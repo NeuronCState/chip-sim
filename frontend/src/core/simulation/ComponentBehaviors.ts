@@ -239,6 +239,161 @@ export const resistorBehavior: ComponentBehaviorFn = (_input: BehaviorInput): Be
   return { simState: {} };
 };
 
+// ==================== Diode 行为 ====================
+
+/**
+ * Diode: 正向导通时传递信号，反向阻断
+ * 引脚: anode (A), cathode (K)
+ */
+export const diodeBehavior: ComponentBehaviorFn = (input: BehaviorInput): BehaviorOutput => {
+  const anodeLevel = input.pinLevels.get('anode') ?? 'floating';
+  const cathodeLevel = input.pinLevels.get('cathode') ?? 'floating';
+  const anodeValue = input.pinValues.get('anode') ?? 0;
+
+  const outputLevels = new Map<string, PinLevel>();
+  const outputValues = new Map<string, number>();
+
+  // 正向导通：阳极高电平，阴极低电平
+  if (anodeLevel === 'high' && cathodeLevel !== 'high') {
+    outputLevels.set('cathode', 'high');
+    outputValues.set('cathode', anodeValue > 0 ? anodeValue : 1);
+  } else {
+    // 反向阻断
+    outputLevels.set('cathode', 'floating');
+    outputValues.set('cathode', 0);
+  }
+
+  return { simState: {}, outputLevels, outputValues };
+};
+
+/**
+ * Zener Diode: 正向导通 + 反向击穿稳压
+ * 引脚: anode (A), cathode (K)
+ */
+export const zenerDiodeBehavior: ComponentBehaviorFn = (input: BehaviorInput): BehaviorOutput => {
+  const anodeLevel = input.pinLevels.get('anode') ?? 'floating';
+  const cathodeLevel = input.pinLevels.get('cathode') ?? 'floating';
+  const anodeValue = input.pinValues.get('anode') ?? 0;
+
+  const outputLevels = new Map<string, PinLevel>();
+  const outputValues = new Map<string, number>();
+
+  if (anodeLevel === 'high' && cathodeLevel !== 'high') {
+    // 正向导通
+    outputLevels.set('cathode', 'high');
+    outputValues.set('cathode', anodeValue > 0 ? anodeValue : 1);
+  } else if (cathodeLevel === 'high' && anodeLevel === 'low') {
+    // 反向击穿（简化：超过阈值时输出稳压值）
+    outputLevels.set('anode', 'high');
+    outputValues.set('anode', 1); // 稳压后的电压
+  } else {
+    outputLevels.set('cathode', 'floating');
+    outputValues.set('cathode', 0);
+  }
+
+  return { simState: {}, outputLevels, outputValues };
+};
+
+// ==================== BJT 行为 ====================
+
+/**
+ * BJT NPN: 基极高电平时集电极-发射极导通
+ * 引脚: 1=基极(B), 2=发射极(E), 3=集电极(C)
+ */
+export const bjtNpnBehavior: ComponentBehaviorFn = (input: BehaviorInput): BehaviorOutput => {
+  const base = input.pinLevels.get('1') ?? 'floating';
+  const collector = input.pinLevels.get('3') ?? 'floating';
+  const collectorValue = input.pinValues.get('3') ?? 0;
+
+  const outputLevels = new Map<string, PinLevel>();
+  const outputValues = new Map<string, number>();
+
+  // 基极高电平 → 导通（集电极信号传递到发射极）
+  if (base === 'high') {
+    outputLevels.set('2', collector === 'high' ? 'high' : collector);
+    outputValues.set('2', collectorValue > 0 ? collectorValue : 1);
+  } else {
+    outputLevels.set('2', 'floating');
+    outputValues.set('2', 0);
+  }
+
+  return { simState: {}, outputLevels, outputValues };
+};
+
+/**
+ * BJT PNP: 基极低电平时发射极-集电极导通
+ * 引脚: 1=基极(B), 2=发射极(E), 3=集电极(C)
+ */
+export const bjtPnpBehavior: ComponentBehaviorFn = (input: BehaviorInput): BehaviorOutput => {
+  const base = input.pinLevels.get('1') ?? 'floating';
+  const emitter = input.pinLevels.get('2') ?? 'floating';
+  const emitterValue = input.pinValues.get('2') ?? 0;
+
+  const outputLevels = new Map<string, PinLevel>();
+  const outputValues = new Map<string, number>();
+
+  // 基极低电平 → 导通（发射极信号传递到集电极）
+  if (base === 'low' || base === 'floating') {
+    outputLevels.set('3', emitter);
+    outputValues.set('3', emitterValue > 0 ? emitterValue : (emitter === 'high' ? 1 : 0));
+  } else {
+    outputLevels.set('3', 'floating');
+    outputValues.set('3', 0);
+  }
+
+  return { simState: {}, outputLevels, outputValues };
+};
+
+// ==================== MOSFET 行为 ====================
+
+/**
+ * NMOS: 栅极高电平时漏极-源极导通
+ * 引脚: 1=栅极(G), 2=源极(S), 3=漏极(D)
+ */
+export const mosfetNmosBehavior: ComponentBehaviorFn = (input: BehaviorInput): BehaviorOutput => {
+  const gate = input.pinLevels.get('1') ?? 'floating';
+  const drain = input.pinLevels.get('3') ?? 'floating';
+  const drainValue = input.pinValues.get('3') ?? 0;
+
+  const outputLevels = new Map<string, PinLevel>();
+  const outputValues = new Map<string, number>();
+
+  // 栅极高电平 → 导通（漏极信号传递到源极）
+  if (gate === 'high') {
+    outputLevels.set('2', drain);
+    outputValues.set('2', drainValue > 0 ? drainValue : (drain === 'high' ? 1 : 0));
+  } else {
+    outputLevels.set('2', 'floating');
+    outputValues.set('2', 0);
+  }
+
+  return { simState: {}, outputLevels, outputValues };
+};
+
+/**
+ * PMOS: 栅极低电平时源极-漏极导通
+ * 引脚: 1=栅极(G), 2=源极(S), 3=漏极(D)
+ */
+export const mosfetPmosBehavior: ComponentBehaviorFn = (input: BehaviorInput): BehaviorOutput => {
+  const gate = input.pinLevels.get('1') ?? 'floating';
+  const source = input.pinLevels.get('2') ?? 'floating';
+  const sourceValue = input.pinValues.get('2') ?? 0;
+
+  const outputLevels = new Map<string, PinLevel>();
+  const outputValues = new Map<string, number>();
+
+  // 栅极低电平 → 导通（源极信号传递到漏极）
+  if (gate === 'low' || gate === 'floating') {
+    outputLevels.set('3', source);
+    outputValues.set('3', sourceValue > 0 ? sourceValue : (source === 'high' ? 1 : 0));
+  } else {
+    outputLevels.set('3', 'floating');
+    outputValues.set('3', 0);
+  }
+
+  return { simState: {}, outputLevels, outputValues };
+};
+
 // ==================== 行为注册表 ====================
 
 /** 元件类型 → 行为函数映射 */
@@ -255,6 +410,12 @@ const BEHAVIOR_REGISTRY: Record<string, ComponentBehaviorFn> = {
   sensor: sensorBehavior,
   resistor: resistorBehavior,
   capacitor: resistorBehavior, // 被动元件无特殊行为
+  diode: diodeBehavior,
+  zener_diode: zenerDiodeBehavior,
+  bjt_npn: bjtNpnBehavior,
+  bjt_pnp: bjtPnpBehavior,
+  mosfet_nmos: mosfetNmosBehavior,
+  mosfet_pmos: mosfetPmosBehavior,
 };
 
 /**

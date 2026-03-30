@@ -17,16 +17,12 @@ jobs:
         include:
           - platform: macos-latest
             target: aarch64-apple-darwin
-            bundle: dmg
           - platform: macos-latest
             target: x86_64-apple-darwin
-            bundle: dmg
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
-            bundle: msi
           - platform: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
-            bundle: deb
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -43,7 +39,7 @@ jobs:
           node-version: 22
 
       - name: Install frontend dependencies
-        working-directory: chip-sim/frontend
+        working-directory: frontend
         run: npm ci
 
       - name: Install Linux dependencies
@@ -61,7 +57,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectPath: chip-sim/frontend
+          projectPath: frontend
           tagName: v__VERSION__
           releaseName: 'ChipSim v__VERSION__'
           releaseBody: 'ChipSim MCU 仿真平台'
@@ -74,8 +70,8 @@ jobs:
         with:
           name: chipsim-${{ matrix.target }}
           path: |
-            chip-sim/frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.dmg
-            chip-sim/frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
-            chip-sim/frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
-            chip-sim/frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
+            frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.dmg
+            frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
+            frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
+            frontend/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
           if-no-files-found: warn

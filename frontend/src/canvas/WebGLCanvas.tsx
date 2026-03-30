@@ -460,6 +460,7 @@ function simBtnStyle(disabled: boolean): React.CSSProperties {
 export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef(0);
+  const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tfRef = useRef<ViewTransform>({ scale: 1, ox: 0, oy: 0 });
   const compsRef = useRef<CanvasComponent[]>([]);
   const wiresRef = useRef<Wire[]>([]);
@@ -1861,7 +1862,21 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
 
     if (e.button === 2) {
       const hitComp = [...compsRef.current].reverse().find(c => p.x >= c.x-c.w/2 && p.x <= c.x+c.w/2 && p.y >= c.y-c.h/2 && p.y <= c.y+c.h/2);
-      if (hitComp) { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY, target: { type: 'component', id: hitComp.id } }); }
+      if (hitComp) { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY, target: { type: 'component', id: hitComp.id } }); return; }
+      // 检测右键点击连线
+      const hitWire = wiresRef.current.find(w => {
+        const fromComp = w.from.componentId === '__chip__' ? null : compsRef.current.find(c => c.id === w.from.componentId);
+        const toComp = w.to.componentId === '__chip__' ? null : compsRef.current.find(c => c.id === w.to.componentId);
+        const fromPinRaw = w.from.componentId === '__chip__' ? chipPinsRef.current.find(pp => pp.id === w.from.pinId) : fromComp?.pins.find(pp => pp.id === w.from.pinId);
+        const toPinRaw = w.to.componentId === '__chip__' ? chipPinsRef.current.find(pp => pp.id === w.to.pinId) : toComp?.pins.find(pp => pp.id === w.to.pinId);
+        if (!fromPinRaw || !toPinRaw) return false;
+        const fromPos = w.from.componentId === '__chip__' ? fromPinRaw as Pin : pinWorld(fromComp!, fromPinRaw as CanvasComponent['pins'][0]);
+        const toPos = w.to.componentId === '__chip__' ? toPinRaw as Pin : pinWorld(toComp!, toPinRaw as CanvasComponent['pins'][0]);
+        if (!fromPos || !toPos) return false;
+        const dist = Math.sqrt((p.x - (fromPos.x + toPos.x) / 2) ** 2 + (p.y - (fromPos.y + toPos.y) / 2) ** 2);
+        return dist < 20;
+      });
+      if (hitWire) { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY, target: { type: 'wire', id: hitWire.id } }); return; }
       return;
     }
 
@@ -1870,9 +1885,13 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
       p.x >= c.x-c.w/2 && p.x <= c.x+c.w/2 && p.y >= c.y-c.h/2 && p.y <= c.y+c.h/2
     );
     if (hitComp) {
-      // 按钮/开关：单击直接切换状态
+      // 按钮/开关：延迟单击切换，避免与双击冲突
       if ((hitComp.type === 'button' || hitComp.type === 'switch') && engineRef.current) {
-        engineRef.current.toggleButton(hitComp.id);
+        if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+        clickTimerRef.current = setTimeout(() => {
+          engineRef.current!.toggleButton(hitComp.id);
+          forceUpdate(n => n + 1);
+        }, 300);
         compsRef.current = compsRef.current.map(c => ({ ...c, selected: c.id === hitComp.id }));
         forceUpdate(n => n + 1);
         return;
@@ -2038,6 +2057,10 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
       compsRef.current = compsRef.current.filter(c => c.id !== target.id);
       engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
       forceUpdate(n => n + 1); onSelect(null);
+    } else if (act === 'delete-wire') {
+      wiresRef.current = wiresRef.current.filter(w => w.id !== target.id);
+      engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
+      forceUpdate(n => n + 1);
     } else if (act === 'rotate') {
       compsRef.current = compsRef.current.map(c => c.id === target.id ? { ...c, rotation: (c.rotation + 90) % 360 } : c);
       forceUpdate(n => n + 1);
@@ -2109,13 +2132,15 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
         onDrop={onDrop}
         onContextMenu={e => e.preventDefault()}
         onDoubleClick={(e) => {
-          // 双击按钮类元件 → 切换状态
+          // 双击按钮类元件 → 取消延迟单击，切换状态
           const p = s2c(e.clientX, e.clientY);
           const hitComp = [...compsRef.current].reverse().find(c =>
             p.x >= c.x - c.w / 2 && p.x <= c.x + c.w / 2 && p.y >= c.y - c.h / 2 && p.y <= c.y + c.h / 2
           );
           if (hitComp && (hitComp.type === 'button' || hitComp.type === 'switch')) {
+            if (clickTimerRef.current) { clearTimeout(clickTimerRef.current); clickTimerRef.current = null; }
             engineRef.current.toggleButton(hitComp.id);
+            forceUpdate(n => n + 1);
           }
         }}
         style={{ cursor: drag.mode === 'pan' ? 'grabbing' : drag.mode === 'wire' ? 'crosshair' : 'grab' }}
@@ -2151,10 +2176,15 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
 
       {ctxMenu && (
         <div className="canvas-context-menu" style={{ left: ctxMenu.x, top: ctxMenu.y }}>
-          <button onClick={() => ctxAction('rotate', ctxMenu.target)}>🔄 旋转</button>
-          <button onClick={() => ctxAction('copy', ctxMenu.target)}>📋 复制</button>
-          <hr />
-          <button onClick={() => ctxAction('delete', ctxMenu.target)} className="danger">🗑️ 删除</button>
+          {ctxMenu.target.type === 'wire' ? (
+            <button onClick={() => ctxAction('delete-wire', ctxMenu.target)} className="danger">🗑️ 删除连线</button>
+          ) : (
+            <>
+              <button onClick={() => ctxAction('rotate', ctxMenu.target)}>🔄 旋转</button>
+              <hr />
+              <button onClick={() => ctxAction('delete', ctxMenu.target)} className="danger">🗑️ 删除</button>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -204,8 +204,11 @@ export class SimulationEngine {
       this.mcuSimulator = create8051Simulator();
     } else if (f === 'stm32' || f === 'arm') {
       this.mcuSimulator = createSTM32Simulator();
-    } else if (f === 'esp32' || f === 'atmega' || f === 'avr') {
+    } else if (f === 'atmega' || f === 'avr') {
       this.mcuSimulator = createATmegaSimulator();
+    } else if (f === 'esp32') {
+      // ESP32 仿真未实现，使用 8051 仿真器作为占位
+      this.mcuSimulator = create8051Simulator();
     } else {
       // 默认 8051
       this.mcuSimulator = create8051Simulator();

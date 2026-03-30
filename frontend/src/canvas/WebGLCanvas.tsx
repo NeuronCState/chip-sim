@@ -6,7 +6,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import type { SelectedElement } from './interaction';
-import { getGlobalEngine, DEFAULT_SIM_STATE, type ComponentSimState } from '../core/simulation';
+import { getGlobalEngine, DEFAULT_SIM_STATE, type ComponentSimState, type PinBehaviorConfig } from '../core/simulation';
 import './WebGLCanvas.css';
 
 // ========== 类型 ==========
@@ -2142,6 +2142,105 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     });
 
     return () => { unsub(); unsubUART(); };
+  }, []);
+
+  // 监听编译成功事件：解析代码 → 配置引脚行为 → 启动仿真
+  useEffect(() => {
+    const onCodeCompiled = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (!detail || !engineRef.current) return;
+
+      const { operations, chipFamily: family } = detail as {
+        operations: Array<{ type: string; target: string; value?: string; raw: string }>;
+        chipFamily: string;
+      };
+
+      // 将解析出的操作转换为引脚行为配置
+      const toggles = operations.filter(op => op.type === 'gpio_write' && op.value === 'TOGGLE');
+      const delays = operations.filter(op => op.type === 'delay');
+
+      for (const op of operations) {
+        if (op.type === 'gpio_write' && op.value === 'TOGGLE') {
+          // Toggle → 先设为 blink，默认 500ms，后面如果有 delay 会覆盖
+          const config: PinBehaviorConfig = { behavior: 'blink', blinkPeriod: 500 };
+          engineRef.current.setPinBehavior(op.target, config);
+        } else if (op.type === 'gpio_write') {
+          // HIGH/LOW → 直接设置引脚值
+          const isHigh = op.value === '1' || op.value === 'GPIO_PIN_SET' || op.value === 'HIGH';
+          engineRef.current.setMCUPinMode(op.target, 'output');
+          engineRef.current.setMCUPinValue(op.target, isHigh ? 1 : 0);
+        } else if (op.type === 'uart_send') {
+          // UART 发送
+          const config: PinBehaviorConfig = {
+            behavior: 'uart_send',
+            uartData: op.value || 'Hello\n',
+            uartBaudRate: 115200,
+            uartTxInterval: 1000,
+          };
+          engineRef.current.setPinBehavior(op.target, config);
+        } else if (op.type === 'pwm_set') {
+          // PWM 输出
+          const duty = parseInt(op.value || '128') / 255;
+          const config: PinBehaviorConfig = {
+            behavior: 'pwm_output',
+            pwmDuty: Math.max(0, Math.min(1, duty)),
+            pwmFreq: 1000,
+          };
+          engineRef.current.setPinBehavior(op.target, config);
+        } else if (op.type === 'adc_read') {
+          // ADC 读取
+          const config: PinBehaviorConfig = {
+            behavior: 'adc_read',
+            adcValue: parseInt(op.value || '2048'),
+          };
+          engineRef.current.setPinBehavior(op.target, config);
+        }
+      }
+
+      // 检测 while(1) 循环模式：如果有 gpio_toggle + delay 组合，用 delay 值覆盖 blink 周期
+      if (toggles.length > 0 && delays.length > 0) {
+        const interval = parseInt(delays[delays.length - 1].value || '500');
+        for (const t of toggles) {
+          const config: PinBehaviorConfig = {
+            behavior: 'blink',
+            blinkPeriod: interval,
+            blinkDuty: 0.5,
+          };
+          engineRef.current.setPinBehavior(t.target, config);
+        }
+      }
+
+      // 重新绑定画布数据到引擎
+      engineRef.current.bindData(
+        compsRef.current as any,
+        wiresRef.current as any,
+        chipPinsRef.current as any,
+      );
+
+      forceUpdate(n => n + 1);
+    };
+
+    const onStartSimulation = () => {
+      if (engineRef.current && !engineRef.current.isRunning()) {
+        // 确保绑定最新数据
+        engineRef.current.bindData(
+          compsRef.current as any,
+          wiresRef.current as any,
+          chipPinsRef.current as any,
+        );
+        engineRef.current.start();
+        setSimRunning(true);
+        setSimPaused(false);
+      }
+    };
+
+    window.addEventListener('chip-sim:code-compiled', onCodeCompiled);
+    window.addEventListener('chip-sim:start-simulation', onStartSimulation);
+
+    return () => {
+      window.removeEventListener('chip-sim:code-compiled', onCodeCompiled);
+      window.removeEventListener('chip-sim:start-simulation', onStartSimulation);
+    };
   }, []);
 
   return (

@@ -832,6 +832,26 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
         const result = await compileCode({ source: file.content, chip_family: chipFamily.toLowerCase(), chip_model: chipModel || '', filename: file.path.split('/').pop() || file.path });
         if (!mountedRef.current) return;
         setCompileResult(result);
+
+        // 编译成功后，解析代码并配置仿真行为
+        if (result.success) {
+          try {
+            const { parseCode } = await import('../mcu/code-parser');
+            const operations = parseCode(file.content, chipFamily);
+
+            // 派发事件：让仿真引擎配置引脚行为
+            window.dispatchEvent(new CustomEvent('chip-sim:code-compiled', {
+              detail: { operations, chipFamily, chipModel }
+            }));
+
+            // 同时派发启动仿真事件
+            window.dispatchEvent(new CustomEvent('chip-sim:start-simulation'));
+          } catch (parseErr) {
+            console.warn('代码解析失败，跳过仿真配置:', parseErr);
+            // 即使解析失败，也启动仿真（用户可能手动配置了电路）
+            window.dispatchEvent(new CustomEvent('chip-sim:start-simulation'));
+          }
+        }
       } catch (e: any) {
         if (!mountedRef.current) return;
         setCompileResult({ success: false, stdout: '', stderr: String(e), output_path: null, output_format: null });

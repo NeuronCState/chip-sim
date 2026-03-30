@@ -671,6 +671,125 @@ void loop() {
   },
 ];
 
+// ========== 元件参数组件 ==========
+interface ElementParamsProps {
+  type: string;
+  properties?: Record<string, unknown>;
+}
+
+function EditableRow({ label, value, onChange }: { label: string; value: string; onChange?: (v: string) => void }) {
+  return (
+    <div className="prop-row">
+      <span className="prop-label">{label}</span>
+      {onChange ? (
+        <input
+          className="prop-value"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          style={{ background: 'transparent', border: '1px solid var(--sil-border, #4a7a8a)', borderRadius: 3, padding: '1px 4px', color: 'inherit', font: 'inherit', width: '60%' }}
+        />
+      ) : (
+        <span className="prop-value">{value}</span>
+      )}
+    </div>
+  );
+}
+
+function SelectRow({ label, value, options, onChange }: { label: string; value: string; options: { label: string; value: string }[]; onChange?: (v: string) => void }) {
+  return (
+    <div className="prop-row">
+      <span className="prop-label">{label}</span>
+      {onChange ? (
+        <select
+          className="prop-value"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          style={{ background: 'transparent', border: '1px solid var(--sil-border, #4a7a8a)', borderRadius: 3, padding: '1px 4px', color: 'inherit', font: 'inherit', width: '60%' }}
+        >
+          {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      ) : (
+        <span className="prop-value">{value}</span>
+      )}
+    </div>
+  );
+}
+
+function ElementParams({ type, properties }: ElementParamsProps) {
+  const [localProps, setLocalProps] = useState<Record<string, unknown>>({});
+
+  // 合并传入的 properties 作为初始值
+  const merged = { ...(properties || {}), ...localProps };
+
+  const setProp = (key: string, val: unknown) => {
+    setLocalProps(prev => ({ ...prev, [key]: val }));
+  };
+
+  switch (type) {
+    case 'resistor':
+      return (
+        <>
+          <EditableRow label="阻值" value={String(merged.resistance ?? '1k')} onChange={v => setProp('resistance', v)} />
+          <EditableRow label="公差" value={String(merged.tolerance ?? '±5%')} onChange={v => setProp('tolerance', v)} />
+          <EditableRow label="功率" value={String(merged.power ?? '0.25W')} onChange={v => setProp('power', v)} />
+        </>
+      );
+    case 'capacitor':
+      return (
+        <>
+          <EditableRow label="容值" value={String(merged.capacitance ?? '100nF')} onChange={v => setProp('capacitance', v)} />
+          <EditableRow label="耐压" value={String(merged.voltage_rating ?? '16V')} onChange={v => setProp('voltage_rating', v)} />
+          <SelectRow label="类型" value={String(merged.cap_type ?? 'MLCC')} options={[
+            { label: 'MLCC', value: 'MLCC' }, { label: '电解', value: 'electrolytic' }, { label: '钽', value: 'tantalum' }, { label: '薄膜', value: 'film' },
+          ]} onChange={v => setProp('cap_type', v)} />
+        </>
+      );
+    case 'led':
+      return (
+        <>
+          <SelectRow label="颜色" value={String(merged.color ?? 'red')} options={[
+            { label: '红', value: 'red' }, { label: '绿', value: 'green' }, { label: '蓝', value: 'blue' },
+            { label: '黄', value: 'yellow' }, { label: '白', value: 'white' }, { label: 'RGB', value: 'rgb' },
+          ]} onChange={v => setProp('color', v)} />
+          <EditableRow label="正向压降" value={String(merged.forward_voltage ?? '1.8V')} onChange={v => setProp('forward_voltage', v)} />
+          <EditableRow label="正向电流" value={String(merged.forward_current ?? '20mA')} onChange={v => setProp('forward_current', v)} />
+        </>
+      );
+    case 'battery':
+      return (
+        <>
+          <EditableRow label="电压" value={String(merged.voltage ?? '3.3V')} onChange={v => setProp('voltage', v)} />
+          <EditableRow label="容量" value={String(merged.capacity ?? '2000mAh')} onChange={v => setProp('capacity', v)} />
+        </>
+      );
+    case 'button':
+    case 'switch':
+      return (
+        <>
+          <SelectRow label="类型" value={String(merged.btn_type ?? 'NO')} options={[
+            { label: '常开 (NO)', value: 'NO' }, { label: '常闭 (NC)', value: 'NC' },
+          ]} onChange={v => setProp('btn_type', v)} />
+          <EditableRow label="操作力" value={String(merged.force ?? '1.6N')} onChange={v => setProp('force', v)} />
+        </>
+      );
+    case 'sensor':
+      return (
+        <>
+          <EditableRow label="型号" value={String(merged.model ?? 'DS18B20')} onChange={v => setProp('model', v)} />
+          <EditableRow label="接口" value={String(merged.interface ?? '1-Wire')} onChange={v => setProp('interface', v)} />
+          <EditableRow label="精度" value={String(merged.accuracy ?? '±0.5°C')} onChange={v => setProp('accuracy', v)} />
+        </>
+      );
+    default:
+      return (
+        <>
+          <EditableRow label="当前值" value={String(merged.value ?? '-') } onChange={v => setProp('value', v)} />
+          <EditableRow label="标签" value={String(merged.label ?? '-') } onChange={v => setProp('label', v)} />
+        </>
+      );
+  }
+}
+
 // ========== 组件 ==========
 export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chipFamily, chipModel, wires, chipPins }: CodeEditorProps) {
   const [files, setFiles] = useState<VFile[]>([]);
@@ -1028,50 +1147,11 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
                     <div className="prop-row"><span className="prop-label">名称</span><span className="prop-value">{selectedElement.name || '-'}</span></div>
                   </div>
 
-                  {/* 元件参数 */}
-                  {selectedElement.type === 'resistor' && (
-                    <div className="prop-section">
-                      <div className="prop-section-title">参数</div>
-                      <div className="prop-row"><span className="prop-label">阻值</span><span className="prop-value">1 kΩ</span></div>
-                      <div className="prop-row"><span className="prop-label">公差</span><span className="prop-value">±5%</span></div>
-                      <div className="prop-row"><span className="prop-label">功率</span><span className="prop-value">0.25 W</span></div>
-                      <div className="prop-row"><span className="prop-label">封装</span><span className="prop-value">0805</span></div>
-                    </div>
-                  )}
-                  {selectedElement.type === 'led' && (
-                    <div className="prop-section">
-                      <div className="prop-section-title">参数</div>
-                      <div className="prop-row"><span className="prop-label">颜色</span><span className="prop-value">红色</span></div>
-                      <div className="prop-row"><span className="prop-label">正向压降</span><span className="prop-value">1.8 V</span></div>
-                      <div className="prop-row"><span className="prop-label">正向电流</span><span className="prop-value">20 mA</span></div>
-                      <div className="prop-row"><span className="prop-label">波长</span><span className="prop-value">620 nm</span></div>
-                    </div>
-                  )}
-                  {selectedElement.type === 'capacitor' && (
-                    <div className="prop-section">
-                      <div className="prop-section-title">参数</div>
-                      <div className="prop-row"><span className="prop-label">容值</span><span className="prop-value">100 nF</span></div>
-                      <div className="prop-row"><span className="prop-label">耐压</span><span className="prop-value">16 V</span></div>
-                      <div className="prop-row"><span className="prop-label">类型</span><span className="prop-value">MLCC</span></div>
-                    </div>
-                  )}
-                  {selectedElement.type === 'button' && (
-                    <div className="prop-section">
-                      <div className="prop-section-title">参数</div>
-                      <div className="prop-row"><span className="prop-label">类型</span><span className="prop-value">轻触开关</span></div>
-                      <div className="prop-row"><span className="prop-label">触点</span><span className="prop-value">常开 (NO)</span></div>
-                      <div className="prop-row"><span className="prop-label">操作力</span><span className="prop-value">1.6 N</span></div>
-                    </div>
-                  )}
-                  {selectedElement.type === 'sensor' && (
-                    <div className="prop-section">
-                      <div className="prop-section-title">参数</div>
-                      <div className="prop-row"><span className="prop-label">型号</span><span className="prop-value">DS18B20</span></div>
-                      <div className="prop-row"><span className="prop-label">接口</span><span className="prop-value">1-Wire</span></div>
-                      <div className="prop-row"><span className="prop-label">精度</span><span className="prop-value">±0.5°C</span></div>
-                      <div className="prop-row"><span className="prop-label">范围</span><span className="prop-value">-55~125°C</span></div>
-                    </div>
-                  )}
+                  {/* 元件参数 — 动态可编辑 */}
+                  <div className="prop-section">
+                    <div className="prop-section-title">参数</div>
+                    <ElementParams type={selectedElement.type} properties={selectedElement.properties} />
+                  </div>
 
                   <div className="prop-section">
                     <div className="prop-section-title">引脚连接</div>

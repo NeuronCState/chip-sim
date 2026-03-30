@@ -13,6 +13,7 @@ import { SerialMonitor } from '../panels/SerialMonitor';
 import { CodeEditor } from '../panels/CodeEditor';
 import { ToastContainer } from '../ui/Toast';
 import { Resizer } from '../components/Resizer';
+import { PinListPanel } from '../components/PinListPanel';
 import type { ToastItem } from '../ui/Toast';
 import type { SelectedElement } from '../canvas/interaction';
 
@@ -226,7 +227,22 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId }: Props) {
                   </div>
                 </div>
 
-                {/* 引脚列表与元件库之间的可拖拽分隔线 */}
+                {/* 元件库与引脚配置之间的分隔线 */}
+                <div
+                  style={{ height: 4, cursor: 'row-resize', background: 'var(--sil-border, #d0d7de)', flexShrink: 0, borderRadius: 2 }}
+                />
+
+                {/* PinListPanel 引脚配置 */}
+                <div className="mcu-section" style={{ flex: '1 1 30%', minHeight: 80, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  <div className="mcu-section-header" style={{ padding: '4px 8px' }}>
+                    <span style={{ fontSize: 12, fontWeight: 600 }}>引脚配置</span>
+                  </div>
+                  <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <PinListPanel chipFamily={chipFamily} chipModel={chipModel} />
+                  </div>
+                </div>
+
+                {/* 引脚列表与串口之间的可拖拽分隔线 */}
                 <div
                   style={{ height: 4, cursor: 'row-resize', background: 'var(--sil-border, #d0d7de)', flexShrink: 0, borderRadius: 2 }}
                   onPointerDown={(e) => {

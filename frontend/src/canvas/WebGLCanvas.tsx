@@ -1863,7 +1863,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     if (e.button === 2) {
       const hitComp = [...compsRef.current].reverse().find(c => p.x >= c.x-c.w/2 && p.x <= c.x+c.w/2 && p.y >= c.y-c.h/2 && p.y <= c.y+c.h/2);
       if (hitComp) { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY, target: { type: 'component', id: hitComp.id } }); return; }
-      // 检测右键点击连线
+      // 检测右键点击连线 — 使用连线路径上的最近点距离
       const hitWire = wiresRef.current.find(w => {
         const fromComp = w.from.componentId === '__chip__' ? null : compsRef.current.find(c => c.id === w.from.componentId);
         const toComp = w.to.componentId === '__chip__' ? null : compsRef.current.find(c => c.id === w.to.componentId);
@@ -1873,8 +1873,37 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
         const fromPos = w.from.componentId === '__chip__' ? fromPinRaw as Pin : pinWorld(fromComp!, fromPinRaw as CanvasComponent['pins'][0]);
         const toPos = w.to.componentId === '__chip__' ? toPinRaw as Pin : pinWorld(toComp!, toPinRaw as CanvasComponent['pins'][0]);
         if (!fromPos || !toPos) return false;
-        const dist = Math.sqrt((p.x - (fromPos.x + toPos.x) / 2) ** 2 + (p.y - (fromPos.y + toPos.y) / 2) ** 2);
-        return dist < 20;
+
+        // 推断引脚方向并获取连线路径
+        const fromDir = w.from.componentId === '__chip__'
+          ? (fromPinRaw as Pin).side
+          : getPinSide(fromPinRaw as CanvasComponent['pins'][0]);
+        const toDir = w.to.componentId === '__chip__'
+          ? (toPinRaw as Pin).side
+          : getPinSide(toPinRaw as CanvasComponent['pins'][0]);
+        const waypoints = calculateWirePath(
+          { x: fromPos.x, y: fromPos.y }, fromDir,
+          fromComp ? { x: fromComp.x, y: fromComp.y, w: fromComp.w, h: fromComp.h } : null,
+          { x: toPos.x, y: toPos.y }, toDir,
+          toComp ? { x: toComp.x, y: toComp.y, w: toComp.w, h: toComp.h } : null,
+          compsRef.current, w.from.componentId, w.to.componentId,
+        );
+
+        // 计算点到线段的最近距离
+        function distToSegment(px: number, py: number, x1: number, y1: number, x2: number, y2: number): number {
+          const dx = x2 - x1, dy = y2 - y1;
+          const lenSq = dx * dx + dy * dy;
+          if (lenSq === 0) return Math.hypot(px - x1, py - y1);
+          const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / lenSq));
+          return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+        }
+
+        let minDist = Infinity;
+        for (let i = 0; i < waypoints.length - 1; i++) {
+          const d = distToSegment(p.x, p.y, waypoints[i].x, waypoints[i].y, waypoints[i + 1].x, waypoints[i + 1].y);
+          if (d < minDist) minDist = d;
+        }
+        return minDist < 12;
       });
       if (hitWire) { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY, target: { type: 'wire', id: hitWire.id } }); return; }
       return;

@@ -40,6 +40,21 @@ fn is_valid_filename(filename: &str) -> bool {
     re.is_match(filename)
 }
 
+/// 将临时目录中的编译产物复制到持久化输出目录，返回新路径。
+/// 避免 tempdir 在函数返回后被清理导致产物丢失。
+fn copy_to_output_dir(src: &std::path::Path) -> Result<String, String> {
+    let output_dir = std::env::temp_dir().join("chipsim_output");
+    std::fs::create_dir_all(&output_dir)
+        .map_err(|e| format!("创建输出目录失败: {}", e))?;
+    let file_name = src
+        .file_name()
+        .ok_or_else(|| "无法获取文件名".to_string())?;
+    let dest = output_dir.join(file_name);
+    std::fs::copy(src, &dest)
+        .map_err(|e| format!("复制产物失败: {}", e))?;
+    Ok(dest.to_string_lossy().to_string())
+}
+
 // ==================== 带超时的命令执行 ====================
 
 const COMPILE_TIMEOUT: Duration = Duration::from_secs(30);
@@ -231,15 +246,17 @@ fn compile_c51(req: &CompileRequest) -> CompileResult {
         Ok(o) => {
             let success = o.status.success();
             let ihx_path = work_dir.path().join(&output_name);
+            // 将产物复制到持久化目录，避免 tempdir 清理
+            let persistent_path = if ihx_path.exists() {
+                copy_to_output_dir(&ihx_path).ok()
+            } else {
+                None
+            };
             CompileResult {
                 success,
                 stdout: String::from_utf8_lossy(&o.stdout).to_string(),
                 stderr: String::from_utf8_lossy(&o.stderr).to_string(),
-                output_path: if ihx_path.exists() {
-                    Some(ihx_path.to_string_lossy().to_string())
-                } else {
-                    None
-                },
+                output_path: persistent_path,
                 output_format: if success { Some("ihx".to_string()) } else { None },
             }
         }
@@ -324,11 +341,14 @@ fn compile_stm32(req: &CompileRequest) -> CompileResult {
             cmd.current_dir(work_dir.path());
             let _ = run_command_with_timeout(cmd, COMPILE_TIMEOUT);
 
+            // 将 ELF 复制到持久化目录，避免 tempdir 清理
+            let persistent_path = copy_to_output_dir(&elf_path).ok();
+
             CompileResult {
                 success: true,
                 stdout: String::from_utf8_lossy(&o.stdout).to_string(),
                 stderr: String::new(),
-                output_path: Some(elf_path.to_string_lossy().to_string()),
+                output_path: persistent_path,
                 output_format: Some("elf".to_string()),
             }
         }
@@ -425,11 +445,14 @@ fn compile_arduino(req: &CompileRequest) -> CompileResult {
             cmd.current_dir(work_dir.path());
             let _ = run_command_with_timeout(cmd, COMPILE_TIMEOUT);
 
+            // 将 HEX 复制到持久化目录，避免 tempdir 清理
+            let persistent_path = copy_to_output_dir(&hex_path).ok();
+
             CompileResult {
                 success: true,
                 stdout: String::from_utf8_lossy(&o.stdout).to_string(),
                 stderr: String::new(),
-                output_path: Some(hex_path.to_string_lossy().to_string()),
+                output_path: persistent_path,
                 output_format: Some("hex".to_string()),
             }
         }

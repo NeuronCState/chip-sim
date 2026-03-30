@@ -1,0 +1,322 @@
+/**
+ * 教程列表面板样式
+ */
+
+.tutorial-panel {
+  padding: 12px;
+}
+
+.tutorial-panel-title {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* 搜索框 */
+.tutorial-search {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.tutorial-search-input {
+  width: 100%;
+  padding: 6px 28px 6px 10px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text);
+  font-size: 11px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.tutorial-search-input:focus {
+  border-color: var(--color-success);
+}
+
+.tutorial-search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.tutorial-search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px;
+}
+
+/* 分类标签 */
+.tutorial-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tutorial-cat-btn {
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.tutorial-cat-btn:hover {
+  border-color: var(--color-border-light);
+}
+
+.tutorial-cat-btn.active {
+  border-color: var(--color-success);
+  color: var(--color-success);
+  background: rgba(78, 205, 196, 0.08);
+}
+
+/* 教程计数 */
+.tutorial-count {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+/* 教程列表 */
+.tutorial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tutorial-card {
+  background: var(--color-bg-toolbar);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  transition: border-color 0.15s;
+}
+
+.tutorial-card:hover {
+  border-color: var(--color-border-light);
+}
+
+.tutorial-card-completed {
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.tutorial-card-locked {
+  opacity: 0.6;
+}
+
+.tutorial-card-expanded {
+  border-color: var(--color-border-light);
+}
+
+.tutorial-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.tutorial-card-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tutorial-card-info {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.tutorial-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tutorial-card-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.tutorial-card-check {
+  font-size: 10px;
+}
+
+.tutorial-card-desc {
+  margin: 2px 0 0;
+  font-size: 10px;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+}
+
+.tutorial-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.tutorial-card-difficulty {
+  font-size: 9px;
+  letter-spacing: -1px;
+}
+
+.tutorial-card-time {
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+
+.tutorial-card-start-btn {
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px solid var(--color-success);
+  border-radius: 4px;
+  color: var(--color-success);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.tutorial-card-start-btn:hover {
+  background: var(--color-success);
+  color: var(--color-bg-app);
+}
+
+.tutorial-card-replay-btn {
+  border-color: var(--color-accent-hover);
+  color: var(--color-accent-hover);
+}
+
+.tutorial-card-replay-btn:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-bg-app);
+}
+
+.tutorial-card-locked-label {
+  font-size: 9px;
+  color: var(--color-text-muted);
+}
+
+/* 展开详情 */
+.tutorial-card-details {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+  animation: tutorialPanelFadeIn 0.2s ease;
+}
+
+.tutorial-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  color: var(--color-text-dim);
+}
+
+/* 步骤预览 */
+.tutorial-steps-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tutorial-step-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--color-text-dim);
+}
+
+.tutorial-step-done {
+  color: var(--color-success);
+}
+
+.tutorial-step-num {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  font-size: 9px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.tutorial-step-done .tutorial-step-num {
+  background: rgba(78, 205, 196, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.tutorial-step-name {
+  flex: 1;
+}
+
+.tutorial-step-check {
+  color: var(--color-success);
+  font-size: 10px;
+}
+
+/* 标签 */
+.tutorial-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tutorial-card-tag {
+  padding: 1px 6px;
+  background: rgba(78, 205, 196, 0.08);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  border-radius: 8px;
+  font-size: 9px;
+  color: var(--color-success);
+}
+
+/* 空状态 */
+.tutorial-empty {
+  text-align: center;
+  padding: 24px 12px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.tutorial-empty span {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.tutorial-empty p {
+  margin: 0;
+}
+
+@keyframes tutorialPanelFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

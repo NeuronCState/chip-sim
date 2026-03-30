@@ -1,0 +1,46 @@
+{
+  "id": "rc-filter",
+  "name": "RC 低通滤波器",
+  "nameEn": "RC Low-Pass Filter",
+  "category": "basic",
+  "difficulty": 2,
+  "description": "一阶低通滤波电路，观察频率响应",
+  "descriptionEn": "First-order low-pass filter, observe frequency response",
+  "components": [
+    {
+      "type": "ac_source",
+      "name": "V1",
+      "position": { "x": 100, "y": 200 },
+      "value": { "value": 1, "unit": "V" },
+      "params": { "frequency": 1000, "phase": 0 }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 280, "y": 200 },
+      "value": { "value": 1000, "unit": "Ω" }
+    },
+    {
+      "type": "capacitor",
+      "name": "C1",
+      "position": { "x": 430, "y": 200 },
+      "value": { "value": 1e-6, "unit": "F" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 100, "y": 320 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "V1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "C1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "V1:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行 AC 扫描分析（1Hz ~ 1MHz），观察幅频特性。截止频率 fc = 1/(2π×1000×10⁻⁶) ≈ 159Hz。",
+    "en": "Run AC sweep (1Hz ~ 1MHz), observe frequency response. Cutoff fc = 1/(2π×1000×10⁻⁶) ≈ 159Hz."
+  }
+}

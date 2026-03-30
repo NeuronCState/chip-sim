@@ -1,0 +1,49 @@
+/* ==================== 离线横幅 ==================== */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(108, 117, 125, 0.95);
+  color: var(--color-text-inverse);
+  font-size: 13px;
+  backdrop-filter: blur(8px);
+  animation: offline-slide-down 0.3s ease-out;
+}
+
+.offline-reconnecting {
+  background: rgba(230, 168, 23, 0.95);
+}
+
+@keyframes offline-slide-down {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.offline-icon {
+  font-size: 14px;
+}
+
+.offline-text {
+  font-weight: 500;
+}
+
+.offline-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--color-text-inverse);
+  border-radius: 50%;
+  animation: offline-spin 0.8s linear infinite;
+}
+
+@keyframes offline-spin {
+  to { transform: rotate(360deg); }
+}

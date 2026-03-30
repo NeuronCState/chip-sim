@@ -1,0 +1,30 @@
+{
+  "id": "stm32-spi-flash",
+  "name": "STM32 W25Qxx SPI Flash读写",
+  "nameEn": "STM32 W25Qxx SPI Flash Read/Write",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "STM32通过硬件SPI接口读写W25Q64 SPI Flash存储器",
+  "descriptionEn": "STM32 reads/writes W25Q64 SPI Flash memory via hardware SPI interface",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "spi_slave", "name": "U2", "position": { "x": 420, "y": 200 }, "value": { "value": 8388608, "unit": "B" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 100, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 400 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "U2:0" },
+    { "from": "U1:1", "to": "U2:1" },
+    { "from": "U1:2", "to": "U2:2" },
+    { "from": "U1:3", "to": "U2:3" },
+    { "from": "VCC:1", "to": "U1:4" },
+    { "from": "VCC:1", "to": "U2:4" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U1:5", "to": "GND:0" },
+    { "from": "U2:5", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，SPI时钟18MHz，先发送写使能(0x06)，再发送页编程命令(0x02)写入数据，发送读命令(0x03)读回验证。",
+    "en": "Run protocol simulation. SPI clock 18MHz, send Write Enable (0x06), then Page Program (0x02) to write data, Read (0x03) to verify."
+  }
+}

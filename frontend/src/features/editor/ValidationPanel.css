@@ -1,0 +1,104 @@
+/**
+ * 电路验证面板样式 — 主题变量
+ */
+
+.validation-panel {
+  padding: 12px;
+  background: var(--bg-panel, #16162a);
+  border-top: 1px solid var(--border, var(--color-border));
+}
+
+.validation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.validation-header .panel-title {
+  margin: 0;
+}
+
+.btn-validate {
+  padding: 3px 8px;
+  background: rgba(26, 58, 42, 0.5);
+  color: var(--success, var(--color-success));
+  border: 1px solid rgba(42, 90, 74, 0.5);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+
+.btn-validate:hover {
+  background: rgba(42, 90, 74, 0.5);
+  border-color: var(--success, var(--color-success));
+}
+
+.validation-empty {
+  font-size: 12px;
+  color: var(--text-muted, #555);
+  text-align: center;
+  padding: 8px 0;
+}
+
+.validation-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.summary-error {
+  color: var(--danger, #ff4444);
+}
+
+.summary-warning {
+  color: var(--warning, #ffaa00);
+}
+
+.summary-ok {
+  color: var(--success, var(--color-success));
+}
+
+.validation-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.validation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.validation-error {
+  background: rgba(255, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+
+.validation-warning {
+  background: rgba(255, 170, 0, 0.1);
+  color: var(--color-warning);
+}
+
+.validation-info {
+  background: rgba(68, 170, 255, 0.1);
+  color: var(--color-info);
+}
+
+.validation-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.validation-text {
+  line-height: 1.4;
+}

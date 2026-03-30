@@ -1,0 +1,28 @@
+{
+  "id": "ultrasonic-hcsr04",
+  "name": "HC-SR04超声波测距",
+  "nameEn": "HC-SR04 Ultrasonic Distance Sensor",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "MCU通过Trig/Echo信号控制HC-SR04超声波模块测量距离，声速340m/s计算",
+  "descriptionEn": "MCU controls HC-SR04 ultrasonic module via Trig/Echo signals for distance measurement, speed of sound 340m/s",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "piezo_sensor", "name": "U2", "position": { "x": 400, "y": 180 }, "value": { "value": 40000, "unit": "Hz" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "U2:0" },
+    { "from": "U2:1", "to": "U1:1" },
+    { "from": "VCC:1", "to": "U2:2" },
+    { "from": "VCC:1", "to": "U1:2" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U2:3", "to": "GND:0" },
+    { "from": "U1:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行时域仿真，MCU发送10μs高电平Trig脉冲触发超声波发射，Echo引脚输出高电平持续时间=距离×2/340。距离=高电平时间(μs)×0.017 cm。",
+    "en": "Run time-domain simulation. MCU sends 10μs HIGH Trig pulse to trigger ultrasonic emission. Echo HIGH duration = distance×2/340. Distance = HIGH time(μs)×0.017 cm."
+  }
+}

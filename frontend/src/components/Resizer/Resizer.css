@@ -1,0 +1,88 @@
+/**
+ * Resizer 样式 — 可拖拽分隔线
+ */
+
+.resizer {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+/* 水平分隔线（左右拖拽，竖线） */
+.resizer-horizontal {
+  width: 4px;
+  cursor: col-resize;
+  height: 100%;
+}
+
+.resizer-horizontal:hover,
+.resizer-horizontal.resizer-dragging {
+  background: var(--sil-accent, #38bdf8);
+}
+
+/* 垂直分隔线（上下拖拽，横线） */
+.resizer-vertical {
+  height: 4px;
+  cursor: row-resize;
+  width: 100%;
+}
+
+.resizer-vertical:hover,
+.resizer-vertical.resizer-dragging {
+  background: var(--sil-accent, #38bdf8);
+}
+
+/* 拖拽手柄 */
+.resizer-grip {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.resizer:hover .resizer-grip,
+.resizer-dragging .resizer-grip {
+  opacity: 1;
+}
+
+/* 水平方向的 grip — 竖向点状 */
+.resizer-horizontal .resizer-grip {
+  width: 2px;
+  height: 24px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--sil-surface-glass, rgba(255, 255, 255, 0.5)) 0px,
+    var(--sil-surface-glass, rgba(255, 255, 255, 0.5)) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  border-radius: 1px;
+}
+
+/* 垂直方向的 grip — 横向点状 */
+.resizer-vertical .resizer-grip {
+  height: 2px;
+  width: 24px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--sil-surface-glass, rgba(255, 255, 255, 0.5)) 0px,
+    var(--sil-surface-glass, rgba(255, 255, 255, 0.5)) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  border-radius: 1px;
+}
+
+/* 拖拽中增加热区 */
+.resizer-dragging.resizer-horizontal {
+  width: 6px;
+  margin: 0 -1px;
+}
+
+.resizer-dragging.resizer-vertical {
+  height: 6px;
+  margin: -1px 0;
+}

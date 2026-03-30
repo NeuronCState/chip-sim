@@ -1,0 +1,510 @@
+{
+  "series": "ESP32-S3",
+  "name": "ESP32-S3",
+  "package": "QFN-56",
+  "flash": 8388608,
+  "ram": 524288,
+  "clock": 240000000,
+  "pinCount": 56,
+  "pins": [
+    {
+      "id": "GPIO0",
+      "port": "GPIO",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC1_CH0",
+        "TOUCH1"
+      ]
+    },
+    {
+      "id": "GPIO1",
+      "port": "GPIO",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC1_CH1",
+        "TOUCH1"
+      ]
+    },
+    {
+      "id": "GPIO2",
+      "port": "GPIO",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "ADC1_CH2",
+        "TOUCH2"
+      ]
+    },
+    {
+      "id": "GPIO3",
+      "port": "GPIO",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "ADC1_CH3",
+        "TOUCH3"
+      ]
+    },
+    {
+      "id": "GPIO4",
+      "port": "GPIO",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "ADC1_CH4",
+        "TOUCH4"
+      ]
+    },
+    {
+      "id": "GPIO5",
+      "port": "GPIO",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "ADC1_CH5",
+        "TOUCH5"
+      ]
+    },
+    {
+      "id": "GPIO6",
+      "port": "GPIO",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "ADC1_CH6",
+        "TOUCH6"
+      ]
+    },
+    {
+      "id": "GPIO7",
+      "port": "GPIO",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "ADC1_CH7",
+        "TOUCH7"
+      ]
+    },
+    {
+      "id": "GPIO8",
+      "port": "GPIO",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "TOUCH8"
+      ]
+    },
+    {
+      "id": "GPIO9",
+      "port": "GPIO",
+      "bit": 9,
+      "functions": [
+        "GPIO",
+        "TOUCH9"
+      ]
+    },
+    {
+      "id": "GPIO10",
+      "port": "GPIO",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "TOUCH10"
+      ]
+    },
+    {
+      "id": "GPIO11",
+      "port": "GPIO",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "TOUCH11"
+      ]
+    },
+    {
+      "id": "GPIO12",
+      "port": "GPIO",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "TOUCH12"
+      ]
+    },
+    {
+      "id": "GPIO13",
+      "port": "GPIO",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "TOUCH13"
+      ]
+    },
+    {
+      "id": "GPIO14",
+      "port": "GPIO",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "TOUCH14"
+      ]
+    },
+    {
+      "id": "GPIO15",
+      "port": "GPIO",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "TOUCH15"
+      ]
+    },
+    {
+      "id": "GPIO16",
+      "port": "GPIO",
+      "bit": 16,
+      "functions": [
+        "GPIO",
+        "TOUCH16"
+      ]
+    },
+    {
+      "id": "GPIO17",
+      "port": "GPIO",
+      "bit": 17,
+      "functions": [
+        "GPIO",
+        "TOUCH17"
+      ]
+    },
+    {
+      "id": "GPIO18",
+      "port": "GPIO",
+      "bit": 18,
+      "functions": [
+        "GPIO",
+        "TOUCH18"
+      ]
+    },
+    {
+      "id": "GPIO19",
+      "port": "GPIO",
+      "bit": 19,
+      "functions": [
+        "GPIO",
+        "TOUCH19",
+        "USB_D-"
+      ]
+    },
+    {
+      "id": "GPIO20",
+      "port": "GPIO",
+      "bit": 20,
+      "functions": [
+        "GPIO",
+        "TOUCH20",
+        "USB_D+"
+      ]
+    },
+    {
+      "id": "GPIO21",
+      "port": "GPIO",
+      "bit": 21,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO38",
+      "port": "GPIO",
+      "bit": 38,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO39",
+      "port": "GPIO",
+      "bit": 39,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO40",
+      "port": "GPIO",
+      "bit": 40,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO41",
+      "port": "GPIO",
+      "bit": 41,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO42",
+      "port": "GPIO",
+      "bit": 42,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO43",
+      "port": "GPIO",
+      "bit": 43,
+      "functions": [
+        "GPIO",
+        "UART0_TXD"
+      ]
+    },
+    {
+      "id": "GPIO44",
+      "port": "GPIO",
+      "bit": 44,
+      "functions": [
+        "GPIO",
+        "UART0_RXD"
+      ]
+    },
+    {
+      "id": "GPIO45",
+      "port": "GPIO",
+      "bit": 45,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO46",
+      "port": "GPIO",
+      "bit": 46,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO47",
+      "port": "GPIO",
+      "bit": 47,
+      "functions": [
+        "GPIO",
+        "SPI1_CS1"
+      ]
+    },
+    {
+      "id": "GPIO48",
+      "port": "GPIO",
+      "bit": 48,
+      "functions": [
+        "GPIO",
+        "SPICLK",
+        "LED_CLK"
+      ]
+    },
+    {
+      "id": "GPIO49",
+      "port": "GPIO",
+      "bit": 49,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO50",
+      "port": "GPIO",
+      "bit": 50,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO51",
+      "port": "GPIO",
+      "bit": 51,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO52",
+      "port": "GPIO",
+      "bit": 52,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO53",
+      "port": "GPIO",
+      "bit": 53,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO54",
+      "port": "GPIO",
+      "bit": 54,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "EN",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "ENABLE",
+        "RESET"
+      ]
+    },
+    {
+      "id": "BOOT",
+      "port": "CONTROL",
+      "bit": 1,
+      "functions": [
+        "BOOT_MODE"
+      ]
+    },
+    {
+      "id": "VCC3P3",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VCC",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND",
+      "port": "POWER",
+      "bit": 2,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VDD_SPI",
+      "port": "POWER",
+      "bit": 3,
+      "functions": [
+        "POWER_SPI"
+      ]
+    },
+    {
+      "id": "GND_2",
+      "port": "POWER",
+      "bit": 4,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_3",
+      "port": "POWER",
+      "bit": 5,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_4",
+      "port": "POWER",
+      "bit": 6,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_5",
+      "port": "POWER",
+      "bit": 7,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_6",
+      "port": "POWER",
+      "bit": 8,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_7",
+      "port": "POWER",
+      "bit": 9,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_8",
+      "port": "POWER",
+      "bit": 10,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_9",
+      "port": "POWER",
+      "bit": 11,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_10",
+      "port": "POWER",
+      "bit": 12,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_11",
+      "port": "POWER",
+      "bit": 13,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND_12",
+      "port": "POWER",
+      "bit": 14,
+      "functions": [
+        "POWER"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "UART",
+    "SPI",
+    "I2C",
+    "ADC",
+    "PWM",
+    "Touch",
+    "USB_OTG",
+    "LCD",
+    "Camera",
+    "WiFi",
+    "Bluetooth_LE"
+  ]
+}

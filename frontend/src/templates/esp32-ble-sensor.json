@@ -1,0 +1,31 @@
+{
+  "id": "esp32-ble-sensor",
+  "name": "ESP32 BLE温湿度上报",
+  "nameEn": "ESP32 BLE Temperature & Humidity Report",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "ESP32通过BLE GATT服务将DHT11温湿度数据通知连接的手机客户端",
+  "descriptionEn": "ESP32 notifies DHT11 temperature/humidity data to connected phone via BLE GATT service",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "bluetooth_module", "name": "BLE1", "position": { "x": 120, "y": 80 }, "value": { "value": 2400, "unit": "MHz" } },
+    { "type": "ds18b20", "name": "U2", "position": { "x": 400, "y": 150 }, "value": { "value": 0, "unit": "" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 300, "y": 150 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "BLE1:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "U2:0" },
+    { "from": "VCC:1", "to": "U2:1" },
+    { "from": "VCC:1", "to": "U1:2" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U2:2", "to": "GND:0" },
+    { "from": "U1:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，ESP32 BLE广播名为\"ESP32-Sensor\"，手机连接后订阅温度通知。DS18B20单总线需4.7kΩ上拉。",
+    "en": "Run digital simulation. ESP32 BLE advertises as \"ESP32-Sensor\", phone connects and subscribes to temperature notifications. DS18B20 1-Wire needs 4.7kΩ pull-up."
+  }
+}

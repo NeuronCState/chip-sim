@@ -1,0 +1,33 @@
+{
+  "id": "esp32-ota-update",
+  "name": "ESP32 OTA空中升级",
+  "nameEn": "ESP32 OTA Over-The-Air Update",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "ESP32通过WiFi实现OTA固件升级，无需USB连接即可更新程序",
+  "descriptionEn": "ESP32 firmware OTA update via WiFi, no USB connection needed for program update",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "wifi_module", "name": "WIFI1", "position": { "x": 150, "y": 80 }, "value": { "value": 2400, "unit": "MHz" } },
+    { "type": "led", "name": "LED1", "position": { "x": 420, "y": 180 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 320, "y": 180 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "capacitor", "name": "C1", "position": { "x": 200, "y": 300 }, "value": { "value": 1e-6, "unit": "F" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "WIFI1:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "C1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:2" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U1:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，ESP32 WiFi连接后启动ArduinoOTA或HTTP OTA服务。LED闪烁指示OTA升级状态（快闪=下载中，常亮=完成）。",
+    "en": "Run digital simulation. ESP32 starts ArduinoOTA or HTTP OTA service after WiFi connect. LED indicates OTA status (fast blink=downloading, solid=complete)."
+  }
+}

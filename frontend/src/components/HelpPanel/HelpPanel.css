@@ -1,0 +1,91 @@
+/**
+ * 帮助面板样式
+ */
+
+.help-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-panel, #16162a);
+}
+
+.help-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border, var(--color-border));
+}
+
+.help-panel-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text, #e0e0e0);
+}
+
+.help-tour-btn {
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  color: var(--text-dim, #888);
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.15s;
+}
+
+.help-tour-btn:hover {
+  background: var(--bg-input, #1a1a2e);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.help-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border, var(--color-border));
+}
+
+.help-tab {
+  flex: 1;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim, #888);
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.help-tab:hover {
+  color: var(--text, #e0e0e0);
+  background: var(--bg-input, #1a1a2e);
+}
+
+.help-tab-active {
+  color: var(--color-success) !important;
+  border-bottom-color: var(--color-success) !important;
+  background: transparent !important;
+}
+
+.help-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin-left: 4px;
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.help-panel-content {
+  flex: 1;
+  overflow-y: auto;
+}

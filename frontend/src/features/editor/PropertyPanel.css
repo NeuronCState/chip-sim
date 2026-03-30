@@ -1,0 +1,283 @@
+/**
+ * 属性面板样式 — 主题变量适配
+ */
+
+.property-panel {
+  width: 100%;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  padding-top: 8px;
+}
+
+.panel-shortcuts {
+  margin-top: 16px;
+  width: 100%;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+.panel-shortcuts p {
+  margin: 0;
+}
+
+.panel-shortcuts b {
+  color: var(--color-text-dim);
+}
+
+/* 元件属性 */
+.component-properties {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prop-section {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.prop-label {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.prop-value {
+  font-size: 13px;
+  color: var(--color-text);
+  font-family: monospace;
+}
+
+.prop-value-small {
+  font-size: 12px;
+  color: var(--color-text-dim);
+}
+
+.prop-input {
+  width: 100%;
+  padding: 5px 8px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-size: 13px;
+  font-family: monospace;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.prop-input:focus {
+  border-color: var(--color-accent);
+}
+
+.prop-value-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.prop-input-number {
+  flex: 1;
+  min-width: 0;
+}
+
+.prop-select {
+  padding: 5px 4px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.prop-select:focus {
+  border-color: var(--color-accent);
+}
+
+.prop-unit {
+  font-size: 12px;
+  color: var(--color-text-dim);
+  font-family: monospace;
+  min-width: 18px;
+}
+
+.prop-formatted {
+  font-size: 11px;
+  color: var(--color-success);
+  font-family: monospace;
+  margin-top: 2px;
+}
+
+/* 操作按钮 */
+.prop-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.btn-action {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.btn-rotate {
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+.btn-rotate:hover {
+  background: rgba(42, 58, 90, 0.5);
+  border-color: var(--color-accent);
+}
+
+.btn-delete {
+  background: var(--color-danger-subtle);
+  color: var(--color-danger);
+}
+
+.btn-delete:hover {
+  background: rgba(90, 42, 42, 0.5);
+  border-color: var(--color-danger);
+}
+
+/* 多选列表 */
+.multi-select-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.multi-select-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 6px;
+  background: var(--color-bg-input);
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.multi-select-name {
+  color: var(--color-text);
+  font-family: monospace;
+  font-weight: 500;
+}
+
+.multi-select-type {
+  color: var(--color-text-dim);
+  font-size: 11px;
+}
+
+/* ==================== MCU GPIO 引脚配置 ==================== */
+
+.mcu-pin-config {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+}
+
+.mcu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mcu-title {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.pin-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.pin-btn {
+  padding: 3px 6px;
+  font-size: 10px;
+  font-family: monospace;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pin-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.pin-btn-active {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  border-color: var(--color-accent);
+}
+
+/* 引脚模式颜色指示 */
+.pin-mode-input {
+  border-left: 3px solid var(--color-success);
+}
+
+.pin-mode-output {
+  border-left: 3px solid var(--color-danger);
+}
+
+.pin-mode-analog {
+  border-left: 3px solid var(--color-warning);
+}
+
+.pin-mode-pwm {
+  border-left: 3px solid var(--color-info);
+}
+
+.prop-select-full {
+  width: 100%;
+}
+
+.drive-specs {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--color-text-dim);
+  font-family: monospace;
+}

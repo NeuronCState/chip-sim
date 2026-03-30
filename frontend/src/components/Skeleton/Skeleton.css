@@ -1,0 +1,204 @@
+/* ==================== 骨架屏动画 ==================== */
+
+.skeleton {
+  border-radius: 4px;
+  background: var(--skeleton-bg, rgba(255, 255, 255, 0.06));
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-bg, rgba(255, 255, 255, 0.06)) 25%,
+    var(--skeleton-shine, rgba(255, 255, 255, 0.12)) 50%,
+    var(--skeleton-bg, rgba(255, 255, 255, 0.06)) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* ==================== 变体 ==================== */
+
+.skeleton-text {
+  height: 16px;
+  border-radius: 4px;
+}
+
+.skeleton-rect {
+  border-radius: 6px;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+.skeleton-button {
+  height: 32px;
+  border-radius: 6px;
+  width: 80px;
+}
+
+/* ==================== 预设布局 ==================== */
+
+.skeleton-library {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-library-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.skeleton-library-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.skeleton-property {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-waveform {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-waveform-legend {
+  display: flex;
+  gap: 8px;
+}
+
+.skeleton-validation {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-validation-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==================== 亮色主题覆盖 ==================== */
+
+.theme-light .skeleton {
+  --skeleton-bg: rgba(0, 0, 0, 0.06);
+  --skeleton-shine: rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== 电路画布骨架屏 ==================== */
+
+.skeleton-circuit-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.skeleton-circuit-component {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+.skeleton-circuit-wire {
+  position: absolute;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 1px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* ==================== 编辑器页面骨架屏 ==================== */
+
+.skeleton-editor-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1px;
+  background: var(--sil-bg-deep, #0d0d1a);
+}
+
+.skeleton-editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--sil-surface-raised, #141428);
+  border-bottom: 1px solid var(--sil-panel-dark, #2a2a4a);
+}
+
+.skeleton-editor-body {
+  display: flex;
+  flex: 1;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.skeleton-editor-sidebar {
+  width: 220px;
+  padding: 12px;
+  background: var(--sil-surface-raised, #141428);
+  border-right: 1px solid var(--sil-panel-dark, #2a2a4a);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-editor-canvas {
+  flex: 1;
+  padding: 16px;
+  background: var(--sil-bg-deep, #0d0d1a);
+}
+
+.skeleton-editor-right {
+  width: 260px;
+  padding: 12px;
+  background: var(--sil-surface-raised, #141428);
+  border-left: 1px solid var(--sil-panel-dark, #2a2a4a);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 兼容旧 .theme-light 类名 */
+.theme-light .skeleton-editor-page { background: var(--sil-bg-soft, #f5f5f5); }
+.theme-light .skeleton-editor-toolbar { background: var(--sil-surface-raised, #fff); border-bottom-color: var(--sil-panel-dark, #eee); }
+.theme-light .skeleton-editor-sidebar { background: var(--sil-surface-raised, #fff); border-right-color: var(--sil-panel-dark, #eee); }
+.theme-light .skeleton-editor-canvas { background: var(--sil-bg-top, #f8f8f8); }
+.theme-light .skeleton-editor-right { background: var(--sil-surface-raised, #fff); border-left-color: var(--sil-panel-dark, #eee); }

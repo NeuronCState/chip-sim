@@ -1,0 +1,65 @@
+:root {
+  /* 背景 */
+  --sil-bg-deep: #c6d4db;
+  --sil-bg-soft: #e5edf2;
+  --sil-bg-top: #f4f8fb;
+  /* 面板 */
+  --sil-panel: #e0e9ee;
+  --sil-panel-bright: #f2f7fa;
+  --sil-panel-dark: #d4dfe6;
+  /* 表面 */
+  --sil-surface-raised: #edf3f7;
+  --sil-surface-muted: #e6edf2;
+  --sil-surface-pressed: #d8e3e9;
+  --sil-surface-glass: rgba(246, 250, 253, .74);
+  /* 文字 */
+  --sil-text-main: #1f333d;
+  --sil-text-soft: #5a707a;
+  /* 强调色 */
+  --sil-mint: #58cebe;
+  --sil-mint-strong: #35b8a8;
+  --sil-mint-soft: #d7f0ea;
+  --sil-ocean: #78b6ec;
+  --sil-ocean-strong: #5c9cd9;
+  --sil-ocean-soft: #dce8f6;
+  --sil-peach: #eeae8a;
+  --sil-peach-strong: #dc9470;
+  --sil-peach-soft: #f6e2d3;
+  --sil-danger: #de8674;
+  /* 阴影 */
+  --sil-shadow-float: 14px 16px 28px rgba(107, 125, 135, .24), -9px -9px 18px rgba(255, 255, 255, .78);
+  --sil-shadow-pressed: inset 5px 6px 11px rgba(132, 150, 159, .42), inset -4px -4px 9px rgba(255, 255, 255, .76);
+  --sil-shadow-soft: 8px 9px 17px rgba(116, 134, 144, .22), -6px -6px 12px rgba(255, 255, 255, .74);
+  --sil-outline-soft: 0 0 0 1px rgba(109, 128, 139, .15) inset;
+  --sil-focus-ring: 0 0 0 2px rgba(53, 184, 168, .28);
+  /* 圆角 */
+  --sil-radius-sm: 12px;
+  --sil-radius-md: 18px;
+  --sil-radius-lg: 26px;
+  /* 过渡 */
+  --sil-transition-spring: .24s cubic-bezier(.22, 1, .36, 1);
+  /* 尺寸 */
+  --sil-topbar-height: 56px;
+  --sil-sidebar-width: 260px;
+  --sil-right-panel-width: 320px;
+}
+
+/* 暗色主题 */
+[data-theme="dark"] {
+  --sil-bg-deep: #0d1b22;
+  --sil-bg-soft: #132229;
+  --sil-bg-top: #1a2d36;
+  --sil-panel: #1e3340;
+  --sil-panel-bright: #243d4d;
+  --sil-panel-dark: #162832;
+  --sil-surface-raised: #1e3340;
+  --sil-surface-muted: #1a2d36;
+  --sil-surface-pressed: #132229;
+  --sil-surface-glass: rgba(26, 45, 54, .74);
+  --sil-text-main: #e0f0f8;
+  --sil-text-soft: #8ab0c4;
+  --sil-shadow-float: 8px 10px 20px rgba(0, 0, 0, .4), -4px -4px 10px rgba(255, 255, 255, .04);
+  --sil-shadow-pressed: inset 4px 5px 10px rgba(0, 0, 0, .4), inset -3px -3px 8px rgba(255, 255, 255, .04);
+  --sil-shadow-soft: 5px 6px 12px rgba(0, 0, 0, .3), -3px -3px 8px rgba(255, 255, 255, .04);
+  --sil-outline-soft: 0 0 0 1px rgba(255, 255, 255, .06) inset;
+}

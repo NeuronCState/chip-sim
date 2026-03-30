@@ -1,0 +1,32 @@
+{
+  "id": "stm32-can-bus",
+  "name": "STM32 CAN总线收发",
+  "nameEn": "STM32 CAN Bus Communication",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "STM32通过CAN控制器连接TJA1050收发器实现CAN总线通信",
+  "descriptionEn": "STM32 CAN controller connects to TJA1050 transceiver for CAN bus communication",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "can_transceiver", "name": "U2", "position": { "x": 350, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 500, "y": 140 }, "value": { "value": 120, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC33", "position": { "x": 100, "y": 80 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC5", "position": { "x": 280, "y": 80 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "U2:0" },
+    { "from": "U1:1", "to": "U2:1" },
+    { "from": "U2:2", "to": "R1:0" },
+    { "from": "R1:1", "to": "U2:3" },
+    { "from": "VCC33:1", "to": "U1:2" },
+    { "from": "VCC5:1", "to": "U2:4" },
+    { "from": "VCC33:0", "to": "GND:0" },
+    { "from": "VCC5:0", "to": "GND:0" },
+    { "from": "U2:5", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，STM32 CAN控制器配置波特率500kbps，TJA1050差分驱动CAN_H/CAN_L。R1为总线终端电阻120Ω。",
+    "en": "Run protocol simulation. STM32 CAN controller configures 500kbps baud rate, TJA1050 differential drives CAN_H/CAN_L. R1 is 120Ω bus termination."
+  }
+}

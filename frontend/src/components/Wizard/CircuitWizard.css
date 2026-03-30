@@ -1,0 +1,244 @@
+/**
+ * 电路向导样式
+ */
+
+.wizard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  animation: wizardFadeIn 0.2s ease;
+}
+
+.wizard-dialog {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  width: 720px;
+  max-width: 95vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: wizardSlideUp 0.25s ease;
+}
+
+/* 头部 */
+.wizard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.wizard-title {
+  margin: 0;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.wizard-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-dim);
+}
+
+.wizard-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.15s;
+}
+
+.wizard-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-danger);
+}
+
+/* 主体 */
+.wizard-body {
+  padding: 16px 24px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* 分类标签 */
+.wizard-categories {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.wizard-cat-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.wizard-cat-btn:hover {
+  border-color: var(--color-border-light);
+  color: var(--color-text);
+}
+
+.wizard-cat-active {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-bg-app);
+  font-weight: 600;
+}
+
+/* 模板网格 */
+.wizard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.wizard-card {
+  background: var(--color-bg-toolbar);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.wizard-card:hover {
+  border-color: var(--color-border-light);
+  background: var(--color-bg-input);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.wizard-card-active {
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 1px var(--color-success), 0 4px 12px rgba(78, 205, 196, 0.2);
+}
+
+.wizard-card-blank {
+  border-style: dashed;
+  border-color: var(--color-border-light);
+}
+
+.wizard-card-blank:hover {
+  border-color: var(--color-success);
+  border-style: solid;
+}
+
+.wizard-card-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.wizard-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.wizard-card-desc {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.wizard-card-meta {
+  display: flex;
+  justify-content: center;
+}
+
+.wizard-difficulty {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* 预览区域 */
+.wizard-preview {
+  background: var(--color-bg-toolbar);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.wizard-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.wizard-preview-header h3 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.wizard-load-btn {
+  padding: 6px 16px;
+  background: var(--color-success);
+  color: var(--color-bg-app);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.wizard-load-btn:hover {
+  background: var(--color-success);
+  box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);
+}
+
+.wizard-preview-desc {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--color-text-dim);
+}
+
+.wizard-preview-info {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--color-text-dim);
+}
+
+/* 动画 */
+@keyframes wizardFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes wizardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

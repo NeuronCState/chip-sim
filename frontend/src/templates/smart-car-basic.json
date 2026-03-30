@@ -1,0 +1,32 @@
+{
+  "id": "smart-car-basic",
+  "name": "L298N驱动双电机智能小车",
+  "nameEn": "L298N Dual Motor Smart Car",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "MCU通过L298N双H桥驱动两个直流电机实现智能小车前进/后退/转向",
+  "descriptionEn": "MCU drives two DC motors via L298N dual H-bridge for smart car forward/backward/turning",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "dc_motor", "name": "M1", "position": { "x": 500, "y": 120 }, "value": { "value": 6, "unit": "V" } },
+    { "type": "dc_motor", "name": "M2", "position": { "x": 500, "y": 300 }, "value": { "value": 6, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 250, "y": 40 }, "value": { "value": 7.4, "unit": "V" } },
+    { "type": "dc_source", "name": "V_logic", "position": { "x": 80, "y": 80 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "M1:0" },
+    { "from": "U1:1", "to": "M1:1" },
+    { "from": "U1:2", "to": "M2:0" },
+    { "from": "U1:3", "to": "M2:1" },
+    { "from": "VCC:1", "to": "U1:4" },
+    { "from": "V_logic:1", "to": "U1:5" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "V_logic:0", "to": "GND:0" },
+    { "from": "U1:6", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，MCU输出4路PWM控制L298N的IN1-IN4引脚。IN1=HIGH/IN2=LOW电机M1正转，反之反转。ENA/ENB控制速度。",
+    "en": "Run digital simulation. MCU outputs 4 PWM channels to L298N IN1-IN4. IN1=HIGH/IN2=LOW rotates M1 forward, reverse for backward. ENA/ENB control speed."
+  }
+}

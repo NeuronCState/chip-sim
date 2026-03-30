@@ -1,0 +1,31 @@
+{
+  "id": "c51-pwm-buzzer",
+  "name": "C51 PWM驱动无源蜂鸣器",
+  "nameEn": "C51 PWM Passive Buzzer Driver",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "51单片机定时器产生PWM方波驱动无源蜂鸣器发出不同频率声音",
+  "descriptionEn": "8051 MCU timer generates PWM square wave to drive passive buzzer at different frequencies",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "buzzer_passive", "name": "BZ1", "position": { "x": 420, "y": 180 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "bjt_npn", "name": "Q1", "position": { "x": 350, "y": 250 }, "value": { "value": 100, "unit": "β" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 250, "y": 200 }, "value": { "value": 1000, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 100, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "Q1:0" },
+    { "from": "VCC:1", "to": "BZ1:0" },
+    { "from": "BZ1:1", "to": "Q1:1" },
+    { "from": "Q1:2", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:1" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U1:2", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，MCU定时器改变PWM频率驱动蜂鸣器。中音Do=523Hz，Re=587Hz，Mi=659Hz。",
+    "en": "Run digital simulation. MCU timer changes PWM frequency to drive buzzer. Middle Do=523Hz, Re=587Hz, Mi=659Hz."
+  }
+}

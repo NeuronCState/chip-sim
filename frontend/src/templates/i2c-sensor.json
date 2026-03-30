@@ -1,0 +1,60 @@
+{
+  "id": "i2c-sensor",
+  "name": "I2C传感器读取电路",
+  "nameEn": "I2C Sensor Reading Circuit",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "MCU通过I2C总线读取传感器数据，含上拉电阻配置",
+  "descriptionEn": "MCU reads sensor data via I2C bus with pull-up resistor configuration",
+  "components": [
+    {
+      "type": "i2c_master",
+      "name": "MCU",
+      "position": { "x": 100, "y": 200 },
+      "value": { "value": 100000, "unit": "Hz" }
+    },
+    {
+      "type": "i2c_slave",
+      "name": "Sensor",
+      "position": { "x": 500, "y": 200 },
+      "value": { "value": 0, "unit": "" }
+    },
+    {
+      "type": "resistor",
+      "name": "R_SCL",
+      "position": { "x": 300, "y": 100 },
+      "value": { "value": 4700, "unit": "Ω" }
+    },
+    {
+      "type": "resistor",
+      "name": "R_SDA",
+      "position": { "x": 300, "y": 300 },
+      "value": { "value": 4700, "unit": "Ω" }
+    },
+    {
+      "type": "dc_source",
+      "name": "VCC",
+      "position": { "x": 100, "y": 80 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 100, "y": 340 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "VCC:1", "to": "R_SCL:0" },
+    { "from": "R_SCL:1", "to": "MCU:0" },
+    { "from": "R_SCL:1", "to": "Sensor:0" },
+    { "from": "VCC:1", "to": "R_SDA:0" },
+    { "from": "R_SDA:1", "to": "MCU:1" },
+    { "from": "R_SDA:1", "to": "Sensor:1" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，观察SCL时钟信号和SDA数据信号的I2C通信波形。上拉电阻典型值4.7kΩ。",
+    "en": "Run protocol simulation to observe SCL clock and SDA data waveforms. Typical pull-up resistor value: 4.7kΩ."
+  }
+}

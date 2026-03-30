@@ -1,0 +1,321 @@
+{
+  "series": "AVR",
+  "name": "ATmega328P",
+  "package": "DIP-28",
+  "flash": 32768,
+  "ram": 2048,
+  "eeprom": 1024,
+  "clock": 20000000,
+  "voltage_min": 1.8,
+  "voltage_max": 5.5,
+  "pinCount": 28,
+  "pins": [
+    {
+      "id": "PC6",
+      "port": "C",
+      "bit": 6,
+      "pin": 1,
+      "functions": [
+        "GPIO",
+        "RESET"
+      ]
+    },
+    {
+      "id": "PD0",
+      "port": "D",
+      "bit": 0,
+      "pin": 2,
+      "functions": [
+        "GPIO",
+        "UART_RXD"
+      ]
+    },
+    {
+      "id": "PD1",
+      "port": "D",
+      "bit": 1,
+      "pin": 3,
+      "functions": [
+        "GPIO",
+        "UART_TXD"
+      ]
+    },
+    {
+      "id": "PD2",
+      "port": "D",
+      "bit": 2,
+      "pin": 4,
+      "functions": [
+        "GPIO",
+        "INT0"
+      ]
+    },
+    {
+      "id": "PD3",
+      "port": "D",
+      "bit": 3,
+      "pin": 5,
+      "functions": [
+        "GPIO",
+        "INT1",
+        "PWM",
+        "OC2B"
+      ]
+    },
+    {
+      "id": "PD4",
+      "port": "D",
+      "bit": 4,
+      "pin": 6,
+      "functions": [
+        "GPIO",
+        "XCK",
+        "T0"
+      ]
+    },
+    {
+      "id": "VCC",
+      "port": "POWER",
+      "bit": 0,
+      "pin": 7,
+      "functions": [
+        "POWER_5V"
+      ]
+    },
+    {
+      "id": "GND",
+      "port": "POWER",
+      "bit": 1,
+      "pin": 8,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "PB6",
+      "port": "B",
+      "bit": 6,
+      "pin": 9,
+      "functions": [
+        "GPIO",
+        "XTAL1",
+        "TOSC1"
+      ]
+    },
+    {
+      "id": "PB7",
+      "port": "B",
+      "bit": 7,
+      "pin": 10,
+      "functions": [
+        "GPIO",
+        "XTAL2",
+        "TOSC2"
+      ]
+    },
+    {
+      "id": "PD5",
+      "port": "D",
+      "bit": 5,
+      "pin": 11,
+      "functions": [
+        "GPIO",
+        "PWM",
+        "OC0B",
+        "T1"
+      ]
+    },
+    {
+      "id": "PD6",
+      "port": "D",
+      "bit": 6,
+      "pin": 12,
+      "functions": [
+        "GPIO",
+        "PWM",
+        "OC0A",
+        "AIN0"
+      ]
+    },
+    {
+      "id": "PD7",
+      "port": "D",
+      "bit": 7,
+      "pin": 13,
+      "functions": [
+        "GPIO",
+        "AIN1"
+      ]
+    },
+    {
+      "id": "PB0",
+      "port": "B",
+      "bit": 0,
+      "pin": 14,
+      "functions": [
+        "GPIO",
+        "ICP1",
+        "CLKO"
+      ]
+    },
+    {
+      "id": "PB1",
+      "port": "B",
+      "bit": 1,
+      "pin": 15,
+      "functions": [
+        "GPIO",
+        "PWM",
+        "OC1A"
+      ]
+    },
+    {
+      "id": "PB2",
+      "port": "B",
+      "bit": 2,
+      "pin": 16,
+      "functions": [
+        "GPIO",
+        "PWM",
+        "OC1B",
+        "SPI_SS"
+      ]
+    },
+    {
+      "id": "PB3",
+      "port": "B",
+      "bit": 3,
+      "pin": 17,
+      "functions": [
+        "GPIO",
+        "PWM",
+        "OC2A",
+        "SPI_MOSI"
+      ]
+    },
+    {
+      "id": "PB4",
+      "port": "B",
+      "bit": 4,
+      "pin": 18,
+      "functions": [
+        "GPIO",
+        "SPI_MISO"
+      ]
+    },
+    {
+      "id": "PB5",
+      "port": "B",
+      "bit": 5,
+      "pin": 19,
+      "functions": [
+        "GPIO",
+        "SPI_SCK"
+      ]
+    },
+    {
+      "id": "AVCC",
+      "port": "POWER",
+      "bit": 2,
+      "pin": 20,
+      "functions": [
+        "ANALOG_POWER"
+      ]
+    },
+    {
+      "id": "AREF",
+      "port": "ANALOG",
+      "bit": 0,
+      "pin": 21,
+      "functions": [
+        "ADC_REF"
+      ]
+    },
+    {
+      "id": "GND_2",
+      "port": "POWER",
+      "bit": 3,
+      "pin": 22,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "PC0",
+      "port": "C",
+      "bit": 0,
+      "pin": 23,
+      "functions": [
+        "GPIO",
+        "ADC",
+        "ADC0"
+      ]
+    },
+    {
+      "id": "PC1",
+      "port": "C",
+      "bit": 1,
+      "pin": 24,
+      "functions": [
+        "GPIO",
+        "ADC",
+        "ADC1"
+      ]
+    },
+    {
+      "id": "PC2",
+      "port": "C",
+      "bit": 2,
+      "pin": 25,
+      "functions": [
+        "GPIO",
+        "ADC",
+        "ADC2"
+      ]
+    },
+    {
+      "id": "PC3",
+      "port": "C",
+      "bit": 3,
+      "pin": 26,
+      "functions": [
+        "GPIO",
+        "ADC",
+        "ADC3"
+      ]
+    },
+    {
+      "id": "PC4",
+      "port": "C",
+      "bit": 4,
+      "pin": 27,
+      "functions": [
+        "GPIO",
+        "ADC",
+        "ADC4",
+        "I2C_SDA"
+      ]
+    },
+    {
+      "id": "PC5",
+      "port": "C",
+      "bit": 5,
+      "pin": 28,
+      "functions": [
+        "GPIO",
+        "ADC",
+        "ADC5",
+        "I2C_SCL"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "Timer"
+  ]
+}

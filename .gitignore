@@ -1,0 +1,38 @@
+# Chip Sim - Git Ignore
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+bin/
+*.exe
+
+# Tauri build
+src-tauri/target/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Go
+*.test
+*.out
+
+# Coverage
+coverage/
+*.lcov
+
+# Logs
+*.log

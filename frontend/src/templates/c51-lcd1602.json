@@ -1,0 +1,37 @@
+{
+  "id": "c51-lcd1602",
+  "name": "C51 LCD1602并行显示",
+  "nameEn": "C51 LCD1602 Parallel Display",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "51单片机通过8位并行总线驱动LCD1602液晶显示模块",
+  "descriptionEn": "8051 MCU drives LCD1602 LCD module via 8-bit parallel bus",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "lcd_display", "name": "LCD1", "position": { "x": 450, "y": 200 }, "value": { "value": 16, "unit": "char" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 350, "y": 100 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "potentiometer", "name": "RV1", "position": { "x": 350, "y": 60 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "LCD1:0" },
+    { "from": "U1:1", "to": "LCD1:1" },
+    { "from": "U1:2", "to": "LCD1:2" },
+    { "from": "U1:3", "to": "LCD1:3" },
+    { "from": "U1:4", "to": "LCD1:4" },
+    { "from": "U1:5", "to": "LCD1:5" },
+    { "from": "U1:6", "to": "LCD1:6" },
+    { "from": "U1:7", "to": "LCD1:7" },
+    { "from": "VCC:1", "to": "RV1:0" },
+    { "from": "RV1:1", "to": "LCD1:8" },
+    { "from": "RV1:2", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:8" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "LCD1:9", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，MCU先发送初始化命令（0x38设置8位2行，0x0C开显示），再写入显示数据。电位器RV1调节对比度。",
+    "en": "Run digital simulation. MCU sends init commands (0x38 for 8-bit 2-line, 0x0C display ON), then writes display data. Potentiometer RV1 adjusts contrast."
+  }
+}

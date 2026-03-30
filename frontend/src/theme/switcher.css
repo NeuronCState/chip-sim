@@ -1,0 +1,87 @@
+/**
+ * ThemeSwitcher 样式
+ */
+
+.theme-switcher {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--sil-surface-muted, #e6edf2);
+  border-radius: var(--sil-radius-md, 18px);
+  box-shadow: var(--sil-shadow-pressed, inset 0 2px 4px rgba(0,0,0,0.1));
+}
+
+.theme-switcher-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  border-radius: calc(var(--sil-radius-md, 18px) - 4px);
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sil-text-soft, #5a707a);
+  transition: all var(--sil-transition-spring, 0.24s cubic-bezier(.22, 1, .36, 1));
+  outline: none;
+  white-space: nowrap;
+  /* 最小点击区域 44x44 */
+  min-height: 36px;
+  min-width: 36px;
+}
+
+.theme-switcher-btn:hover:not(.active) {
+  color: var(--sil-text-main, #1f333d);
+  background: var(--sil-surface-raised, #edf3f7);
+}
+
+.theme-switcher-btn.active {
+  background: var(--sil-surface-raised, #edf3f7);
+  color: var(--sil-mint-strong, #35b8a8);
+  box-shadow: var(--sil-shadow-soft, 0 2px 8px rgba(0,0,0,0.1));
+}
+
+.theme-switcher-btn:focus-visible {
+  box-shadow: var(--sil-focus-ring, 0 0 0 2px rgba(53, 184, 168, .28));
+}
+
+.theme-switcher-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.theme-switcher-label {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .theme-switcher-label {
+    display: inline;
+  }
+}
+
+/* 简洁版切换按钮 */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: var(--sil-radius-sm, 12px);
+  cursor: pointer;
+  font-size: 18px;
+  transition: background var(--sil-transition-spring, 0.24s cubic-bezier(.22, 1, .36, 1));
+  outline: none;
+}
+
+.theme-toggle:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+}
+
+.theme-toggle:focus-visible {
+  box-shadow: var(--sil-focus-ring, 0 0 0 2px rgba(53, 184, 168, .28));
+}

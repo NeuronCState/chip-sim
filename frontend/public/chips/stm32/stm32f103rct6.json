@@ -1,0 +1,644 @@
+{
+  "series": "STM32F1",
+  "name": "STM32F103RCT6",
+  "package": "LQFP-64",
+  "flash": 262144,
+  "ram": 49152,
+  "clock": 72000000,
+  "pinCount": 64,
+  "pins": [
+    {
+      "id": "PA0",
+      "port": "A",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC1_IN0",
+        "TIM2_CH1",
+        "USART2_CTS"
+      ]
+    },
+    {
+      "id": "PA1",
+      "port": "A",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC1_IN1",
+        "TIM2_CH2",
+        "USART2_RTS"
+      ]
+    },
+    {
+      "id": "PA2",
+      "port": "A",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "ADC1_IN2",
+        "TIM2_CH3",
+        "USART2_TX"
+      ]
+    },
+    {
+      "id": "PA3",
+      "port": "A",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "ADC1_IN3",
+        "TIM2_CH4",
+        "USART2_RX"
+      ]
+    },
+    {
+      "id": "PA4",
+      "port": "A",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "ADC1_IN4",
+        "DAC_OUT1",
+        "SPI1_NSS",
+        "USART2_CK"
+      ]
+    },
+    {
+      "id": "PA5",
+      "port": "A",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "ADC1_IN5",
+        "DAC_OUT2",
+        "SPI1_SCK"
+      ]
+    },
+    {
+      "id": "PA6",
+      "port": "A",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "ADC1_IN6",
+        "TIM3_CH1",
+        "SPI1_MISO"
+      ]
+    },
+    {
+      "id": "PA7",
+      "port": "A",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "ADC1_IN7",
+        "TIM3_CH2",
+        "SPI1_MOSI"
+      ]
+    },
+    {
+      "id": "PA8",
+      "port": "A",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "TIM1_CH1",
+        "MCO",
+        "USART1_CK"
+      ]
+    },
+    {
+      "id": "PA9",
+      "port": "A",
+      "bit": 9,
+      "functions": [
+        "GPIO",
+        "TIM1_CH2",
+        "USART1_TX"
+      ]
+    },
+    {
+      "id": "PA10",
+      "port": "A",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "TIM1_CH3",
+        "USART1_RX"
+      ]
+    },
+    {
+      "id": "PA11",
+      "port": "A",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "TIM1_CH4",
+        "USART1_CTS",
+        "CAN_RX",
+        "USB_DM"
+      ]
+    },
+    {
+      "id": "PA12",
+      "port": "A",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "TIM1_ETR",
+        "USART1_RTS",
+        "CAN_TX",
+        "USB_DP"
+      ]
+    },
+    {
+      "id": "PA13",
+      "port": "A",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "JTMS",
+        "SWDIO"
+      ]
+    },
+    {
+      "id": "PA14",
+      "port": "A",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "JTCK",
+        "SWCLK"
+      ]
+    },
+    {
+      "id": "PA15",
+      "port": "A",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "JTDI",
+        "TIM2_CH1_ETR"
+      ]
+    },
+    {
+      "id": "PB0",
+      "port": "B",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC1_IN8",
+        "TIM3_CH3"
+      ]
+    },
+    {
+      "id": "PB1",
+      "port": "B",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC1_IN9",
+        "TIM3_CH4"
+      ]
+    },
+    {
+      "id": "PB2",
+      "port": "B",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "BOOT1"
+      ]
+    },
+    {
+      "id": "PB3",
+      "port": "B",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "JTDO",
+        "TIM2_CH2",
+        "SPI1_SCK"
+      ]
+    },
+    {
+      "id": "PB4",
+      "port": "B",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "NJTRST",
+        "TIM3_CH1",
+        "SPI1_MISO"
+      ]
+    },
+    {
+      "id": "PB5",
+      "port": "B",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "TIM3_CH2",
+        "SPI1_MOSI",
+        "I2C1_SMBA"
+      ]
+    },
+    {
+      "id": "PB6",
+      "port": "B",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "TIM4_CH1",
+        "I2C1_SCL",
+        "USART1_TX"
+      ]
+    },
+    {
+      "id": "PB7",
+      "port": "B",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "TIM4_CH2",
+        "I2C1_SDA",
+        "USART1_RX"
+      ]
+    },
+    {
+      "id": "PB8",
+      "port": "B",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "TIM4_CH3",
+        "I2C1_SCL",
+        "CAN_RX"
+      ]
+    },
+    {
+      "id": "PB9",
+      "port": "B",
+      "bit": 9,
+      "functions": [
+        "GPIO",
+        "TIM4_CH4",
+        "I2C1_SDA",
+        "CAN_TX"
+      ]
+    },
+    {
+      "id": "PB10",
+      "port": "B",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "TIM2_CH3",
+        "I2C2_SCL",
+        "USART3_TX"
+      ]
+    },
+    {
+      "id": "PB11",
+      "port": "B",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "TIM2_CH4",
+        "I2C2_SDA",
+        "USART3_RX"
+      ]
+    },
+    {
+      "id": "PB12",
+      "port": "B",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "TIM1_BKIN",
+        "I2C2_SMBA",
+        "SPI2_NSS",
+        "USART3_CK"
+      ]
+    },
+    {
+      "id": "PB13",
+      "port": "B",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "TIM1_CH1N",
+        "SPI2_SCK",
+        "USART3_CTS"
+      ]
+    },
+    {
+      "id": "PB14",
+      "port": "B",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "TIM1_CH2N",
+        "SPI2_MISO",
+        "USART3_RTS"
+      ]
+    },
+    {
+      "id": "PB15",
+      "port": "B",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "TIM1_CH3N",
+        "SPI2_MOSI"
+      ]
+    },
+    {
+      "id": "PC0",
+      "port": "C",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC1_IN10"
+      ]
+    },
+    {
+      "id": "PC1",
+      "port": "C",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC1_IN11"
+      ]
+    },
+    {
+      "id": "PC2",
+      "port": "C",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "ADC1_IN12"
+      ]
+    },
+    {
+      "id": "PC3",
+      "port": "C",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "ADC1_IN13"
+      ]
+    },
+    {
+      "id": "PC4",
+      "port": "C",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "ADC1_IN14"
+      ]
+    },
+    {
+      "id": "PC5",
+      "port": "C",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "ADC1_IN15"
+      ]
+    },
+    {
+      "id": "PC6",
+      "port": "C",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "TIM3_CH1"
+      ]
+    },
+    {
+      "id": "PC7",
+      "port": "C",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "TIM3_CH2"
+      ]
+    },
+    {
+      "id": "PC8",
+      "port": "C",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "TIM3_CH3"
+      ]
+    },
+    {
+      "id": "PC9",
+      "port": "C",
+      "bit": 9,
+      "functions": [
+        "GPIO",
+        "TIM3_CH4"
+      ]
+    },
+    {
+      "id": "PC10",
+      "port": "C",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "USART3_TX"
+      ]
+    },
+    {
+      "id": "PC11",
+      "port": "C",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "USART3_RX"
+      ]
+    },
+    {
+      "id": "PC12",
+      "port": "C",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "USART3_CK"
+      ]
+    },
+    {
+      "id": "PC13",
+      "port": "C",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "TAMPER_RTC"
+      ]
+    },
+    {
+      "id": "PC14",
+      "port": "C",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "OSC32_IN"
+      ]
+    },
+    {
+      "id": "PC15",
+      "port": "C",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "OSC32_OUT"
+      ]
+    },
+    {
+      "id": "PD0",
+      "port": "D",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "OSC_IN"
+      ]
+    },
+    {
+      "id": "PD1",
+      "port": "D",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "OSC_OUT"
+      ]
+    },
+    {
+      "id": "PD2",
+      "port": "D",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "TIM3_ETR"
+      ]
+    },
+    {
+      "id": "NRST",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    },
+    {
+      "id": "VBAT",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VDD",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VSS",
+      "port": "POWER",
+      "bit": 2,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VDDA",
+      "port": "POWER",
+      "bit": 3,
+      "functions": [
+        "POWER_ANALOG"
+      ]
+    },
+    {
+      "id": "VSSA",
+      "port": "POWER",
+      "bit": 4,
+      "functions": [
+        "POWER_ANALOG"
+      ]
+    },
+    {
+      "id": "BOOT0",
+      "port": "CONTROL",
+      "bit": 1,
+      "functions": [
+        "BOOT_MODE"
+      ]
+    },
+    {
+      "id": "OSC_IN",
+      "port": "CONTROL",
+      "bit": 2,
+      "functions": [
+        "HSE_IN"
+      ]
+    },
+    {
+      "id": "OSC_OUT",
+      "port": "CONTROL",
+      "bit": 3,
+      "functions": [
+        "HSE_OUT"
+      ]
+    },
+    {
+      "id": "VDD_2",
+      "port": "POWER",
+      "bit": 5,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VSS_2",
+      "port": "POWER",
+      "bit": 6,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VDD_3",
+      "port": "POWER",
+      "bit": 7,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VSS_3",
+      "port": "POWER",
+      "bit": 8,
+      "functions": [
+        "POWER"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "USART",
+    "SPI",
+    "I2C",
+    "ADC",
+    "TIM",
+    "CAN",
+    "USB",
+    "DMA",
+    "DAC"
+  ]
+}

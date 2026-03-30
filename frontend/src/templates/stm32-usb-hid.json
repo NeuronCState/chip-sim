@@ -1,0 +1,32 @@
+{
+  "id": "stm32-usb-hid",
+  "name": "STM32 USB HID键盘设备",
+  "nameEn": "STM32 USB HID Keyboard Device",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "STM32 USB外设配置为HID键盘设备，按键触发USB键盘字符上报",
+  "descriptionEn": "STM32 USB peripheral configured as HID keyboard, key press triggers USB character report",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 350, "y": 100 }, "value": { "value": 22, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 350, "y": 180 }, "value": { "value": 22, "unit": "Ω" } },
+    { "type": "capacitor", "name": "C1", "position": { "x": 450, "y": 100 }, "value": { "value": 2.2e-12, "unit": "F" } },
+    { "type": "capacitor", "name": "C2", "position": { "x": 450, "y": 180 }, "value": { "value": 2.2e-12, "unit": "F" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "C1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "U1:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "C2:0" },
+    { "from": "C2:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:2" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，USB D+/D-差分信号需22Ω串联电阻阻抗匹配。D+上拉1.5kΩ标记为全速设备。C1/C2为ESD保护电容。",
+    "en": "Run digital simulation. USB D+/D- differential signals need 22Ω series resistors for impedance matching. D+ pull-up 1.5kΩ marks full-speed device. C1/C2 are ESD protection caps."
+  }
+}

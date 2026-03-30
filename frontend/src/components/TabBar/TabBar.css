@@ -1,0 +1,145 @@
+/**
+ * TabBar - 多标签页样式
+ */
+
+.tab-bar {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  height: 36px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.tab-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-bar-empty {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  flex: 1;
+}
+
+.tab-new-btn {
+  padding: 4px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab-new-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0, 102, 204, 0.05);
+}
+
+/* 标签项 */
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  min-width: 100px;
+  max-width: 200px;
+  height: 100%;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tab-item:hover {
+  background: var(--bg-input);
+}
+
+.tab-active {
+  background: var(--bg-input);
+  border-bottom: 2px solid var(--accent);
+}
+
+.tab-active:hover {
+  background: var(--bg-input);
+}
+
+.tab-dragging {
+  opacity: 0.4;
+}
+
+.tab-drop-target {
+  border-left: 2px solid var(--accent);
+}
+
+.tab-name {
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  line-height: 36px;
+}
+
+.tab-active .tab-name {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tab-unsaved {
+  color: var(--accent);
+  font-size: 10px;
+}
+
+/* 关闭按钮 */
+.tab-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: all 0.1s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.tab-item:hover .tab-close,
+.tab-active .tab-close {
+  opacity: 0.7;
+}
+
+.tab-close:hover {
+  opacity: 1 !important;
+  background: rgba(255, 107, 107, 0.2);
+  color: var(--color-danger);
+}
+
+/* 新增按钮 */
+.tab-add-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 10px;
+  height: 100%;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.tab-add-btn:hover {
+  color: var(--accent);
+  background: rgba(0, 102, 204, 0.05);
+}

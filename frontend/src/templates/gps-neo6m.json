@@ -1,0 +1,37 @@
+{
+  "id": "gps-neo6m",
+  "name": "NEO-6M GPS定位模块",
+  "nameEn": "NEO-6M GPS Positioning Module",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "MCU通过UART接收NEO-6M GPS模块的NMEA数据，解析经纬度/时间/速度",
+  "descriptionEn": "MCU receives NMEA data from NEO-6M GPS module via UART, parses lat/lon/time/speed",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "uart_tx", "name": "GPS_TX", "position": { "x": 400, "y": 150 }, "value": { "value": 9600, "unit": "bps" } },
+    { "type": "uart_rx", "name": "GPS_RX", "position": { "x": 400, "y": 250 }, "value": { "value": 9600, "unit": "bps" } },
+    { "type": "crystal", "name": "Y1", "position": { "x": 450, "y": 100 }, "value": { "value": 16000000, "unit": "Hz" } },
+    { "type": "led", "name": "LED1", "position": { "x": 450, "y": 350 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 350, "y": 350 }, "value": { "value": 1000, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "GPS_TX:0", "to": "U1:0" },
+    { "from": "U1:1", "to": "GPS_RX:0" },
+    { "from": "Y1:0", "to": "GPS_TX:1" },
+    { "from": "GPS_TX:2", "to": "LED1:0" },
+    { "from": "U1:2", "to": "R1:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "GPS_TX:3" },
+    { "from": "VCC:1", "to": "U1:3" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "GPS_TX:4", "to": "GND:0" },
+    { "from": "U1:4", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，NEO-6M上电后每秒输出NMEA语句：$GPGGA（定位数据）、$GPRMC（推荐定位）。LED闪烁表示定位成功。",
+    "en": "Run protocol simulation. NEO-6M outputs NMEA sentences every second after power-on: $GPGGA (position data), $GPRMC (recommended minimum). LED blinking indicates successful positioning."
+  }
+}

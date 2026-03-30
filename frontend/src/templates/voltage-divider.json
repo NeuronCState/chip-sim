@@ -1,0 +1,45 @@
+{
+  "id": "voltage-divider",
+  "name": "分压器电路",
+  "nameEn": "Voltage Divider",
+  "category": "basic",
+  "difficulty": 1,
+  "description": "经典电阻分压电路，理解欧姆定律",
+  "descriptionEn": "Classic resistive divider, understand Ohm's Law",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "V1",
+      "position": { "x": 100, "y": 200 },
+      "value": { "value": 10, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 250, "y": 160 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "resistor",
+      "name": "R2",
+      "position": { "x": 250, "y": 280 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 100, "y": 320 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "V1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "R2:1" },
+    { "from": "R2:0", "to": "GND:0" },
+    { "from": "V1:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行直流分析，测量 R1、R2 连接点的电压。当 R1=R2=10kΩ 时，输出为 5V。",
+    "en": "Run DC analysis, measure voltage at R1-R2 junction. With R1=R2=10kΩ, output is 5V."
+  }
+}

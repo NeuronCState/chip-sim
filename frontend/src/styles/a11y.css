@@ -1,0 +1,153 @@
+/**
+ * a11y.css — 无障碍样式
+ * WCAG AA 合规：焦点环、最小点击区域、减少动画
+ */
+
+/* ============================================================
+   焦点样式（:focus-visible）
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--tk-border-focus, #2563eb);
+  outline-offset: 2px;
+}
+
+/* 暗色主题焦点环更亮 */
+[data-theme="dark"] :focus-visible {
+  outline-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.3);
+}
+
+/* 移除鼠标点击的 focus 样式（仅键盘导航显示） */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* 交互元素焦点环（按钮、链接等） */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+[role="radio"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="menuitem"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--tk-border-focus, #2563eb);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] button:focus-visible,
+[data-theme="dark"] a:focus-visible,
+[data-theme="dark"] [role="button"]:focus-visible,
+[data-theme="dark"] [role="radio"]:focus-visible,
+[data-theme="dark"] input:focus-visible {
+  outline-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.3);
+}
+
+/* ============================================================
+   最小点击区域（44×44px）
+   ============================================================ */
+button,
+[role="button"],
+[role="radio"],
+[role="tab"],
+[role="menuitem"],
+a[href] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* 小按钮/图标按钮例外：在 CSS Module 中显式覆盖 */
+.btn-sm,
+.sil-hamburger,
+.theme-toggle,
+.closeBtn {
+  min-height: 40px;
+  min-width: 40px;
+}
+
+/* 内联文本链接不需要最小尺寸 */
+a[href]:not([class]) {
+  min-height: auto;
+  min-width: auto;
+}
+
+/* ============================================================
+   prefers-reduced-motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* 禁用主题切换过渡 */
+  [data-theme] {
+    transition: none !important;
+  }
+
+  /* 禁用 toast/modal 动画 */
+  .toast,
+  .overlay,
+  .modal,
+  .theme-switcher-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   高对比度模式支持
+   ============================================================ */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+
+  button,
+  [role="button"] {
+    border: 1px solid ButtonText;
+  }
+}
+
+/* ============================================================
+   跳过导航链接（Skip Link）
+   ============================================================ */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  padding: 12px 24px;
+  background: var(--tk-primary, #2563eb);
+  color: white;
+  font-weight: 600;
+  z-index: 10000;
+  transition: top 0.2s ease;
+  text-decoration: none;
+  border-radius: 0 0 var(--tk-radius-md, 8px) 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================================
+   屏幕阅读器专用
+   ============================================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

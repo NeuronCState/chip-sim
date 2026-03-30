@@ -1,0 +1,88 @@
+{
+  "id": "relay-control",
+  "name": "继电器控制电路",
+  "nameEn": "Relay Control Circuit",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "MCU GPIO通过三极管驱动继电器线圈，控制外部负载通断",
+  "descriptionEn": "MCU GPIO drives relay coil via transistor to switch external load",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "Vcc",
+      "position": { "x": 100, "y": 80 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "relay",
+      "name": "K1",
+      "position": { "x": 300, "y": 120 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "diode",
+      "name": "D1",
+      "position": { "x": 450, "y": 80 },
+      "value": { "value": 0.7, "unit": "V" }
+    },
+    {
+      "type": "dc_source",
+      "name": "Load_V",
+      "position": { "x": 300, "y": 260 },
+      "value": { "value": 220, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R_load",
+      "position": { "x": 450, "y": 260 },
+      "value": { "value": 100, "unit": "Ω" }
+    },
+    {
+      "type": "bjt_npn",
+      "name": "Q1",
+      "position": { "x": 300, "y": 370 },
+      "value": { "value": 100, "unit": "β" }
+    },
+    {
+      "type": "dc_source",
+      "name": "GPIO",
+      "position": { "x": 100, "y": 450 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 220, "y": 450 },
+      "value": { "value": 1000, "unit": "Ω" }
+    },
+    {
+      "type": "ground",
+      "name": "GND1",
+      "position": { "x": 300, "y": 490 },
+      "value": { "value": 0, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND2",
+      "position": { "x": 100, "y": 520 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "Vcc:1", "to": "K1:0" },
+    { "from": "K1:1", "to": "Q1:1" },
+    { "from": "K1:1", "to": "D1:1" },
+    { "from": "D1:0", "to": "Vcc:1" },
+    { "from": "K1:2", "to": "Load_V:1" },
+    { "from": "Load_V:1", "to": "R_load:0" },
+    { "from": "R_load:1", "to": "K1:3" },
+    { "from": "GPIO:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "Q1:0" },
+    { "from": "Q1:2", "to": "GND1:0" },
+    { "from": "GPIO:0", "to": "GND2:0" }
+  ],
+  "simulationNotes": {
+    "zh": "GPIO高电平时Q1导通，继电器线圈通电，常开触点闭合，负载回路接通。D1为续流二极管，吸收线圈断电时的反向电动势。R1限制基极电流。",
+    "en": "When GPIO is HIGH, Q1 conducts, relay coil energizes, NO contact closes and load circuit activates. D1 absorbs back-EMF when coil de-energizes. R1 limits base current."
+  }
+}

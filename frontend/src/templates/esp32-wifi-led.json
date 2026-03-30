@@ -1,0 +1,30 @@
+{
+  "id": "esp32-wifi-led",
+  "name": "ESP32 WiFi远程控制LED",
+  "nameEn": "ESP32 WiFi Remote LED Control",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "ESP32连接WiFi后通过HTTP服务器提供Web页面远程控制LED开关",
+  "descriptionEn": "ESP32 connects WiFi and provides web page via HTTP server for remote LED on/off control",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "wifi_module", "name": "WIFI1", "position": { "x": 150, "y": 100 }, "value": { "value": 2400, "unit": "MHz" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 350, "y": 180 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "led", "name": "LED1", "position": { "x": 480, "y": 180 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "WIFI1:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:2" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U1:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，ESP32连接路由器WiFi后启动HTTP Server（端口80），浏览器访问IP地址即可控制LED。",
+    "en": "Run digital simulation. ESP32 connects to router WiFi and starts HTTP Server (port 80). Open browser to IP address to control LED."
+  }
+}

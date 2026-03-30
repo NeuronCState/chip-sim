@@ -1,0 +1,39 @@
+{
+  "id": "security-alarm",
+  "name": "PIR人体感应+蜂鸣器安防",
+  "nameEn": "PIR Motion Sensor + Buzzer Security Alarm",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "PIR人体红外传感器检测到移动后触发蜂鸣器报警和LED闪烁",
+  "descriptionEn": "PIR infrared motion sensor detects movement, triggers buzzer alarm and LED flash",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "piezo_sensor", "name": "PIR1", "position": { "x": 350, "y": 100 }, "value": { "value": 0, "unit": "" } },
+    { "type": "buzzer_active", "name": "BZ1", "position": { "x": 450, "y": 250 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "led", "name": "LED1", "position": { "x": 450, "y": 350 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "bjt_npn", "name": "Q1", "position": { "x": 380, "y": 250 }, "value": { "value": 100, "unit": "β" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 270, "y": 220 }, "value": { "value": 1000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 330, "y": 350 }, "value": { "value": 330, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "VCC:1", "to": "PIR1:0" },
+    { "from": "PIR1:1", "to": "U1:0" },
+    { "from": "PIR1:2", "to": "GND:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "Q1:0" },
+    { "from": "VCC:1", "to": "BZ1:0" },
+    { "from": "BZ1:1", "to": "Q1:1" },
+    { "from": "Q1:2", "to": "GND:0" },
+    { "from": "U1:2", "to": "R2:0" },
+    { "from": "R2:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:3" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，PIR1检测到人体移动时输出高电平脉冲，MCU触发蜂鸣器报警10秒并LED闪烁。PIR延时可通过电位器调节。",
+    "en": "Run digital simulation. PIR1 outputs HIGH pulse on motion detection, MCU triggers 10s buzzer alarm and LED flash. PIR delay adjustable via potentiometer."
+  }
+}

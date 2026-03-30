@@ -1,0 +1,72 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sil-text-soft);
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  background: var(--sil-surface-raised);
+  border-radius: var(--sil-radius-sm);
+  box-shadow: var(--sil-shadow-pressed);
+  padding: 0 14px;
+  transition: box-shadow var(--sil-transition-spring);
+  gap: 8px;
+}
+
+.inputRow:focus-within {
+  box-shadow: var(--sil-shadow-pressed), var(--sil-focus-ring);
+}
+
+.prefix,
+.suffix {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  color: var(--sil-text-soft);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--sil-text-main);
+  padding: 10px 0;
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: var(--sil-text-soft);
+  opacity: 0.6;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sil-text-soft);
+  transition: all var(--sil-transition-spring);
+  flex-shrink: 0;
+}
+
+.clearBtn:hover {
+  background: var(--sil-surface-pressed);
+  color: var(--sil-text-main);
+}

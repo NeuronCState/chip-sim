@@ -1,0 +1,504 @@
+/**
+ * tokens.css — 全局设计令牌（Design Tokens）
+ * 统一管理亮色/暗色主题的全部 CSS 变量
+ * 
+ * 命名规范：
+ *   --tk-*      新标准令牌（规划文档定义）
+ *   --sil-*     旧版 ChipSim 令牌（兼容保留）
+ *   --color-*   theme.css 旧变量（兼容保留）
+ *   --vis-*     可视化专用（兼容保留）
+ * 
+ * 使用方式：
+ *   :root / [data-theme="light"] → 亮色
+ *   [data-theme="dark"]          → 暗色覆盖
+ */
+
+/* ============================================================
+   一、标准令牌 — 亮色主题（:root 默认值）
+   ============================================================ */
+:root {
+  /* --- 基础色板 --- */
+  --tk-primary: #2563eb;
+  --tk-primary-hover: #1d4ed8;
+  --tk-primary-active: #1e40af;
+  --tk-primary-light: #dbeafe;
+
+  --tk-success: #16a34a;
+  --tk-warning: #f59e0b;
+  --tk-error: #dc2626;
+  --tk-info: #0ea5e9;
+
+  /* --- 语义色 --- */
+  --tk-bg-base: #ffffff;
+  --tk-bg-surface: #f8fafc;
+  --tk-bg-elevated: #ffffff;
+  --tk-bg-overlay: rgba(0, 0, 0, 0.5);
+
+  --tk-text-primary: #0f172a;
+  --tk-text-secondary: #475569;
+  --tk-text-tertiary: #94a3b8;
+  --tk-text-inverse: #ffffff;
+  --tk-text-link: #2563eb;
+
+  --tk-border-default: #e2e8f0;
+  --tk-border-strong: #cbd5e1;
+  --tk-border-focus: #2563eb;
+
+  /* --- 阴影 --- */
+  --tk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --tk-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --tk-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --tk-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* --- 间距（4px 基准） --- */
+  --tk-space-1: 4px;
+  --tk-space-2: 8px;
+  --tk-space-3: 12px;
+  --tk-space-4: 16px;
+  --tk-space-5: 20px;
+  --tk-space-6: 24px;
+  --tk-space-8: 32px;
+  --tk-space-10: 40px;
+  --tk-space-12: 48px;
+  --tk-space-16: 64px;
+
+  /* --- 圆角 --- */
+  --tk-radius-sm: 4px;
+  --tk-radius-md: 8px;
+  --tk-radius-lg: 12px;
+  --tk-radius-xl: 16px;
+  --tk-radius-full: 9999px;
+
+  /* --- 字体 --- */
+  --tk-font-sans: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --tk-font-display: 'Space Grotesk', 'Manrope', sans-serif;
+  --tk-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  --tk-text-xs: 0.75rem;
+  --tk-text-sm: 0.875rem;
+  --tk-text-base: 1rem;
+  --tk-text-lg: 1.125rem;
+  --tk-text-xl: 1.25rem;
+  --tk-text-2xl: 1.5rem;
+
+  --tk-line-height-tight: 1.25;
+  --tk-line-height-normal: 1.5;
+  --tk-line-height-relaxed: 1.75;
+
+  /* --- 过渡 --- */
+  --tk-transition-fast: 150ms ease;
+  --tk-transition-base: 250ms ease;
+  --tk-transition-slow: 350ms ease;
+  --tk-transition-spring: .24s cubic-bezier(.22, 1, .36, 1);
+
+  /* --- 层级 --- */
+  --tk-z-dropdown: 1000;
+  --tk-z-sticky: 1020;
+  --tk-z-fixed: 1030;
+  --tk-z-modal-backdrop: 1040;
+  --tk-z-modal: 1050;
+  --tk-z-popover: 1060;
+  --tk-z-tooltip: 1070;
+  --tk-z-toast: 2000;
+
+  /* --- 图表/波形配色 --- */
+  --tk-chart-bg: #ffffff;
+  --tk-chart-plot-bg: #ffffff;
+  --tk-chart-grid: rgba(200, 200, 210, 0.8);
+  --tk-chart-axis: #999999;
+  --tk-chart-label: #666666;
+  --tk-chart-zero-line: rgba(150, 150, 170, 0.7);
+  --tk-chart-border: #cccccc;
+  --tk-chart-cursor: #888888;
+  --tk-chart-series-1: #1677ff;
+  --tk-chart-series-2: #13c2c2;
+  --tk-chart-series-3: #ff4d4f;
+  --tk-chart-series-4: #faad14;
+  --tk-chart-series-5: #722ed1;
+  --tk-chart-series-6: #eb2f96;
+
+  /* ============================================================
+     二、ChipSim 旧版令牌 — 亮色（--sil-* 兼容）
+     ============================================================ */
+  /* 背景 */
+  --sil-bg-deep: #c6d4db;
+  --sil-bg-soft: #e5edf2;
+  --sil-bg-top: #f4f8fb;
+  /* 面板 */
+  --sil-panel: #e0e9ee;
+  --sil-panel-bright: #f2f7fa;
+  --sil-panel-dark: #d4dfe6;
+  /* 表面 */
+  --sil-surface-raised: #edf3f7;
+  --sil-surface-muted: #e6edf2;
+  --sil-surface-pressed: #d8e3e9;
+  --sil-surface-glass: rgba(246, 250, 253, .74);
+  /* 文字 */
+  --sil-text-main: #1f333d;
+  --sil-text-soft: #5a707a;
+  /* 强调色 */
+  --sil-mint: #58cebe;
+  --sil-mint-strong: #35b8a8;
+  --sil-mint-soft: #d7f0ea;
+  --sil-ocean: #78b6ec;
+  --sil-ocean-strong: #5c9cd9;
+  --sil-ocean-soft: #dce8f6;
+  --sil-peach: #eeae8a;
+  --sil-peach-strong: #dc9470;
+  --sil-peach-soft: #f6e2d3;
+  --sil-danger: #de8674;
+  /* 阴影 */
+  --sil-shadow-float: 14px 16px 28px rgba(107, 125, 135, .24), -9px -9px 18px rgba(255, 255, 255, .78);
+  --sil-shadow-pressed: inset 5px 6px 11px rgba(132, 150, 159, .42), inset -4px -4px 9px rgba(255, 255, 255, .76);
+  --sil-shadow-soft: 8px 9px 17px rgba(116, 134, 144, .22), -6px -6px 12px rgba(255, 255, 255, .74);
+  --sil-outline-soft: 0 0 0 1px rgba(109, 128, 139, .15) inset;
+  --sil-focus-ring: 0 0 0 2px rgba(53, 184, 168, .28);
+  /* 圆角 */
+  --sil-radius-sm: 12px;
+  --sil-radius-md: 18px;
+  --sil-radius-lg: 26px;
+  /* 过渡 */
+  --sil-transition-spring: .24s cubic-bezier(.22, 1, .36, 1);
+  /* 尺寸 */
+  --sil-topbar-height: 56px;
+  --sil-sidebar-width: 260px;
+  --sil-right-panel-width: 320px;
+
+  /* ============================================================
+     三、theme.css 旧变量 — 亮色（--color-* 兼容）
+     ============================================================ */
+  --color-bg-app: #f0f2f5;
+  --color-bg-panel: #ffffff;
+  --color-bg-input: #f5f5f5;
+  --color-bg-toolbar: #ffffff;
+  --color-bg-canvas: #f8f9fa;
+  --color-bg-overlay: rgba(255, 255, 255, 0.7);
+
+  --color-border: #d9d9d9;
+  --color-border-light: #e8e8e8;
+  --color-border-accent: #1677ff;
+
+  --color-text: #1a1a2e;
+  --color-text-dim: #666666;
+  --color-text-muted: #999999;
+  --color-text-inverse: #ffffff;
+
+  --color-accent: #1677ff;
+  --color-accent-hover: #4096ff;
+  --color-accent-subtle: rgba(22, 119, 255, 0.1);
+
+  --color-success: #13c2c2;
+  --color-success-subtle: rgba(19, 194, 194, 0.1);
+  --color-danger: #ff4d4f;
+  --color-danger-subtle: rgba(255, 77, 79, 0.1);
+  --color-warning: #faad14;
+  --color-warning-subtle: rgba(250, 173, 20, 0.1);
+  --color-info: #1677ff;
+  --color-info-subtle: rgba(22, 119, 255, 0.1);
+
+  /* 画布专用 */
+  --color-grid: #e0e0e0;
+  --color-grid-major: #d0d0d0;
+  --color-wire: #1677ff;
+  --color-wire-selected: #ff4d4f;
+  --color-wire-preview: #7c9eff;
+  --color-component: #333333;
+  --color-component-selected: #1677ff;
+  --color-component-hover: #4096ff;
+  --color-port: #13c2c2;
+  --color-port-snap: #faad14;
+  --color-port-glow: rgba(19, 194, 194, 0.5);
+  --color-selection: #1677ff;
+  --color-node: #ff4d4f;
+  --color-node-ground: #13c2c2;
+
+  /* 热力图 */
+  --color-heatmap-low: #4488ff;
+  --color-heatmap-mid: #ffaa00;
+  --color-heatmap-high: #ff2222;
+
+  /* 动画光效 */
+  --color-glow: #1677ff;
+  --color-flow: #13c2c2;
+  --color-pulse: #1677ff;
+
+  /* 旧版阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-glow: 0 0 20px rgba(22, 119, 255, 0.2);
+
+  /* vis-* 可视化兼容 */
+  --vis-bg-app: #f0f2f5;
+  --vis-bg-panel: #ffffff;
+  --vis-bg-input: #f5f5f5;
+  --vis-bg-toolbar: #ffffff;
+  --vis-border: #d9d9d9;
+  --vis-border-light: #e8e8e8;
+  --vis-text: #1a1a2e;
+  --vis-text-dim: #666666;
+  --vis-text-muted: #999999;
+  --vis-accent: #1677ff;
+  --vis-accent-hover: #4096ff;
+  --vis-glow-color: #1677ff;
+  --vis-port-glow: rgba(19, 194, 194, 0.5);
+
+  /* EditorPage.css / ShortcutsHelp.css 兼容 */
+  --bg-app: #f0f2f5;
+  --bg-panel: #ffffff;
+  --bg-input: #f5f5f5;
+  --bg-toolbar: #ffffff;
+  --border: #d9d9d9;
+  --border-light: #e8e8e8;
+  --text: #1a1a2e;
+  --text-dim: #666;
+  --text-muted: #999;
+  --accent: #1677ff;
+  --accent-hover: #4096ff;
+  --success: #13c2c2;
+  --danger: #ff4d4f;
+  --warning: #faad14;
+
+  --panel-bg: #fff;
+  --border-color: #ddd;
+  --text-primary: #222;
+  --text-secondary: #666;
+  --hover-bg: #f0f0f0;
+  --input-bg: #f8f8f8;
+  --accent-color: #2563eb;
+  --kbd-bg: #f5f5f5;
+  --kbd-color: #333;
+  --border-subtle: #f0f0f0;
+  --text-muted-custom: #999;
+}
+
+/* ============================================================
+   四、暗色主题覆盖
+   ============================================================ */
+[data-theme="dark"],
+.dark {
+  /* --- 标准令牌暗色 --- */
+  --tk-bg-base: #0f172a;
+  --tk-bg-surface: #1e293b;
+  --tk-bg-elevated: #334155;
+  --tk-bg-overlay: rgba(0, 0, 0, 0.7);
+
+  --tk-text-primary: #f1f5f9;
+  --tk-text-secondary: #94a3b8;
+  --tk-text-tertiary: #64748b;
+  --tk-text-inverse: #0f172a;
+  --tk-text-link: #60a5fa;
+
+  --tk-border-default: #334155;
+  --tk-border-strong: #475569;
+  --tk-border-focus: #60a5fa;
+
+  --tk-primary: #60a5fa;
+  --tk-primary-hover: #93bbfd;
+  --tk-primary-active: #3b82f6;
+  --tk-primary-light: #1e3a5f;
+
+  --tk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --tk-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --tk-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --tk-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+
+  /* --- 图表暗色 --- */
+  --tk-chart-bg: #0d0d1a;
+  --tk-chart-plot-bg: #0a0a14;
+  --tk-chart-grid: rgba(42, 42, 74, 0.6);
+  --tk-chart-axis: #555555;
+  --tk-chart-label: #999999;
+  --tk-chart-zero-line: rgba(100, 100, 150, 0.5);
+  --tk-chart-border: #3a3a5a;
+  --tk-chart-cursor: #666666;
+  --tk-chart-series-1: #60a5fa;
+  --tk-chart-series-2: #4ecdc4;
+  --tk-chart-series-3: #ff6b6b;
+  --tk-chart-series-4: #ffd93d;
+  --tk-chart-series-5: #c084fc;
+  --tk-chart-series-6: #f472b6;
+
+  /* --- sil-* 暗色 --- */
+  --sil-bg-deep: #0d1b22;
+  --sil-bg-soft: #132229;
+  --sil-bg-top: #1a2d36;
+  --sil-panel: #1e3340;
+  --sil-panel-bright: #243d4d;
+  --sil-panel-dark: #162832;
+  --sil-surface-raised: #1e3340;
+  --sil-surface-muted: #1a2d36;
+  --sil-surface-pressed: #132229;
+  --sil-surface-glass: rgba(26, 45, 54, .74);
+  --sil-text-main: #e0f0f8;
+  --sil-text-soft: #8ab0c4;
+  --sil-shadow-float: 8px 10px 20px rgba(0, 0, 0, .4), -4px -4px 10px rgba(255, 255, 255, .04);
+  --sil-shadow-pressed: inset 4px 5px 10px rgba(0, 0, 0, .4), inset -3px -3px 8px rgba(255, 255, 255, .04);
+  --sil-shadow-soft: 5px 6px 12px rgba(0, 0, 0, .3), -3px -3px 8px rgba(255, 255, 255, .04);
+  --sil-outline-soft: 0 0 0 1px rgba(255, 255, 255, .06) inset;
+  --sil-focus-ring: 0 0 0 2px rgba(96, 165, 250, .35);
+
+  /* --- color-* 暗色 --- */
+  --color-bg-app: #0d0d1a;
+  --color-bg-panel: #16162a;
+  --color-bg-input: #1a1a2e;
+  --color-bg-toolbar: #12122a;
+  --color-bg-canvas: #0d0d1a;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+
+  --color-border: #2a2a4a;
+  --color-border-light: #3a3a5a;
+  --color-border-accent: #4488ff;
+
+  --color-text: #e0e0e0;
+  --color-text-dim: #888888;
+  --color-text-muted: #555555;
+  --color-text-inverse: #0d0d1a;
+
+  --color-accent: #0066cc;
+  --color-accent-hover: #0088ff;
+  --color-accent-subtle: rgba(0, 102, 204, 0.15);
+
+  --color-success: #4ecdc4;
+  --color-success-subtle: rgba(78, 205, 196, 0.15);
+  --color-danger: #ff6b6b;
+  --color-danger-subtle: rgba(255, 107, 107, 0.15);
+  --color-warning: #ffaa00;
+  --color-warning-subtle: rgba(255, 170, 0, 0.15);
+  --color-info: #44aaff;
+  --color-info-subtle: rgba(68, 170, 255, 0.15);
+
+  --color-grid: #2a2a4a;
+  --color-grid-major: #3a3a5a;
+  --color-wire: #00d4ff;
+  --color-wire-selected: #ff6b6b;
+  --color-wire-preview: #8888ff;
+  --color-component: #e0e0e0;
+  --color-component-selected: #4488ff;
+  --color-component-hover: #66bbff;
+  --color-port: #4ecdc4;
+  --color-port-snap: #ffd93d;
+  --color-port-glow: rgba(78, 205, 196, 0.6);
+  --color-selection: #4488ff;
+  --color-node: #ff6b6b;
+  --color-node-ground: #4ecdc4;
+
+  --color-heatmap-low: #1a3a6e;
+  --color-heatmap-mid: #cc8800;
+  --color-heatmap-high: #ff2222;
+
+  --color-glow: #00d4ff;
+  --color-flow: #00ffaa;
+  --color-pulse: #4488ff;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+
+  --vis-bg-app: #0d0d1a;
+  --vis-bg-panel: #16162a;
+  --vis-bg-input: #1a1a2e;
+  --vis-bg-toolbar: #12122a;
+  --vis-border: #2a2a4a;
+  --vis-border-light: #3a3a5a;
+  --vis-text: #e0e0e0;
+  --vis-text-dim: #888888;
+  --vis-text-muted: #555555;
+  --vis-accent: #0066cc;
+  --vis-accent-hover: #0088ff;
+  --vis-glow-color: #00d4ff;
+  --vis-port-glow: rgba(78, 205, 196, 0.6);
+
+  --bg-app: #0d0d1a;
+  --bg-panel: #16162a;
+  --bg-input: #1a1a2e;
+  --bg-toolbar: #12122a;
+  --border: #2a2a4a;
+  --border-light: #3a3a5a;
+  --text: #e0e0e0;
+  --text-dim: #888;
+  --text-muted: #555;
+  --accent: #0066cc;
+  --accent-hover: #0088ff;
+  --success: #4ecdc4;
+  --danger: #ff6b6b;
+  --warning: #ffaa00;
+
+  --panel-bg: #1e1e2e;
+  --border-color: #333;
+  --text-primary: #e0e0e0;
+  --text-secondary: #888;
+  --hover-bg: #333;
+  --input-bg: #2a2a3a;
+  --accent-color: #7aa2f7;
+  --kbd-bg: #2a2a3a;
+  --kbd-color: #c0caf5;
+  --border-subtle: #2a2a3a;
+  --text-muted-custom: #666;
+}
+
+/* ============================================================
+   五、主题切换过渡动画
+   ============================================================ */
+[data-theme] {
+  transition:
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   六、组件暗色覆盖（P2-4）
+   为使用硬编码颜色的组件提供暗色覆盖
+   ============================================================ */
+
+/* --- WaveformPanel: 硬编码深色背景 --- */
+[data-theme="dark"] .waveform-tooltip,
+[data-theme="dark"] .wf-cursor-info {
+  background: var(--sil-panel-bright, #243d4d);
+  box-shadow: var(--sil-shadow-float, 0 4px 16px rgba(0,0,0,0.5));
+}
+
+/* --- ShortcutsHelp / ProjectManager: 模态遮罩 --- */
+[data-theme="dark"] .shortcuts-overlay,
+[data-theme="dark"] .pm-overlay {
+  background: var(--bg-overlay, rgba(0,0,0,0.7));
+}
+
+/* --- OfflineBanner --- */
+[data-theme="dark"] .offline-banner {
+  background: rgba(30, 51, 64, 0.95);
+}
+
+/* --- 表格斑马纹/hover/选中行 --- */
+[data-theme="dark"] tr:nth-child(even) {
+  background: var(--sil-surface-muted, rgba(255,255,255,0.03));
+}
+[data-theme="dark"] tr:hover {
+  background: var(--sil-surface-pressed, rgba(255,255,255,0.06));
+}
+[data-theme="dark"] tr.selected,
+[data-theme="dark"] .row-selected {
+  background: var(--color-accent-subtle, rgba(0,102,204,0.2));
+}
+
+/* --- ValidationPanel 状态色 --- */
+[data-theme="dark"] .validation-error {
+  background: var(--color-danger-subtle, rgba(255,107,107,0.15));
+}
+[data-theme="dark"] .validation-warning {
+  background: var(--color-warning-subtle, rgba(255,170,0,0.15));
+}
+[data-theme="dark"] .validation-info {
+  background: var(--color-info-subtle, rgba(68,170,255,0.15));
+}
+
+/* --- PropertyPanel 状态色 --- */
+[data-theme="dark"] .prop-section-good {
+  background: var(--color-success-subtle, rgba(78,205,196,0.15));
+}
+[data-theme="dark"] .prop-section-bad {
+  background: var(--color-danger-subtle, rgba(255,107,107,0.15));
+}

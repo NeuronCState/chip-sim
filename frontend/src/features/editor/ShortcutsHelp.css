@@ -1,0 +1,307 @@
+/* 快捷键帮助面板样式（增强版） */
+
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.shortcuts-panel {
+  background: var(--panel-bg, #1e1e2e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 12px;
+  min-width: 460px;
+  max-width: 580px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.2s ease-out;
+}
+
+.shortcuts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border-color, #333);
+  flex-shrink: 0;
+}
+
+.shortcuts-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-primary, #e0e0e0);
+}
+
+.shortcuts-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #888);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.shortcuts-close:hover {
+  background: var(--hover-bg, #333);
+  color: var(--text-primary, #e0e0e0);
+}
+
+/* ====== 搜索框 ====== */
+.shortcuts-search {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color, #333);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.shortcuts-search-input {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 6px;
+  background: var(--input-bg, #2a2a3a);
+  color: var(--text-primary, #e0e0e0);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.shortcuts-search-input:focus {
+  border-color: var(--accent-color, #7aa2f7);
+}
+
+.shortcuts-search-input::placeholder {
+  color: var(--text-muted, #666);
+}
+
+.shortcuts-search-clear {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted, #666);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.shortcuts-search-clear:hover {
+  color: var(--text-primary, #e0e0e0);
+}
+
+/* ====== 内容区 ====== */
+.shortcuts-body {
+  padding: 12px 20px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.shortcuts-group {
+  margin-bottom: 16px;
+}
+
+.shortcuts-group:last-child {
+  margin-bottom: 0;
+}
+
+.shortcuts-group h4 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-color, #7aa2f7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.shortcuts-group table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.shortcuts-group tr {
+  border-bottom: 1px solid var(--border-subtle, #2a2a3a);
+}
+
+.shortcuts-group tr:last-child {
+  border-bottom: none;
+}
+
+.shortcuts-group td {
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.shortcut-keys {
+  width: 150px;
+  text-align: right;
+  padding-right: 16px !important;
+  white-space: nowrap;
+}
+
+.shortcut-keys kbd,
+kbd {
+  display: inline-block;
+  background: var(--kbd-bg, #2a2a3a);
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11px;
+  color: var(--kbd-color, #c0caf5);
+  box-shadow: 0 1px 0 var(--border-color, var(--color-border-light));
+  white-space: nowrap;
+}
+
+.shortcut-desc {
+  color: var(--text-secondary, #a0a0b0);
+}
+
+/* ====== 搜索结果 ====== */
+.shortcuts-search-results {
+  padding: 4px 0;
+}
+
+.shortcuts-result-count {
+  font-size: 12px;
+  color: var(--text-muted, #888);
+  margin-bottom: 12px;
+}
+
+.shortcuts-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle, #2a2a3a);
+}
+
+.shortcuts-result-item:last-child {
+  border-bottom: none;
+}
+
+.shortcuts-result-item .shortcut-keys {
+  flex-shrink: 0;
+  text-align: left;
+  width: auto;
+}
+
+.shortcuts-no-results {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--text-muted, #666);
+  font-size: 14px;
+}
+
+/* ====== 页脚 ====== */
+.shortcuts-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-color, #333);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted, #666);
+  flex-shrink: 0;
+}
+
+/* ==================== Light Theme ==================== */
+
+.theme-light .shortcuts-panel {
+  background: var(--color-text-inverse);
+  border-color: var(--color-text);
+}
+
+.theme-light .shortcuts-header {
+  border-bottom-color: var(--color-border-light);
+}
+
+.theme-light .shortcuts-header h3 {
+  color: var(--color-text);
+}
+
+.theme-light .shortcuts-close {
+  color: var(--color-text-dim);
+}
+
+.theme-light .shortcuts-close:hover {
+  background: var(--color-bg-input);
+  color: var(--color-text);
+}
+
+.theme-light .shortcuts-search {
+  border-bottom-color: var(--color-border-light);
+}
+
+.theme-light .shortcuts-search-input {
+  background: var(--color-bg-panel);
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.theme-light .shortcuts-search-input:focus {
+  border-color: var(--color-accent);
+}
+
+.theme-light .shortcuts-search-input::placeholder {
+  color: var(--color-text-dim);
+}
+
+.theme-light .shortcuts-group h4 {
+  color: var(--color-accent);
+}
+
+.theme-light .shortcut-keys kbd,
+.theme-light kbd {
+  background: var(--color-bg-input);
+  border-color: var(--color-text);
+  color: var(--color-border);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+.theme-light .shortcuts-group tr {
+  border-bottom-color: var(--color-bg-input);
+}
+
+.theme-light .shortcut-desc {
+  color: var(--color-text-muted);
+}
+
+.theme-light .shortcuts-result-count {
+  color: var(--color-text-dim);
+}
+
+.theme-light .shortcuts-result-item {
+  border-bottom-color: var(--color-bg-input);
+}
+
+.theme-light .shortcuts-no-results {
+  color: var(--color-text-dim);
+}
+
+.theme-light .shortcuts-footer {
+  border-top-color: var(--color-border-light);
+  color: var(--color-text-dim);
+}

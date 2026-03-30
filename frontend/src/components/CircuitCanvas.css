@@ -1,0 +1,160 @@
+/**
+ * 电路画布样式 — Silicone Float UI
+ * 圆角/阴影/玻璃态blur/紧凑间距/统一色彩
+ */
+
+.circuit-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg-app);
+}
+
+/* ===== 工具栏：玻璃态浮起 ===== */
+.canvas-toolbar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  background: var(--sil-surface-glass, rgba(246, 250, 253, 0.74));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 128, 139, 0.12);
+  border-radius: var(--sil-radius-md, 18px);
+  box-shadow: var(--sil-shadow-soft, 8px 9px 17px rgba(116, 134, 144, 0.22), -6px -6px 12px rgba(255, 255, 255, 0.74));
+  z-index: 10;
+}
+
+[data-theme="dark"] .canvas-toolbar {
+  background: var(--sil-surface-glass, rgba(26, 45, 54, 0.74));
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: var(--sil-shadow-soft, 5px 6px 12px rgba(0, 0, 0, 0.3), -3px -3px 8px rgba(255, 255, 255, 0.04));
+}
+
+.canvas-toolbar button {
+  padding: 4px 10px;
+  background: transparent;
+  color: var(--color-text-dim, #666);
+  border: 1px solid transparent;
+  border-radius: var(--sil-radius-sm, 12px);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--sil-transition-spring, 0.24s cubic-bezier(0.22, 1, 0.36, 1));
+  white-space: nowrap;
+}
+
+.canvas-toolbar button:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+  color: var(--color-text, #333);
+  box-shadow: var(--sil-outline-soft, 0 0 0 1px rgba(109, 128, 139, 0.15) inset);
+}
+
+[data-theme="dark"] .canvas-toolbar button:hover {
+  background: var(--sil-surface-muted, #1a2d36);
+  color: var(--color-text, #e0e0e0);
+}
+
+.canvas-toolbar button.active {
+  background: var(--sil-mint-soft, #d7f0ea);
+  color: #123943;
+  border-color: var(--sil-mint, #58cebe);
+  box-shadow:
+    var(--sil-shadow-soft, 8px 9px 17px rgba(116, 134, 144, 0.22), -6px -6px 12px rgba(255, 255, 255, 0.74)),
+    0 0 0 1px rgba(88, 206, 190, 0.2);
+}
+
+[data-theme="dark"] .canvas-toolbar button.active {
+  background: rgba(88, 206, 190, 0.15);
+  color: var(--sil-mint, #58cebe);
+  border-color: var(--sil-mint, #58cebe);
+  box-shadow:
+    var(--sil-shadow-soft, 5px 6px 12px rgba(0, 0, 0, 0.3), -3px -3px 8px rgba(255, 255, 255, 0.04)),
+    0 0 8px rgba(88, 206, 190, 0.15);
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 18px;
+  background: rgba(109, 128, 139, 0.15);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.toolbar-info {
+  margin-left: auto;
+  color: var(--sil-text-soft, #888);
+  font-size: 11px;
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 500;
+  padding: 2px 8px;
+  background: var(--sil-surface-muted, rgba(0, 0, 0, 0.04));
+  border-radius: 8px;
+}
+
+[data-theme="dark"] .toolbar-info {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.circuit-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+/* ==================== 响应式断点 ==================== */
+
+@media (max-width: 1024px) {
+  .canvas-toolbar {
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    padding: 4px 8px;
+    gap: 3px;
+  }
+
+  .canvas-toolbar button {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .toolbar-separator {
+    margin: 0 2px;
+  }
+
+  .toolbar-info {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .canvas-toolbar {
+    padding: 3px 6px;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .canvas-toolbar button {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+
+  .toolbar-separator {
+    height: 14px;
+    margin: 0 1px;
+  }
+
+  .toolbar-info {
+    font-size: 9px;
+    display: none;
+  }
+
+  .circuit-canvas-container {
+    touch-action: none;
+  }
+}

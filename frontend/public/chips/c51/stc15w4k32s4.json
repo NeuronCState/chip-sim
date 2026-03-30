@@ -1,0 +1,476 @@
+{
+  "series": "C51-STC",
+  "name": "STC15W4K32S4",
+  "package": "LQFP-48",
+  "flash": 32768,
+  "ram": 4096,
+  "clock": 35000000,
+  "pinCount": 51,
+  "pins": [
+    {
+      "id": "P0.0",
+      "port": "0",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "RxD3"
+      ]
+    },
+    {
+      "id": "P0.1",
+      "port": "0",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "TxD3"
+      ]
+    },
+    {
+      "id": "P0.2",
+      "port": "0",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "RxD4"
+      ]
+    },
+    {
+      "id": "P0.3",
+      "port": "0",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "TxD4"
+      ]
+    },
+    {
+      "id": "P0.4",
+      "port": "0",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "T0"
+      ]
+    },
+    {
+      "id": "P0.5",
+      "port": "0",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "T1"
+      ]
+    },
+    {
+      "id": "P0.6",
+      "port": "0",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "WR"
+      ]
+    },
+    {
+      "id": "P0.7",
+      "port": "0",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "RD"
+      ]
+    },
+    {
+      "id": "P1.0",
+      "port": "1",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC0",
+        "CCP1"
+      ]
+    },
+    {
+      "id": "P1.1",
+      "port": "1",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC1",
+        "CCP0"
+      ]
+    },
+    {
+      "id": "P1.2",
+      "port": "1",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "ADC2",
+        "ECI"
+      ]
+    },
+    {
+      "id": "P1.3",
+      "port": "1",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "ADC3",
+        "MOSI"
+      ]
+    },
+    {
+      "id": "P1.4",
+      "port": "1",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "ADC4",
+        "MISO"
+      ]
+    },
+    {
+      "id": "P1.5",
+      "port": "1",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "ADC5",
+        "SCLK"
+      ]
+    },
+    {
+      "id": "P1.6",
+      "port": "1",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "ADC6",
+        "RxD2"
+      ]
+    },
+    {
+      "id": "P1.7",
+      "port": "1",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "ADC7",
+        "TxD2"
+      ]
+    },
+    {
+      "id": "P2.0",
+      "port": "2",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "A8"
+      ]
+    },
+    {
+      "id": "P2.1",
+      "port": "2",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "A9"
+      ]
+    },
+    {
+      "id": "P2.2",
+      "port": "2",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "A10"
+      ]
+    },
+    {
+      "id": "P2.3",
+      "port": "2",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "A11"
+      ]
+    },
+    {
+      "id": "P2.4",
+      "port": "2",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "A12"
+      ]
+    },
+    {
+      "id": "P2.5",
+      "port": "2",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "A13"
+      ]
+    },
+    {
+      "id": "P2.6",
+      "port": "2",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "A14"
+      ]
+    },
+    {
+      "id": "P2.7",
+      "port": "2",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "A15"
+      ]
+    },
+    {
+      "id": "P3.0",
+      "port": "3",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "RxD"
+      ]
+    },
+    {
+      "id": "P3.1",
+      "port": "3",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "TxD"
+      ]
+    },
+    {
+      "id": "P3.2",
+      "port": "3",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "INT0"
+      ]
+    },
+    {
+      "id": "P3.3",
+      "port": "3",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "INT1"
+      ]
+    },
+    {
+      "id": "P3.4",
+      "port": "3",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "T0",
+        "TxD2"
+      ]
+    },
+    {
+      "id": "P3.5",
+      "port": "3",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "T1",
+        "RxD2"
+      ]
+    },
+    {
+      "id": "P3.6",
+      "port": "3",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "WR"
+      ]
+    },
+    {
+      "id": "P3.7",
+      "port": "3",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "RD"
+      ]
+    },
+    {
+      "id": "P4.0",
+      "port": "4",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.1",
+      "port": "4",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.2",
+      "port": "4",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.3",
+      "port": "4",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.4",
+      "port": "4",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.5",
+      "port": "4",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P5.4",
+      "port": "5",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "RST"
+      ]
+    },
+    {
+      "id": "P5.5",
+      "port": "5",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.6",
+      "port": "4",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P4.7",
+      "port": "4",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P5.0",
+      "port": "5",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P5.1",
+      "port": "5",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P5.2",
+      "port": "5",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P5.3",
+      "port": "5",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "VCC",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "GND",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "RST",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    },
+    {
+      "id": "XTAL1",
+      "port": "CONTROL",
+      "bit": 1,
+      "functions": [
+        "CRYSTAL"
+      ]
+    },
+    {
+      "id": "XTAL2",
+      "port": "CONTROL",
+      "bit": 2,
+      "functions": [
+        "CRYSTAL"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "UART",
+    "UART2",
+    "UART3",
+    "UART4",
+    "SPI",
+    "ADC",
+    "PWM",
+    "TIM",
+    "PCA",
+    "INT",
+    "WDT"
+  ]
+}

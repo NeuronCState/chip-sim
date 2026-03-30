@@ -1,0 +1,45 @@
+{
+  "id": "and-gate",
+  "name": "与门逻辑电路",
+  "nameEn": "AND Gate Logic",
+  "category": "logic",
+  "difficulty": 2,
+  "description": "基本逻辑门电路，理解布尔运算",
+  "descriptionEn": "Basic logic gate circuit, understand Boolean operations",
+  "components": [
+    {
+      "type": "logic_and",
+      "name": "U1",
+      "position": { "x": 300, "y": 200 },
+      "value": { "value": 0, "unit": "" }
+    },
+    {
+      "type": "dc_source",
+      "name": "VA",
+      "position": { "x": 100, "y": 170 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "dc_source",
+      "name": "VB",
+      "position": { "x": 100, "y": 230 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 100, "y": 300 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "VA:1", "to": "U1:0" },
+    { "from": "VB:1", "to": "U1:1" },
+    { "from": "VA:0", "to": "GND:0" },
+    { "from": "VB:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "修改 VA、VB 的电压值（0V 或 5V），观察输出变化。验证真值表：0&0=0, 0&1=0, 1&0=0, 1&1=1。",
+    "en": "Modify VA/VB voltages (0V or 5V), observe output. Verify truth table: 0&0=0, 0&1=0, 1&0=0, 1&1=1."
+  }
+}

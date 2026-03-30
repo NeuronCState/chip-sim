@@ -1,0 +1,33 @@
+{
+  "id": "c51-eeprom-i2c",
+  "name": "C51 AT24C02 I2C EEPROM读写",
+  "nameEn": "C51 AT24C02 I2C EEPROM Read/Write",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "51单片机软件模拟I2C协议读写AT24C02 EEPROM，256字节存储",
+  "descriptionEn": "8051 MCU bit-bangs I2C protocol to read/write AT24C02 EEPROM, 256-byte storage",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "eeprom_i2c", "name": "U2", "position": { "x": 450, "y": 180 }, "value": { "value": 256, "unit": "B" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 300, "y": 100 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 300, "y": 260 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 100, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 380 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "VCC:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "U1:0" },
+    { "from": "R1:1", "to": "U2:0" },
+    { "from": "VCC:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "U1:1" },
+    { "from": "R2:1", "to": "U2:1" },
+    { "from": "VCC:1", "to": "U2:2" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U1:2", "to": "GND:0" },
+    { "from": "U2:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，观察SCL/SDA上的I2C通信波形。写入地址0x00数据0xAA后读取验证。",
+    "en": "Run protocol simulation to observe I2C waveforms on SCL/SDA. Write 0xAA to address 0x00, then read back to verify."
+  }
+}

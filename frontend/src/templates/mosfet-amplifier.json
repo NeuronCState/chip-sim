@@ -1,0 +1,81 @@
+{
+  "id": "mosfet-cs-amp",
+  "name": "NMOS共源放大电路",
+  "nameEn": "NMOS Common Source Amplifier",
+  "category": "analog",
+  "difficulty": 3,
+  "description": "NMOS共源极放大器，电阻负载，观察直流工作点和小信号放大",
+  "descriptionEn": "NMOS common-source amplifier with resistive load, observe DC operating point and small-signal amplification",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "Vdd",
+      "position": { "x": 100, "y": 80 },
+      "value": { "value": 12, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "Rd",
+      "position": { "x": 250, "y": 80 },
+      "value": { "value": 3300, "unit": "Ω" }
+    },
+    {
+      "type": "mosfet_nmos",
+      "name": "M1",
+      "position": { "x": 350, "y": 200 },
+      "value": { "value": 2, "unit": "mA/V²" }
+    },
+    {
+      "type": "resistor",
+      "name": "Rs",
+      "position": { "x": 350, "y": 340 },
+      "value": { "value": 1000, "unit": "Ω" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 350, "y": 420 },
+      "value": { "value": 0, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "Rg1",
+      "position": { "x": 230, "y": 180 },
+      "value": { "value": 100000, "unit": "Ω" }
+    },
+    {
+      "type": "resistor",
+      "name": "Rg2",
+      "position": { "x": 230, "y": 280 },
+      "value": { "value": 47000, "unit": "Ω" }
+    },
+    {
+      "type": "ac_source",
+      "name": "Vin",
+      "position": { "x": 80, "y": 220 },
+      "value": { "value": 0.05, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND2",
+      "position": { "x": 80, "y": 320 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "Vdd:1", "to": "Rd:0" },
+    { "from": "Rd:1", "to": "M1:1" },
+    { "from": "M1:2", "to": "Rs:0" },
+    { "from": "Rs:1", "to": "GND:0" },
+    { "from": "Vdd:0", "to": "GND2:0" },
+    { "from": "Rg1:1", "to": "M1:0" },
+    { "from": "Rg2:0", "to": "M1:0" },
+    { "from": "Rg2:1", "to": "GND:0" },
+    { "from": "Vin:1", "to": "Rg1:0" },
+    { "from": "Vin:0", "to": "GND2:0" }
+  ],
+  "simulationNotes": {
+    "zh": "直流工作点：Vgs ≈ 3.8V (Rg1/Rg2分压)，Vds ≈ 6-8V。小信号增益 Av ≈ -gm·Rd ≈ -6.6 (gm=2mA/V)。Rs提供源极退化稳定偏置。Vin应小于50mV以保证线性放大。",
+    "en": "DC bias: Vgs ≈ 3.8V (Rg1/Rg2 divider), Vds ≈ 6-8V. Small-signal gain Av ≈ -gm·Rd ≈ -6.6 (gm=2mA/V). Rs provides source degeneration for stable bias. Keep Vin < 50mV for linear amplification."
+  }
+}

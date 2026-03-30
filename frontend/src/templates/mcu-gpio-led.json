@@ -1,0 +1,45 @@
+{
+  "id": "mcu-gpio-led",
+  "name": "MCU GPIO控制LED",
+  "nameEn": "MCU GPIO LED Control",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "微控制器GPIO引脚通过限流电阻驱动LED，嵌入式入门电路",
+  "descriptionEn": "MCU GPIO pin drives LED through current-limiting resistor, embedded starter circuit",
+  "components": [
+    {
+      "type": "mcu",
+      "name": "MCU1",
+      "position": { "x": 150, "y": 200 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 320, "y": 180 },
+      "value": { "value": 330, "unit": "Ω" }
+    },
+    {
+      "type": "diode",
+      "name": "D1",
+      "position": { "x": 470, "y": 180 },
+      "value": { "value": 0.7, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 300, "y": 320 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "MCU1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "D1:0" },
+    { "from": "D1:1", "to": "GND:0" },
+    { "from": "MCU1:2", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "设置MCU GPIO引脚为输出模式，电平设为高（3.3V）。电流 I = (3.3-0.7)/330 ≈ 7.9mA。",
+    "en": "Set MCU GPIO pin to output mode, level HIGH (3.3V). Current I = (3.3-0.7)/330 ≈ 7.9mA."
+  }
+}

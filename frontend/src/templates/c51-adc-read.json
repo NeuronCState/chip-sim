@@ -1,0 +1,31 @@
+{
+  "id": "c51-adc-read",
+  "name": "C51 ADC0832模数转换采集",
+  "nameEn": "C51 ADC0832 ADC Acquisition",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "51单片机通过SPI方式读取ADC0832两通道8位ADC数据",
+  "descriptionEn": "8051 MCU reads 8-bit ADC data from ADC0832 dual channel via SPI interface",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "adc", "name": "U2", "position": { "x": 400, "y": 180 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "dc_source", "name": "Vin", "position": { "x": 300, "y": 80 }, "value": { "value": 2.5, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 100, "y": 80 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 400 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "U2:0" },
+    { "from": "U1:1", "to": "U2:1" },
+    { "from": "U1:2", "to": "U2:2" },
+    { "from": "Vin:1", "to": "U2:3" },
+    { "from": "Vin:0", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:3" },
+    { "from": "VCC:1", "to": "U2:4" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U2:5", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行混合仿真，MCU通过CLK/CS/DI/DO四线SPI协议控制ADC0832采样。Vin=2.5V时输出约128（8位）。",
+    "en": "Run mixed simulation, MCU controls ADC0832 sampling via 4-wire SPI (CLK/CS/DI/DO). Output ~128 (8-bit) when Vin=2.5V."
+  }
+}

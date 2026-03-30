@@ -1,0 +1,194 @@
+.wire-props-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--panel-bg, #1e1e2e);
+  border-left: 1px solid var(--border-color, #333);
+  font-size: 13px;
+  color: var(--text-color, var(--color-border));
+  min-width: 220px;
+  max-width: 280px;
+}
+
+.wire-props-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color, #333);
+  background: var(--header-bg, #252535);
+}
+
+.wire-props-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #e0e0e0);
+}
+
+.wire-props-empty {
+  padding: 20px 16px;
+  text-align: center;
+  color: var(--text-secondary, #888);
+  font-size: 12px;
+}
+
+.wire-props-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+/* 属性段 */
+.props-section {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light, var(--color-border));
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.prop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.prop-label {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-secondary, #888);
+  width: 50px;
+}
+
+.prop-value {
+  font-size: 11px;
+  color: var(--text-color, var(--color-border));
+}
+
+.prop-value.mono {
+  font-family: monospace;
+  font-size: 10px;
+}
+
+.prop-value.status-connected {
+  color: var(--color-success);
+}
+
+.prop-value.status-disconnected {
+  color: var(--color-danger);
+}
+
+/* 滑块 */
+.prop-slider {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border-color, var(--color-border-light));
+  border-radius: 2px;
+  outline: none;
+}
+
+.prop-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color, var(--color-success));
+  cursor: pointer;
+}
+
+/* 颜色选择器 */
+.prop-color {
+  width: 28px;
+  height: 22px;
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 3px;
+  background: var(--input-bg, #1a1a2a);
+  cursor: pointer;
+  padding: 0;
+}
+
+.prop-color::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.prop-color::-webkit-color-swatch {
+  border: none;
+  border-radius: 2px;
+}
+
+/* 下拉选择 */
+.prop-select {
+  flex: 1;
+  padding: 4px 6px;
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 3px;
+  background: var(--input-bg, #1a1a2a);
+  color: var(--text-color, var(--color-border));
+  font-size: 11px;
+  outline: none;
+}
+
+.prop-select:focus {
+  border-color: var(--accent-color, var(--color-success));
+}
+
+/* 预设按钮 */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 3px;
+  background: var(--btn-bg, var(--color-border));
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 40px;
+}
+
+.preset-btn:hover {
+  border-color: var(--accent-color, var(--color-success));
+  background: var(--btn-hover-bg, #3a3a4a);
+}
+
+.preset-swatch {
+  display: block;
+  width: 28px;
+  border-radius: 1px;
+}
+
+.preset-name {
+  font-size: 9px;
+  color: var(--text-secondary, #888);
+}
+
+/* 预览 */
+.wire-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 0;
+}
+
+.wire-preview-svg {
+  background: var(--canvas-bg, #1a1a2e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 3px;
+}

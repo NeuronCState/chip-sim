@@ -1,0 +1,123 @@
+/* 协议仿真配置面板样式 — 主题变量适配 */
+.protocol-panel {
+  border-top: 1px solid var(--color-border);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.protocol-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.protocol-panel-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.protocol-config {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.config-row label {
+  flex: 0 0 70px;
+  font-size: 12px;
+  color: var(--color-text-dim);
+  text-align: right;
+}
+
+.config-row select,
+.config-row input[type='text'],
+.config-row input[type='number'] {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  color: var(--color-text);
+  padding: 4px 6px;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.config-row select:focus,
+.config-row input:focus {
+  outline: none;
+  border-color: var(--color-success);
+}
+
+.config-row input[type='checkbox'] {
+  accent-color: var(--color-success);
+}
+
+.config-input-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.config-input-group input {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  color: var(--color-text);
+  padding: 4px 6px;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.config-input-group span {
+  font-size: 11px;
+  color: var(--color-text-dim);
+}
+
+.protocol-error {
+  background: var(--color-danger-subtle);
+  border: 1px solid var(--color-danger);
+  border-radius: 4px;
+  color: var(--color-danger);
+  font-size: 12px;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+}
+
+.protocol-sim-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--color-success), #44b09e);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.protocol-sim-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5fd5cd, var(--color-success));
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);
+}
+
+.protocol-sim-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--color-border-light);
+  color: var(--color-text-dim);
+}

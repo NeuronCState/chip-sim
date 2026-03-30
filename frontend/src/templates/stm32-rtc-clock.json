@@ -1,0 +1,34 @@
+{
+  "id": "stm32-rtc-clock",
+  "name": "STM32 RTC + 32.768kHz晶振",
+  "nameEn": "STM32 RTC + 32.768kHz Crystal Oscillator",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "STM32内部RTC模块外接32.768kHz晶振实现实时时钟功能",
+  "descriptionEn": "STM32 internal RTC with external 32.768kHz crystal for real-time clock functionality",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "crystal", "name": "Y1", "position": { "x": 350, "y": 160 }, "value": { "value": 32768, "unit": "Hz" } },
+    { "type": "capacitor", "name": "C1", "position": { "x": 350, "y": 80 }, "value": { "value": 1e-11, "unit": "F" } },
+    { "type": "capacitor", "name": "C2", "position": { "x": 350, "y": 260 }, "value": { "value": 1e-11, "unit": "F" } },
+    { "type": "battery", "name": "BAT1", "position": { "x": 150, "y": 350 }, "value": { "value": 3.0, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "Y1:0" },
+    { "from": "Y1:0", "to": "C1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "U1:1", "to": "Y1:1" },
+    { "from": "Y1:1", "to": "C2:0" },
+    { "from": "C2:1", "to": "GND:0" },
+    { "from": "BAT1:1", "to": "U1:2" },
+    { "from": "BAT1:0", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:3" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行时域仿真，32.768kHz晶振经15级分频产生1秒时基。BAT1为备份电池，掉电后RTC继续走时。",
+    "en": "Run time-domain simulation. 32.768kHz crystal divided by 15 stages produces 1-second timebase. BAT1 backup battery keeps RTC running during power loss."
+  }
+}

@@ -1,0 +1,183 @@
+/**
+ * 元件库面板样式（优化版）
+ */
+
+.component-library {
+  padding: 12px;
+  border-bottom: 1px solid var(--border, var(--color-border));
+}
+
+.library-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--text, var(--color-border));
+  font-weight: 600;
+}
+
+/* 搜索框 */
+.library-search {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 6px 28px 6px 10px;
+  background: var(--bg-input, #1a1a2e);
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 6px;
+  color: var(--text, var(--color-border));
+  font-size: 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: var(--accent, var(--color-accent));
+}
+
+.search-input::placeholder {
+  color: var(--text-muted, #555);
+}
+
+.search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-dim, #888);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 4px;
+}
+
+.search-clear:hover {
+  color: var(--text, var(--color-border));
+}
+
+/* 元件列表 */
+.library-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* 搜索结果 */
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.no-results {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-dim, #888);
+  font-size: 12px;
+}
+
+/* 分类分组 */
+.category-group {
+  margin-bottom: 2px;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--bg-input, #1a1a2e);
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  color: var(--text, var(--color-border));
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.category-header:hover {
+  background: var(--border, var(--color-border));
+}
+
+.category-toggle {
+  font-size: 10px;
+  width: 14px;
+  color: var(--text-dim, #888);
+}
+
+.category-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.category-count {
+  font-size: 10px;
+  color: var(--text-dim, #888);
+  background: var(--bg-input, #1a1a2e);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.category-items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+  margin-left: 12px;
+  margin-top: 3px;
+}
+
+/* 元件条目 */
+.library-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-input, #1a1a2e);
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  cursor: grab;
+  color: var(--text, var(--color-border));
+  text-align: left;
+  transition: all 0.15s;
+  font-size: 12px;
+}
+
+.library-item:hover {
+  background: var(--border, var(--color-border));
+  border-color: var(--accent, var(--color-accent));
+}
+
+.library-item:active {
+  cursor: grabbing;
+}
+
+.item-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.item-label {
+  font-size: 12px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.item-value {
+  font-size: 10px;
+  color: var(--text-dim, #888);
+  font-family: monospace;
+}
+
+.library-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted, #555);
+  text-align: center;
+}

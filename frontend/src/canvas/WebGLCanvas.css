@@ -1,0 +1,86 @@
+.webgl-canvas-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #1a2d36;
+}
+
+.webgl-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  display: block;
+  background: #1a2d36;
+}
+
+.canvas-chip-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sil-text-soft);
+  background: var(--sil-surface-glass);
+  box-shadow: var(--sil-outline-soft), var(--sil-shadow-soft);
+  pointer-events: none;
+}
+
+.canvas-zoom-indicator {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sil-text-soft);
+  background: var(--sil-surface-glass);
+  box-shadow: var(--sil-outline-soft);
+  pointer-events: none;
+}
+
+/* 右键菜单 */
+.canvas-context-menu {
+  position: fixed;
+  z-index: 100;
+  min-width: 140px;
+  padding: 6px;
+  border-radius: var(--sil-radius-md);
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 128, 139, 0.12);
+  box-shadow: var(--sil-shadow-float), var(--sil-outline-soft);
+}
+
+.canvas-context-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sil-text-main);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.canvas-context-menu button:hover {
+  background: var(--sil-surface-muted);
+}
+
+.canvas-context-menu button.danger {
+  color: var(--sil-danger);
+}
+
+.canvas-context-menu hr {
+  border: 0;
+  border-top: 1px solid var(--sil-surface-pressed);
+  margin: 4px 0;
+}

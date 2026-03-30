@@ -1,0 +1,69 @@
+{
+  "id": "battery-power",
+  "name": "电池供电电路",
+  "nameEn": "Battery Power Supply Circuit",
+  "category": "power",
+  "difficulty": 1,
+  "description": "18650锂电池经AMS1117-3.3 LDO稳压后为LED负载供电",
+  "descriptionEn": "18650 Li-ion battery regulated by AMS1117-3.3 LDO to power LED load",
+  "components": [
+    {
+      "type": "battery",
+      "name": "BAT1",
+      "position": { "x": 100, "y": 200 },
+      "value": { "value": 3.7, "unit": "V" }
+    },
+    {
+      "type": "capacitor",
+      "name": "C1",
+      "position": { "x": 240, "y": 140 },
+      "value": { "value": 100e-6, "unit": "F" }
+    },
+    {
+      "type": "ldo",
+      "name": "U1",
+      "position": { "x": 340, "y": 200 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "capacitor",
+      "name": "C2",
+      "position": { "x": 470, "y": 140 },
+      "value": { "value": 10e-6, "unit": "F" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 570, "y": 200 },
+      "value": { "value": 100, "unit": "Ω" }
+    },
+    {
+      "type": "diode",
+      "name": "LED1",
+      "position": { "x": 680, "y": 200 },
+      "value": { "value": 0.7, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 340, "y": 350 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "BAT1:1", "to": "C1:0" },
+    { "from": "BAT1:1", "to": "U1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "U1:1", "to": "C2:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "C2:1", "to": "GND:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "BAT1:0", "to": "GND:0" },
+    { "from": "U1:2", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "18650锂电池标称3.7V，经AMS1117-3.3 LDO降压至稳定的3.3V输出。C1为输入滤波电容，C2为输出去耦电容。R1为LED限流电阻，3.3V供电时LED电流约26mA。",
+    "en": "18650 Li-ion battery (3.7V nominal) is stepped down to stable 3.3V by AMS1117-3.3 LDO. C1 is input filter cap, C2 is output decoupling cap. R1 limits LED current to ~26mA at 3.3V."
+  }
+}

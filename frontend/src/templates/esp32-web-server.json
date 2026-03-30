@@ -1,0 +1,37 @@
+{
+  "id": "esp32-web-server",
+  "name": "ESP32 Web控制面板",
+  "nameEn": "ESP32 Web Control Panel",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "ESP32作为Web服务器提供控制面板页面，实时显示传感器数据并控制LED/继电器",
+  "descriptionEn": "ESP32 serves web control panel page, displays sensor data in real-time and controls LED/relay",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "wifi_module", "name": "WIFI1", "position": { "x": 120, "y": 80 }, "value": { "value": 2400, "unit": "MHz" } },
+    { "type": "led", "name": "LED1", "position": { "x": 400, "y": 120 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "relay", "name": "K1", "position": { "x": 400, "y": 250 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ntc_thermistor", "name": "NTC1", "position": { "x": 400, "y": 350 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 280, "y": 120 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 280, "y": 250 }, "value": { "value": 1000, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "WIFI1:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "U1:2", "to": "R2:0" },
+    { "from": "R2:1", "to": "K1:0" },
+    { "from": "K1:1", "to": "GND:0" },
+    { "from": "U1:3", "to": "NTC1:0" },
+    { "from": "NTC1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:4" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，ESP32启动Web服务器（端口80），页面含LED开关按钮、继电器控制和温度仪表盘。支持WebSocket实时数据推送。",
+    "en": "Run digital simulation. ESP32 starts web server (port 80) with LED toggle, relay control, and temperature dashboard. Supports WebSocket real-time data push."
+  }
+}

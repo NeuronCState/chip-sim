@@ -1,0 +1,38 @@
+{
+  "id": "weather-station",
+  "name": "DHT22 + BMP280气象站",
+  "nameEn": "DHT22 + BMP280 Weather Station",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "MCU采集DHT22温湿度和BMP280气压数据，I2C+单总线双协议传感器集成",
+  "descriptionEn": "MCU collects DHT22 temp/humidity and BMP280 pressure data, I2C + 1-Wire dual protocol sensor integration",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ds18b20", "name": "U2", "position": { "x": 400, "y": 100 }, "value": { "value": 0, "unit": "" } },
+    { "type": "i2c_slave", "name": "U3", "position": { "x": 400, "y": 280 }, "value": { "value": 0, "unit": "Pa" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 300, "y": 100 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 280, "y": 200 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "resistor", "name": "R3", "position": { "x": 280, "y": 320 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "U2:0" },
+    { "from": "VCC:1", "to": "U2:1" },
+    { "from": "U2:2", "to": "GND:0" },
+    { "from": "VCC:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "U1:1" },
+    { "from": "R2:1", "to": "U3:0" },
+    { "from": "VCC:1", "to": "R3:0" },
+    { "from": "R3:1", "to": "U1:2" },
+    { "from": "R3:1", "to": "U3:1" },
+    { "from": "VCC:1", "to": "U3:2" },
+    { "from": "U3:3", "to": "GND:0" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行混合仿真，DHT22单总线协议读取温湿度，BMP280 I2C地址0x76读取气压。数据可通过串口或LCD显示。",
+    "en": "Run mixed simulation. DHT22 1-Wire protocol reads temp/humidity, BMP280 I2C address 0x76 reads pressure. Data displayable via serial or LCD."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "esp32-mqtt-iot",
+  "name": "ESP32 MQTT物联网上报",
+  "nameEn": "ESP32 MQTT IoT Data Report",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "ESP32通过MQTT协议将传感器数据上报云端，订阅控制主题实现远程指令",
+  "descriptionEn": "ESP32 reports sensor data to cloud via MQTT, subscribes to control topic for remote commands",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "wifi_module", "name": "WIFI1", "position": { "x": 120, "y": 80 }, "value": { "value": 2400, "unit": "MHz" } },
+    { "type": "led", "name": "LED1", "position": { "x": 420, "y": 150 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 320, "y": 150 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "ds18b20", "name": "U2", "position": { "x": 420, "y": 280 }, "value": { "value": 0, "unit": "" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "WIFI1:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "U1:2", "to": "U2:0" },
+    { "from": "VCC:1", "to": "U2:1" },
+    { "from": "U2:2", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:3" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行网络仿真，ESP32连接MQTT Broker（如broker.emqx.io:1883），每5秒向\"esp32/temperature\"发布温度数据，订阅\"esp32/led\"控制LED。",
+    "en": "Run network simulation. ESP32 connects MQTT Broker (e.g., broker.emqx.io:1883), publishes temperature to \"esp32/temperature\" every 5s, subscribes \"esp32/led\" to control LED."
+  }
+}

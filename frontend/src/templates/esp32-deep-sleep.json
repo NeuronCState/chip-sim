@@ -1,0 +1,33 @@
+{
+  "id": "esp32-deep-sleep",
+  "name": "ESP32深度睡眠低功耗",
+  "nameEn": "ESP32 Deep Sleep Low Power Mode",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "ESP32配置深度睡眠模式，定时唤醒采集传感器数据后重新休眠，实现电池供电低功耗",
+  "descriptionEn": "ESP32 configures deep sleep mode, wakes up periodically to collect sensor data then sleeps, achieving battery-powered low power",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "battery", "name": "BAT1", "position": { "x": 80, "y": 100 }, "value": { "value": 3.7, "unit": "V" } },
+    { "type": "ntc_thermistor", "name": "NTC1", "position": { "x": 400, "y": 150 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "led", "name": "LED1", "position": { "x": 400, "y": 280 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 300, "y": 150 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 300, "y": 280 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "BAT1:1", "to": "U1:0" },
+    { "from": "U1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "NTC1:0" },
+    { "from": "NTC1:1", "to": "GND:0" },
+    { "from": "U1:2", "to": "R2:0" },
+    { "from": "R2:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "BAT1:0", "to": "GND:0" },
+    { "from": "U1:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行时域仿真，ESP32深度睡眠电流约10μA，RTC定时器每60秒唤醒一次，唤醒后读取NTC温度、闪烁LED后重新进入深度睡眠。",
+    "en": "Run time-domain simulation. ESP32 deep sleep current ~10μA, RTC timer wakes every 60s. On wake, reads NTC temp, blinks LED, then re-enters deep sleep."
+  }
+}

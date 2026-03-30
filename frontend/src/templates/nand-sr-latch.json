@@ -1,0 +1,59 @@
+{
+  "id": "nand-sr-latch",
+  "name": "与非门SR锁存器",
+  "nameEn": "NAND Gate SR Latch",
+  "category": "digital",
+  "difficulty": 3,
+  "description": "两个与非门交叉耦合构成基本SR锁存器，理解时序逻辑基础",
+  "descriptionEn": "Two NAND gates cross-coupled to form basic SR latch, understand sequential logic",
+  "components": [
+    {
+      "type": "logic_nand",
+      "name": "U1",
+      "position": { "x": 300, "y": 160 },
+      "value": { "value": 0, "unit": "" }
+    },
+    {
+      "type": "logic_nand",
+      "name": "U2",
+      "position": { "x": 300, "y": 280 },
+      "value": { "value": 0, "unit": "" }
+    },
+    {
+      "type": "dc_source",
+      "name": "S̄",
+      "position": { "x": 100, "y": 130 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "dc_source",
+      "name": "R̄",
+      "position": { "x": 100, "y": 310 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND_S",
+      "position": { "x": 100, "y": 180 },
+      "value": { "value": 0, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND_R",
+      "position": { "x": 100, "y": 360 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "S̄:1", "to": "U1:0" },
+    { "from": "R̄:1", "to": "U2:1" },
+    { "from": "U1:2", "to": "U2:0" },
+    { "from": "U2:2", "to": "U1:1" },
+    { "from": "S̄:0", "to": "GND_S:0" },
+    { "from": "R̄:0", "to": "GND_R:0" }
+  ],
+  "simulationNotes": {
+    "zh": "修改S̄/R̄电压（0V=低有效, 5V=高）验证锁存功能。S̄=0,R̄=1→置位；S̄=1,R̄=0→复位；S̄=R̄=1→保持。",
+    "en": "Toggle S̄/R̄ voltages (0V=active low, 5V=high) to verify latch. S̄=0,R̄=1→SET; S̄=1,R̄=0→RESET; S̄=R̄=1→HOLD."
+  }
+}

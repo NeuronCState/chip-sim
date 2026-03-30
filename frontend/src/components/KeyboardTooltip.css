@@ -1,0 +1,83 @@
+/* 键盘操作提示浮窗 */
+
+.keyboard-tooltip {
+  position: fixed;
+  z-index: 900;
+  background: var(--panel-bg, #1e1e2e);
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  min-width: 140px;
+  animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.kb-tooltip-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-color, #7aa2f7);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-subtle, #2a2a3a);
+}
+
+.kb-tooltip-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.kb-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kb-tooltip-key {
+  display: inline-block;
+  background: var(--kbd-bg, #2a2a3a);
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 10px;
+  color: var(--kbd-color, #c0caf5);
+  box-shadow: 0 1px 0 var(--border-color, var(--color-border-light));
+  white-space: nowrap;
+  min-width: 28px;
+  text-align: center;
+}
+
+.kb-tooltip-desc {
+  font-size: 11px;
+  color: var(--text-secondary, #a0a0b0);
+}
+
+/* Light theme */
+.theme-light .keyboard-tooltip {
+  background: var(--color-text-inverse);
+  border-color: var(--color-text);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.theme-light .kb-tooltip-title {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-border-light);
+}
+
+.theme-light .kb-tooltip-key {
+  background: var(--color-bg-input);
+  border-color: var(--color-text);
+  color: var(--color-border);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+.theme-light .kb-tooltip-desc {
+  color: var(--color-text-muted);
+}

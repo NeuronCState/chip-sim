@@ -1,0 +1,93 @@
+/**
+ * grid.css — 响应式栅格系统
+ * xs 4列 / md 8列 / lg+ 12列
+ * 移动优先，使用 CSS Grid
+ */
+
+/* === 容器 === */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--tk-space-4, 16px);
+  padding: var(--tk-space-4, 16px);
+  max-width: 1536px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .grid-container {
+    grid-template-columns: repeat(8, 1fr);
+    gap: var(--tk-space-5, 20px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--tk-space-6, 24px);
+  }
+}
+
+/* === 列跨度 === */
+/* xs: 4列基础 */
+.col-1  { grid-column: span 1; }
+.col-2  { grid-column: span 2; }
+.col-3  { grid-column: span 3; }
+.col-4  { grid-column: span 4; }
+
+/* md: 8列 */
+@media (min-width: 768px) {
+  .col-md-1  { grid-column: span 1; }
+  .col-md-2  { grid-column: span 2; }
+  .col-md-3  { grid-column: span 3; }
+  .col-md-4  { grid-column: span 4; }
+  .col-md-5  { grid-column: span 5; }
+  .col-md-6  { grid-column: span 6; }
+  .col-md-7  { grid-column: span 7; }
+  .col-md-8  { grid-column: span 8; }
+}
+
+/* lg: 12列 */
+@media (min-width: 1024px) {
+  .col-lg-1  { grid-column: span 1; }
+  .col-lg-2  { grid-column: span 2; }
+  .col-lg-3  { grid-column: span 3; }
+  .col-lg-4  { grid-column: span 4; }
+  .col-lg-5  { grid-column: span 5; }
+  .col-lg-6  { grid-column: span 6; }
+  .col-lg-7  { grid-column: span 7; }
+  .col-lg-8  { grid-column: span 8; }
+  .col-lg-9  { grid-column: span 9; }
+  .col-lg-10 { grid-column: span 10; }
+  .col-lg-11 { grid-column: span 11; }
+  .col-lg-12 { grid-column: span 12; }
+}
+
+/* xl: 12列 */
+@media (min-width: 1280px) {
+  .col-xl-1  { grid-column: span 1; }
+  .col-xl-2  { grid-column: span 2; }
+  .col-xl-3  { grid-column: span 3; }
+  .col-xl-4  { grid-column: span 4; }
+  .col-xl-5  { grid-column: span 5; }
+  .col-xl-6  { grid-column: span 6; }
+  .col-xl-7  { grid-column: span 7; }
+  .col-xl-8  { grid-column: span 8; }
+  .col-xl-9  { grid-column: span 9; }
+  .col-xl-10 { grid-column: span 10; }
+  .col-xl-11 { grid-column: span 11; }
+  .col-xl-12 { grid-column: span 12; }
+}
+
+/* === Flex 工具 === */
+.flex-row    { display: flex; flex-direction: row; }
+.flex-col    { display: flex; flex-direction: column; }
+.flex-wrap   { flex-wrap: wrap; }
+.flex-center { align-items: center; justify-content: center; }
+.flex-between { justify-content: space-between; }
+.gap-1 { gap: var(--tk-space-1, 4px); }
+.gap-2 { gap: var(--tk-space-2, 8px); }
+.gap-3 { gap: var(--tk-space-3, 12px); }
+.gap-4 { gap: var(--tk-space-4, 16px); }
+.gap-6 { gap: var(--tk-space-6, 24px); }

@@ -1,0 +1,185 @@
+/* ─── PerfPanel.css ──────────────────────────────────────────────────────────── */
+
+:root {
+  --perf-green: #4ade80;
+  --perf-yellow: #facc15;
+  --perf-red: #f87171;
+  --perf-bg: rgba(0, 0, 0, 0.85);
+  --perf-border: rgba(255, 255, 255, 0.08);
+  --perf-text: #e2e8f0;
+  --perf-text-dim: #94a3b8;
+  --perf-accent: #38bdf8;
+}
+
+/* ─── 面板容器 ─────────────────────────────────────────────────────────────── */
+
+.perf-panel {
+  position: fixed;
+  z-index: 99999;
+  background: var(--perf-bg);
+  border: 1px solid var(--perf-border);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  color: var(--perf-text);
+  min-width: 220px;
+  max-width: 300px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  user-select: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.perf-panel--dragging {
+  opacity: 0.9;
+  cursor: grabbing;
+}
+
+/* ─── 最小化模式 ────────────────────────────────────────────────────────────── */
+
+.perf-panel--minimized {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  min-width: auto;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.perf-panel--minimized:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.perf-panel__fps-mini {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--perf-current-color, var(--perf-green));
+}
+
+.perf-panel__fps-label {
+  font-size: 10px;
+  color: var(--perf-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── 标题栏 ───────────────────────────────────────────────────────────────── */
+
+.perf-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--perf-border);
+  cursor: grab;
+  border-radius: 8px 8px 0 0;
+}
+
+.perf-panel__header:active {
+  cursor: grabbing;
+}
+
+.perf-panel__title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--perf-text);
+}
+
+.perf-panel__collapse-btn {
+  background: none;
+  border: none;
+  color: var(--perf-text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.perf-panel__collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--perf-text);
+}
+
+/* ─── 面板内容 ─────────────────────────────────────────────────────────────── */
+
+.perf-panel__body {
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ─── 分区 ─────────────────────────────────────────────────────────────────── */
+
+.perf-panel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perf-panel__section-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--perf-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* ─── 指标网格 ─────────────────────────────────────────────────────────────── */
+
+.perf-panel__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}
+
+.perf-panel__grid--3col {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* ─── 单个指标 ─────────────────────────────────────────────────────────────── */
+
+.perf-panel__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.perf-panel__metric-label {
+  font-size: 10px;
+  color: var(--perf-text-dim);
+}
+
+.perf-panel__metric-value {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--perf-text);
+  line-height: 1.2;
+}
+
+/* ─── 响应式：小屏幕折叠 ───────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .perf-panel {
+    min-width: 180px;
+    font-size: 11px;
+  }
+
+  .perf-panel__grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .perf-panel__grid--3col {
+    grid-template-columns: 1fr 1fr;
+  }
+}

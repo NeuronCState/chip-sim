@@ -1,0 +1,694 @@
+{
+  "series": "NXP",
+  "name": "LPC1768",
+  "package": "LQFP-100",
+  "flash": 524288,
+  "ram": 65536,
+  "clock": 100000000,
+  "pinCount": 82,
+  "pins": [
+    {
+      "id": "P0.0",
+      "port": "0",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.1",
+      "port": "0",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.2",
+      "port": "0",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "UART0_TX"
+      ]
+    },
+    {
+      "id": "P0.3",
+      "port": "0",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "UART0_RX"
+      ]
+    },
+    {
+      "id": "P0.4",
+      "port": "0",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.5",
+      "port": "0",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.6",
+      "port": "0",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.7",
+      "port": "0",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.8",
+      "port": "0",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.9",
+      "port": "0",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.10",
+      "port": "0",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "I2C2_SDA"
+      ]
+    },
+    {
+      "id": "P0.11",
+      "port": "0",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "I2C2_SCL"
+      ]
+    },
+    {
+      "id": "P0.12",
+      "port": "0",
+      "bit": 12,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.13",
+      "port": "0",
+      "bit": 13,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.14",
+      "port": "0",
+      "bit": 14,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.15",
+      "port": "0",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "SPI_SCK"
+      ]
+    },
+    {
+      "id": "P0.16",
+      "port": "0",
+      "bit": 16,
+      "functions": [
+        "GPIO",
+        "SPI_MOSI"
+      ]
+    },
+    {
+      "id": "P0.17",
+      "port": "0",
+      "bit": 17,
+      "functions": [
+        "GPIO",
+        "SPI_MISO"
+      ]
+    },
+    {
+      "id": "P0.18",
+      "port": "0",
+      "bit": 18,
+      "functions": [
+        "GPIO",
+        "SPI_SSEL"
+      ]
+    },
+    {
+      "id": "P0.19",
+      "port": "0",
+      "bit": 19,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.20",
+      "port": "0",
+      "bit": 20,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.21",
+      "port": "0",
+      "bit": 21,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.22",
+      "port": "0",
+      "bit": 22,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.23",
+      "port": "0",
+      "bit": 23,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.24",
+      "port": "0",
+      "bit": 24,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.25",
+      "port": "0",
+      "bit": 25,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.26",
+      "port": "0",
+      "bit": 26,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.27",
+      "port": "0",
+      "bit": 27,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.28",
+      "port": "0",
+      "bit": 28,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.29",
+      "port": "0",
+      "bit": 29,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.30",
+      "port": "0",
+      "bit": 30,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P0.31",
+      "port": "0",
+      "bit": 31,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.0",
+      "port": "1",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.1",
+      "port": "1",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.2",
+      "port": "1",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.3",
+      "port": "1",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.4",
+      "port": "1",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.5",
+      "port": "1",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.6",
+      "port": "1",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.7",
+      "port": "1",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.8",
+      "port": "1",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.9",
+      "port": "1",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.10",
+      "port": "1",
+      "bit": 10,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.11",
+      "port": "1",
+      "bit": 11,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.12",
+      "port": "1",
+      "bit": 12,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.13",
+      "port": "1",
+      "bit": 13,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.14",
+      "port": "1",
+      "bit": 14,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.15",
+      "port": "1",
+      "bit": 15,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.16",
+      "port": "1",
+      "bit": 16,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.17",
+      "port": "1",
+      "bit": 17,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.18",
+      "port": "1",
+      "bit": 18,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.19",
+      "port": "1",
+      "bit": 19,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.20",
+      "port": "1",
+      "bit": 20,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.21",
+      "port": "1",
+      "bit": 21,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.22",
+      "port": "1",
+      "bit": 22,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.23",
+      "port": "1",
+      "bit": 23,
+      "functions": [
+        "GPIO",
+        "ADC"
+      ]
+    },
+    {
+      "id": "P1.24",
+      "port": "1",
+      "bit": 24,
+      "functions": [
+        "GPIO",
+        "ADC"
+      ]
+    },
+    {
+      "id": "P1.25",
+      "port": "1",
+      "bit": 25,
+      "functions": [
+        "GPIO",
+        "ADC"
+      ]
+    },
+    {
+      "id": "P1.26",
+      "port": "1",
+      "bit": 26,
+      "functions": [
+        "GPIO",
+        "ADC"
+      ]
+    },
+    {
+      "id": "P1.27",
+      "port": "1",
+      "bit": 27,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.28",
+      "port": "1",
+      "bit": 28,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.29",
+      "port": "1",
+      "bit": 29,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.30",
+      "port": "1",
+      "bit": 30,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.31",
+      "port": "1",
+      "bit": 31,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.0",
+      "port": "2",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "PWM"
+      ]
+    },
+    {
+      "id": "P2.1",
+      "port": "2",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "PWM"
+      ]
+    },
+    {
+      "id": "P2.2",
+      "port": "2",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.3",
+      "port": "2",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.4",
+      "port": "2",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.5",
+      "port": "2",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.6",
+      "port": "2",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.7",
+      "port": "2",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.8",
+      "port": "2",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.9",
+      "port": "2",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.10",
+      "port": "2",
+      "bit": 10,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.11",
+      "port": "2",
+      "bit": 11,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.12",
+      "port": "2",
+      "bit": 12,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.13",
+      "port": "2",
+      "bit": 13,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "VDD",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER_3V3"
+      ]
+    },
+    {
+      "id": "VSS",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "VDDA",
+      "port": "POWER",
+      "bit": 2,
+      "functions": [
+        "ANALOG_POWER"
+      ]
+    },
+    {
+      "id": "RESET",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "Timer",
+    "CAN",
+    "USB",
+    "DMA",
+    "Ethernet"
+  ]
+}

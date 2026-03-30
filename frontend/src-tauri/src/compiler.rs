@@ -1,0 +1,381 @@
+use serde::{Deserialize, Serialize};
+use std::process::Command;
+
+// ==================== 类型定义 ====================
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompilerInfo {
+    pub name: String,
+    pub family: String,
+    pub path: String,
+    pub version: String,
+    pub available: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompileRequest {
+    pub source: String,          // C 源代码
+    pub chip_family: String,     // c51, stm32, esp32, arduino
+    pub chip_model: String,      // 具体型号
+    pub filename: String,        // 文件名，如 main.c
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompileResult {
+    pub success: bool,
+    pub stdout: String,
+    pub stderr: String,
+    pub output_path: Option<String>,  // 编译产物路径 (.hex/.bin/.elf)
+    pub output_format: Option<String>, // hex, bin, elf
+}
+
+// ==================== 编译器路径检测 ====================
+
+/// 检测系统中已安装的编译器
+#[tauri::command]
+pub fn detect_compilers() -> Vec<CompilerInfo> {
+    let mut compilers = Vec::new();
+
+    // SDCC (51系列)
+    compilers.push(check_compiler("sdcc", "sdcc", "c51", "--version"));
+
+    // AVR-GCC (Arduino/AVR)
+    compilers.push(check_compiler("avr-gcc", "avr-gcc", "arduino", "--version"));
+
+    // ARM-none-eabi-GCC (STM32)
+    compilers.push(check_compiler("arm-none-eabi-gcc", "arm-none-eabi-gcc", "stm32", "--version"));
+
+    // Xtensa GCC (ESP32)
+    if let Some(path) = which("xtensa-esp32-elf-gcc") {
+        compilers.push(CompilerInfo {
+            name: "xtensa-gcc".to_string(),
+            family: "esp32".to_string(),
+            path,
+            version: get_version("xtensa-esp32-elf-gcc", "--version"),
+            available: true,
+        });
+    } else {
+        compilers.push(CompilerInfo {
+            name: "xtensa-gcc".to_string(),
+            family: "esp32".to_string(),
+            path: String::new(),
+            version: String::new(),
+            available: false,
+        });
+    }
+
+    // RISC-V GCC (CH32V, GD32VF)
+    if let Some(path) = which("riscv-none-embed-gcc") {
+        compilers.push(CompilerInfo {
+            name: "riscv-gcc".to_string(),
+            family: "riscv".to_string(),
+            path,
+            version: get_version("riscv-none-embed-gcc", "--version"),
+            available: true,
+        });
+    }
+
+    compilers
+}
+
+fn check_compiler(cmd: &str, name: &str, family: &str, version_flag: &str) -> CompilerInfo {
+    if let Some(path) = which(cmd) {
+        CompilerInfo {
+            name: name.to_string(),
+            family: family.to_string(),
+            path,
+            version: get_version(cmd, version_flag),
+            available: true,
+        }
+    } else {
+        CompilerInfo {
+            name: name.to_string(),
+            family: family.to_string(),
+            path: String::new(),
+            version: String::new(),
+            available: false,
+        }
+    }
+}
+
+fn which(cmd: &str) -> Option<String> {
+    let output = Command::new("which").arg(cmd).output().ok()?;
+    if output.status.success() {
+        Some(String::from_utf8_lossy(&output.stdout).trim().to_string())
+    } else {
+        None
+    }
+}
+
+fn get_version(cmd: &str, flag: &str) -> String {
+    Command::new(cmd)
+        .arg(flag)
+        .output()
+        .ok()
+        .and_then(|o| {
+            let s = String::from_utf8_lossy(&o.stdout);
+            s.lines().next().map(|l| l.to_string())
+        })
+        .unwrap_or_default()
+}
+
+// ==================== 编译 ====================
+
+#[tauri::command]
+pub fn compile_code(req: CompileRequest) -> CompileResult {
+    match req.chip_family.as_str() {
+        "c51" => compile_c51(&req),
+        "stm32" => compile_stm32(&req),
+        "arduino" => compile_arduino(&req),
+        "esp32" => compile_esp32(&req),
+        _ => CompileResult {
+            success: false,
+            stdout: String::new(),
+            stderr: format!("不支持的芯片系列: {}", req.chip_family),
+            output_path: None,
+            output_format: None,
+        },
+    }
+}
+
+// ---------- C51 (SDCC) ----------
+
+fn compile_c51(req: &CompileRequest) -> CompileResult {
+    let work_dir = std::env::temp_dir().join("chipsim_build");
+    let _ = std::fs::create_dir_all(&work_dir);
+    let src_path = work_dir.join(&req.filename);
+    let _ = std::fs::write(&src_path, &req.source);
+
+    // sdcc main.c -o main.ihx
+    let output_name = req.filename.replace(".c", ".ihx");
+    let out_path = work_dir.join(&output_name);
+
+    let output = Command::new("sdcc")
+        .arg(&src_path)
+        .arg("-o")
+        .arg(&out_path)
+        .current_dir(&work_dir)
+        .output();
+
+    match output {
+        Ok(o) => {
+            let success = o.status.success();
+            let ihx_path = work_dir.join(&output_name);
+            CompileResult {
+                success,
+                stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+                stderr: String::from_utf8_lossy(&o.stderr).to_string(),
+                output_path: if ihx_path.exists() {
+                    Some(ihx_path.to_string_lossy().to_string())
+                } else {
+                    None
+                },
+                output_format: if success { Some("ihx".to_string()) } else { None },
+            }
+        }
+        Err(e) => CompileResult {
+            success: false,
+            stdout: String::new(),
+            stderr: format!("SDCC 执行失败: {}。请确认已安装 SDCC: brew install sdcc", e),
+            output_path: None,
+            output_format: None,
+        },
+    }
+}
+
+// ---------- STM32 (arm-none-eabi-gcc) ----------
+
+fn compile_stm32(req: &CompileRequest) -> CompileResult {
+    let work_dir = std::env::temp_dir().join("chipsim_build");
+    let _ = std::fs::create_dir_all(&work_dir);
+    let src_path = work_dir.join(&req.filename);
+    let _ = std::fs::write(&src_path, &req.source);
+
+    let obj_name = req.filename.replace(".c", ".o");
+    let elf_name = req.filename.replace(".c", ".elf");
+    let bin_name = req.filename.replace(".c", ".bin");
+
+    // Step 1: Compile to object
+    let compile_output = Command::new("arm-none-eabi-gcc")
+        .args([
+            "-mcpu=cortex-m3", "-mthumb",
+            "-Os", "-Wall",
+            "-c", src_path.to_str().unwrap(),
+            "-o", work_dir.join(&obj_name).to_str().unwrap(),
+        ])
+        .current_dir(&work_dir)
+        .output();
+
+    let compile_output = match compile_output {
+        Ok(o) => o,
+        Err(e) => return CompileResult {
+            success: false,
+            stdout: String::new(),
+            stderr: format!("arm-none-eabi-gcc 执行失败: {}。请确认已安装: brew install --cask gcc-arm-embedded", e),
+            output_path: None,
+            output_format: None,
+        },
+    };
+
+    if !compile_output.status.success() {
+        return CompileResult {
+            success: false,
+            stdout: String::from_utf8_lossy(&compile_output.stdout).to_string(),
+            stderr: String::from_utf8_lossy(&compile_output.stderr).to_string(),
+            output_path: None,
+            output_format: None,
+        };
+    }
+
+    // Step 2: Link to ELF (simplified, no linker script for now)
+    let elf_path = work_dir.join(&elf_name);
+    let link_output = Command::new("arm-none-eabi-gcc")
+        .args([
+            "-mcpu=cortex-m3", "-mthumb",
+            "-nostartfiles",
+            work_dir.join(&obj_name).to_str().unwrap(),
+            "-o", elf_path.to_str().unwrap(),
+        ])
+        .current_dir(&work_dir)
+        .output();
+
+    match link_output {
+        Ok(o) if o.status.success() => {
+            // Step 3: Convert ELF to BIN
+            let bin_path = work_dir.join(&bin_name);
+            let _ = Command::new("arm-none-eabi-objcopy")
+                .args(["-O", "binary", elf_path.to_str().unwrap(), bin_path.to_str().unwrap()])
+                .current_dir(&work_dir)
+                .output();
+
+            CompileResult {
+                success: true,
+                stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+                stderr: String::new(),
+                output_path: Some(elf_path.to_string_lossy().to_string()),
+                output_format: Some("elf".to_string()),
+            }
+        }
+        Ok(o) => CompileResult {
+            success: false,
+            stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+            stderr: String::from_utf8_lossy(&o.stderr).to_string(),
+            output_path: None,
+            output_format: None,
+        },
+        Err(e) => CompileResult {
+            success: false,
+            stdout: String::new(),
+            stderr: format!("链接失败: {}", e),
+            output_path: None,
+            output_format: None,
+        },
+    }
+}
+
+// ---------- Arduino (avr-gcc) ----------
+
+fn compile_arduino(req: &CompileRequest) -> CompileResult {
+    let work_dir = std::env::temp_dir().join("chipsim_build");
+    let _ = std::fs::create_dir_all(&work_dir);
+
+    // Arduino .ino needs to be wrapped for avr-gcc
+    let wrapped = format!(
+        "#include <Arduino.h>\n{}\n",
+        req.source
+    );
+    let src_path = work_dir.join(&req.filename);
+    let _ = std::fs::write(&src_path, &wrapped);
+
+    let obj_name = req.filename.replace(".ino", ".o").replace(".c", ".o");
+    let elf_name = req.filename.replace(".ino", ".elf").replace(".c", ".elf");
+
+    // Compile
+    let compile_output = Command::new("avr-gcc")
+        .args([
+            "-mmcu=atmega328p", "-DF_CPU=16000000L",
+            "-Os", "-Wall",
+            "-c", src_path.to_str().unwrap(),
+            "-o", work_dir.join(&obj_name).to_str().unwrap(),
+        ])
+        .current_dir(&work_dir)
+        .output();
+
+    let compile_output = match compile_output {
+        Ok(o) => o,
+        Err(e) => return CompileResult {
+            success: false,
+            stdout: String::new(),
+            stderr: format!("avr-gcc 执行失败: {}。请确认已安装: brew install avr-gcc", e),
+            output_path: None,
+            output_format: None,
+        },
+    };
+
+    if !compile_output.status.success() {
+        return CompileResult {
+            success: false,
+            stdout: String::from_utf8_lossy(&compile_output.stdout).to_string(),
+            stderr: String::from_utf8_lossy(&compile_output.stderr).to_string(),
+            output_path: None,
+            output_format: None,
+        };
+    }
+
+    // Link
+    let elf_path = work_dir.join(&elf_name);
+    let link_output = Command::new("avr-gcc")
+        .args([
+            "-mmcu=atmega328p",
+            work_dir.join(&obj_name).to_str().unwrap(),
+            "-o", elf_path.to_str().unwrap(),
+        ])
+        .current_dir(&work_dir)
+        .output();
+
+    match link_output {
+        Ok(o) if o.status.success() => {
+            // Convert to hex
+            let hex_name = req.filename.replace(".ino", ".hex").replace(".c", ".hex");
+            let hex_path = work_dir.join(&hex_name);
+            let _ = Command::new("avr-objcopy")
+                .args(["-O", "ihex", "-R", ".eeprom", elf_path.to_str().unwrap(), hex_path.to_str().unwrap()])
+                .current_dir(&work_dir)
+                .output();
+
+            CompileResult {
+                success: true,
+                stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+                stderr: String::new(),
+                output_path: Some(hex_path.to_string_lossy().to_string()),
+                output_format: Some("hex".to_string()),
+            }
+        }
+        Ok(o) => CompileResult {
+            success: false,
+            stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+            stderr: String::from_utf8_lossy(&o.stderr).to_string(),
+            output_path: None,
+            output_format: None,
+        },
+        Err(e) => CompileResult {
+            success: false,
+            stdout: String::new(),
+            stderr: format!("链接失败: {}", e),
+            output_path: None,
+            output_format: None,
+        },
+    }
+}
+
+// ---------- ESP32 (placeholder) ----------
+
+fn compile_esp32(_req: &CompileRequest) -> CompileResult {
+    CompileResult {
+        success: false,
+        stdout: String::new(),
+        stderr: "ESP32 编译暂未实现，需要安装 ESP-IDF 工具链".to_string(),
+        output_path: None,
+        output_format: None,
+    }
+}

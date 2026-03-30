@@ -1,0 +1,188 @@
+{
+  "series": "MSP430",
+  "name": "MSP430G2553",
+  "package": "DIP-20",
+  "flash": 16384,
+  "ram": 512,
+  "clock": 16000000,
+  "pinCount": 20,
+  "pins": [
+    {
+      "id": "P1.0",
+      "port": "1",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC_CH0"
+      ]
+    },
+    {
+      "id": "P1.1",
+      "port": "1",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC_CH1"
+      ]
+    },
+    {
+      "id": "P1.2",
+      "port": "1",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "UART_RX"
+      ]
+    },
+    {
+      "id": "P1.3",
+      "port": "1",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "UART_TX"
+      ]
+    },
+    {
+      "id": "P1.4",
+      "port": "1",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P1.5",
+      "port": "1",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "SPI"
+      ]
+    },
+    {
+      "id": "P1.6",
+      "port": "1",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "SPI"
+      ]
+    },
+    {
+      "id": "P1.7",
+      "port": "1",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.0",
+      "port": "2",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.1",
+      "port": "2",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.2",
+      "port": "2",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.3",
+      "port": "2",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.4",
+      "port": "2",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.5",
+      "port": "2",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "P2.6",
+      "port": "2",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "PWM"
+      ]
+    },
+    {
+      "id": "P2.7",
+      "port": "2",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "PWM"
+      ]
+    },
+    {
+      "id": "VCC",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER_3V3"
+      ]
+    },
+    {
+      "id": "VSS",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "RST",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    },
+    {
+      "id": "TEST",
+      "port": "CONTROL",
+      "bit": 1,
+      "functions": [
+        "DEBUG"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "Timer"
+  ]
+}

@@ -1,0 +1,220 @@
+/* PinListPanel — CubeMX 风格引脚配置 */
+
+.pin-list-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.pin-list-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--sil-border, #d0d7de);
+  flex-shrink: 0;
+}
+
+.pin-list-panel-title {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.pin-list-panel-count {
+  font-size: 10px;
+  color: var(--sil-text-soft, #5a707a);
+}
+
+.pin-list-panel-search {
+  position: relative;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+
+.pin-list-search-input {
+  width: 100%;
+  padding: 4px 22px 4px 8px;
+  border: 1px solid var(--sil-border, #d0d7de);
+  border-radius: 4px;
+  font-size: 11px;
+  background: var(--sil-surface, #fff);
+  color: var(--sil-text-main, #1f333d);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.pin-list-search-input:focus {
+  border-color: var(--sil-accent, #0969da);
+}
+
+.pin-list-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--sil-text-soft, #5a707a);
+  padding: 2px;
+}
+
+.pin-list-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2px 0;
+}
+
+.pin-list-loading, .pin-list-error, .pin-list-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--sil-text-soft, #5a707a);
+  font-size: 11px;
+}
+
+.pin-list-group-header {
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sil-text-soft, #5a707a);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--sil-surface-muted, #f6f8fa);
+  display: flex;
+  justify-content: space-between;
+}
+
+.pin-list-group-count {
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.pin-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.pin-list-item:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+}
+
+.pin-list-item.selected {
+  background: var(--sil-accent-soft, #dbeafe);
+}
+
+.pin-list-item.configured {
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.pin-list-item-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pin-list-type-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pin-list-pin-id {
+  font-weight: 600;
+  font-size: 11px;
+  font-family: monospace;
+}
+
+.pin-list-item-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pin-list-pin-func {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.pin-list-func-count {
+  font-size: 9px;
+  color: var(--sil-text-soft, #5a707a);
+  background: var(--sil-surface-muted, #e6edf2);
+  padding: 0 4px;
+  border-radius: 8px;
+}
+
+/* 功能选择下拉 */
+.pin-func-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 200;
+  background: var(--sil-surface, #fff);
+  border: 1px solid var(--sil-border, #d0d7de);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  padding: 4px 0;
+  margin: 1px 4px 0;
+}
+
+.pin-func-dropdown-title {
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sil-text-soft, #5a707a);
+  border-bottom: 1px solid var(--sil-border, #d0d7de);
+  margin-bottom: 2px;
+}
+
+.pin-func-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--sil-text-main, #1f333d);
+  text-align: left;
+}
+
+.pin-func-option:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+}
+
+.pin-func-option.active {
+  background: var(--sil-accent-soft, #dbeafe);
+  font-weight: 500;
+}
+
+.pin-func-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pin-func-check {
+  margin-left: auto;
+  color: var(--sil-accent, #0969da);
+  font-weight: 700;
+}
+
+.pin-list-panel-footer {
+  padding: 4px 8px;
+  border-top: 1px solid var(--sil-border, #d0d7de);
+  font-size: 10px;
+  color: var(--sil-text-soft, #5a707a);
+  flex-shrink: 0;
+}

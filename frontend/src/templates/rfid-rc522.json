@@ -1,0 +1,45 @@
+{
+  "id": "rfid-rc522",
+  "name": "RC522 RFID门禁",
+  "nameEn": "RC522 RFID Access Control",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "MCU通过SPI接口读取RC522 RFID模块卡片UID，验证后控制电磁锁开关",
+  "descriptionEn": "MCU reads RC522 RFID module card UID via SPI, controls electromagnetic lock after verification",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "spi_slave", "name": "U2", "position": { "x": 380, "y": 180 }, "value": { "value": 13560000, "unit": "Hz" } },
+    { "type": "relay", "name": "K1", "position": { "x": 380, "y": 340 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "led", "name": "LED1", "position": { "x": 500, "y": 120 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "led", "name": "LED2", "position": { "x": 500, "y": 160 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 430, "y": 120 }, "value": { "value": 330, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 430, "y": 160 }, "value": { "value": 330, "unit": "Ω" } },
+    { "type": "buzzer_active", "name": "BZ1", "position": { "x": 500, "y": 250 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 450 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "U2:0" },
+    { "from": "U1:1", "to": "U2:1" },
+    { "from": "U1:2", "to": "U2:2" },
+    { "from": "U1:3", "to": "U2:3" },
+    { "from": "U1:4", "to": "R1:0" },
+    { "from": "R1:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "U1:5", "to": "R2:0" },
+    { "from": "R2:1", "to": "LED2:0" },
+    { "from": "LED2:1", "to": "GND:0" },
+    { "from": "U1:6", "to": "BZ1:0" },
+    { "from": "BZ1:1", "to": "GND:0" },
+    { "from": "U1:7", "to": "K1:0" },
+    { "from": "K1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U2:4" },
+    { "from": "VCC:1", "to": "U1:8" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U2:5", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，RC522工作频率13.56MHz，刷卡后读取4字节UID。LED1绿色=授权通过，LED2红色=拒绝，蜂鸣器提示，继电器开锁2秒。",
+    "en": "Run protocol simulation. RC522 operates at 13.56MHz, reads 4-byte UID after card swipe. LED1 green=authorized, LED2 red=denied, buzzer alert, relay unlocks for 2 seconds."
+  }
+}

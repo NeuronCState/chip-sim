@@ -1,0 +1,719 @@
+{
+  "series": "Arduino",
+  "name": "Arduino Mega 2560",
+  "package": "TQFP-100",
+  "flash": 262144,
+  "ram": 8192,
+  "clock": 16000000,
+  "pinCount": 76,
+  "pins": [
+    {
+      "id": "D0",
+      "port": "D",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "UART0_RX"
+      ]
+    },
+    {
+      "id": "D1",
+      "port": "D",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "UART0_TX"
+      ]
+    },
+    {
+      "id": "D2",
+      "port": "D",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "INT"
+      ]
+    },
+    {
+      "id": "D3",
+      "port": "D",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "INT"
+      ]
+    },
+    {
+      "id": "D4",
+      "port": "D",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D5",
+      "port": "D",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D6",
+      "port": "D",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D7",
+      "port": "D",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D8",
+      "port": "D",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D9",
+      "port": "D",
+      "bit": 9,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D10",
+      "port": "D",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D11",
+      "port": "D",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D12",
+      "port": "D",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D13",
+      "port": "D",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D14",
+      "port": "D",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "UART3_TX"
+      ]
+    },
+    {
+      "id": "D15",
+      "port": "D",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "UART3_RX"
+      ]
+    },
+    {
+      "id": "D16",
+      "port": "D",
+      "bit": 16,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D17",
+      "port": "D",
+      "bit": 17,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D18",
+      "port": "D",
+      "bit": 18,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "INT"
+      ]
+    },
+    {
+      "id": "D19",
+      "port": "D",
+      "bit": 19,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "INT"
+      ]
+    },
+    {
+      "id": "D20",
+      "port": "D",
+      "bit": 20,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D21",
+      "port": "D",
+      "bit": 21,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D22",
+      "port": "D",
+      "bit": 22,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D23",
+      "port": "D",
+      "bit": 23,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D24",
+      "port": "D",
+      "bit": 24,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D25",
+      "port": "D",
+      "bit": 25,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D26",
+      "port": "D",
+      "bit": 26,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D27",
+      "port": "D",
+      "bit": 27,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D28",
+      "port": "D",
+      "bit": 28,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D29",
+      "port": "D",
+      "bit": 29,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D30",
+      "port": "D",
+      "bit": 30,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D31",
+      "port": "D",
+      "bit": 31,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D32",
+      "port": "D",
+      "bit": 32,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D33",
+      "port": "D",
+      "bit": 33,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D34",
+      "port": "D",
+      "bit": 34,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D35",
+      "port": "D",
+      "bit": 35,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D36",
+      "port": "D",
+      "bit": 36,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D37",
+      "port": "D",
+      "bit": 37,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D38",
+      "port": "D",
+      "bit": 38,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D39",
+      "port": "D",
+      "bit": 39,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D40",
+      "port": "D",
+      "bit": 40,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D41",
+      "port": "D",
+      "bit": 41,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D42",
+      "port": "D",
+      "bit": 42,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D43",
+      "port": "D",
+      "bit": 43,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D44",
+      "port": "D",
+      "bit": 44,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D45",
+      "port": "D",
+      "bit": 45,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D46",
+      "port": "D",
+      "bit": 46,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D47",
+      "port": "D",
+      "bit": 47,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D48",
+      "port": "D",
+      "bit": 48,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D49",
+      "port": "D",
+      "bit": 49,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D50",
+      "port": "D",
+      "bit": 50,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D51",
+      "port": "D",
+      "bit": 51,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D52",
+      "port": "D",
+      "bit": 52,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D53",
+      "port": "D",
+      "bit": 53,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "A0",
+      "port": "A",
+      "bit": 0,
+      "functions": [
+        "ADC",
+        "ADC_CH0"
+      ]
+    },
+    {
+      "id": "A1",
+      "port": "A",
+      "bit": 1,
+      "functions": [
+        "ADC",
+        "ADC_CH1"
+      ]
+    },
+    {
+      "id": "A2",
+      "port": "A",
+      "bit": 2,
+      "functions": [
+        "ADC",
+        "ADC_CH2"
+      ]
+    },
+    {
+      "id": "A3",
+      "port": "A",
+      "bit": 3,
+      "functions": [
+        "ADC",
+        "ADC_CH3"
+      ]
+    },
+    {
+      "id": "A4",
+      "port": "A",
+      "bit": 4,
+      "functions": [
+        "ADC",
+        "ADC_CH4"
+      ]
+    },
+    {
+      "id": "A5",
+      "port": "A",
+      "bit": 5,
+      "functions": [
+        "ADC",
+        "ADC_CH5"
+      ]
+    },
+    {
+      "id": "A6",
+      "port": "A",
+      "bit": 6,
+      "functions": [
+        "ADC",
+        "ADC_CH6"
+      ]
+    },
+    {
+      "id": "A7",
+      "port": "A",
+      "bit": 7,
+      "functions": [
+        "ADC",
+        "ADC_CH7"
+      ]
+    },
+    {
+      "id": "A8",
+      "port": "A",
+      "bit": 8,
+      "functions": [
+        "ADC",
+        "ADC_CH8"
+      ]
+    },
+    {
+      "id": "A9",
+      "port": "A",
+      "bit": 9,
+      "functions": [
+        "ADC",
+        "ADC_CH9"
+      ]
+    },
+    {
+      "id": "A10",
+      "port": "A",
+      "bit": 10,
+      "functions": [
+        "ADC",
+        "ADC_CH10"
+      ]
+    },
+    {
+      "id": "A11",
+      "port": "A",
+      "bit": 11,
+      "functions": [
+        "ADC",
+        "ADC_CH11"
+      ]
+    },
+    {
+      "id": "A12",
+      "port": "A",
+      "bit": 12,
+      "functions": [
+        "ADC",
+        "ADC_CH12"
+      ]
+    },
+    {
+      "id": "A13",
+      "port": "A",
+      "bit": 13,
+      "functions": [
+        "ADC",
+        "ADC_CH13"
+      ]
+    },
+    {
+      "id": "A14",
+      "port": "A",
+      "bit": 14,
+      "functions": [
+        "ADC",
+        "ADC_CH14"
+      ]
+    },
+    {
+      "id": "A15",
+      "port": "A",
+      "bit": 15,
+      "functions": [
+        "ADC",
+        "ADC_CH15"
+      ]
+    },
+    {
+      "id": "5V",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER_5V"
+      ]
+    },
+    {
+      "id": "3V3",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER_3V3"
+      ]
+    },
+    {
+      "id": "GND1",
+      "port": "POWER",
+      "bit": 2,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "GND2",
+      "port": "POWER",
+      "bit": 3,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "VIN",
+      "port": "POWER",
+      "bit": 4,
+      "functions": [
+        "POWER_IN"
+      ]
+    },
+    {
+      "id": "RESET",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UARTx4",
+    "PWM",
+    "Timer"
+  ]
+}

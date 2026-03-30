@@ -1,0 +1,157 @@
+/* ==================== 连接状态栏 ==================== */
+
+.cs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 简化模式（已连接时） */
+.cs-minimal {
+  padding: 3px 8px;
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+/* ==================== 状态样式 ==================== */
+
+.cs-connected {
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.cs-connecting {
+  background: rgba(230, 168, 23, 0.1);
+  border: 1px solid rgba(230, 168, 23, 0.2);
+}
+
+.cs-reconnecting {
+  background: rgba(230, 168, 23, 0.1);
+  border: 1px solid rgba(230, 168, 23, 0.3);
+  animation: cs-pulse 2s ease-in-out infinite;
+}
+
+.cs-disconnected {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.cs-offline {
+  background: rgba(108, 117, 125, 0.15);
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+@keyframes cs-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ==================== 内容元素 ==================== */
+
+.cs-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cs-dot-connected {
+  background: var(--color-success);
+  box-shadow: 0 0 4px rgba(40, 167, 69, 0.5);
+}
+
+.cs-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.cs-text-mini {
+  font-size: 11px;
+  color: var(--color-success);
+}
+
+.cs-sim-indicator {
+  font-size: 10px;
+  color: var(--color-warning);
+  margin-left: 4px;
+}
+
+.cs-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cs-text {
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.cs-detail {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cs-connected .cs-text { color: var(--color-success); }
+.cs-connecting .cs-text { color: var(--color-warning); }
+.cs-reconnecting .cs-text { color: var(--color-warning); }
+.cs-disconnected .cs-text { color: var(--color-danger); }
+.cs-offline .cs-text { color: var(--color-text-dim); }
+
+/* ==================== 重连按钮 ==================== */
+
+.cs-reconnect-btn {
+  background: rgba(0, 102, 204, 0.2);
+  border: 1px solid rgba(0, 102, 204, 0.4);
+  color: var(--color-info);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.cs-reconnect-btn:hover {
+  background: rgba(0, 102, 204, 0.3);
+  color: var(--color-info);
+}
+
+/* ==================== 重连进度条 ==================== */
+
+.cs-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cs-progress-fill {
+  height: 100%;
+  background: var(--color-warning);
+  transition: width 0.3s ease;
+}
+
+/* ==================== 亮色主题 ==================== */
+
+.theme-light .cs-text { color: var(--color-border-light); }
+.theme-light .cs-detail { color: var(--color-text-dim); }
+.theme-light .cs-connected .cs-text { color: var(--color-success); }
+.theme-light .cs-connecting .cs-text { color: var(--color-warning); }
+.theme-light .cs-reconnecting .cs-text { color: var(--color-warning); }
+.theme-light .cs-disconnected .cs-text { color: var(--color-danger); }
+.theme-light .cs-text-mini { color: var(--color-success); }

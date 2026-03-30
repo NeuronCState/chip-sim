@@ -1,0 +1,45 @@
+{
+  "id": "c51-digital-tube",
+  "name": "C51 数码管动态扫描显示",
+  "nameEn": "C51 Seven Segment Dynamic Scan Display",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "51单片机P0口段选、P2口位选驱动共阴数码管，动态扫描显示数字",
+  "descriptionEn": "8051 MCU P0 segment select, P2 digit select drives common cathode 7-segment display with dynamic scanning",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 300, "y": 80 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 300, "y": 120 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R3", "position": { "x": 300, "y": 160 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R4", "position": { "x": 300, "y": 200 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R5", "position": { "x": 300, "y": 240 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R6", "position": { "x": 300, "y": 280 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "resistor", "name": "R7", "position": { "x": 300, "y": 320 }, "value": { "value": 220, "unit": "Ω" } },
+    { "type": "seven_segment", "name": "SEG1", "position": { "x": 480, "y": 200 }, "value": { "value": 0, "unit": "" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 80 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "SEG1:0" },
+    { "from": "U1:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "SEG1:1" },
+    { "from": "U1:2", "to": "R3:0" },
+    { "from": "R3:1", "to": "SEG1:2" },
+    { "from": "U1:3", "to": "R4:0" },
+    { "from": "R4:1", "to": "SEG1:3" },
+    { "from": "U1:4", "to": "R5:0" },
+    { "from": "R5:1", "to": "SEG1:4" },
+    { "from": "U1:5", "to": "R6:0" },
+    { "from": "R6:1", "to": "SEG1:5" },
+    { "from": "U1:6", "to": "R7:0" },
+    { "from": "R7:1", "to": "SEG1:6" },
+    { "from": "SEG1:7", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:7" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，P0口输出段选码控制显示笔段，P2口控制位选。扫描频率需大于50Hz以消除闪烁。",
+    "en": "Run digital simulation, P0 outputs segment codes, P2 controls digit select. Scan frequency >50Hz to avoid flickering."
+  }
+}

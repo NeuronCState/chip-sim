@@ -1,0 +1,53 @@
+{
+  "id": "opamp-inverting",
+  "name": "运放反相放大器",
+  "nameEn": "Op-Amp Inverting Amplifier",
+  "category": "analog",
+  "difficulty": 2,
+  "description": "运算放大器反相放大电路，增益 Av = -R2/R1 = -10",
+  "descriptionEn": "Inverting amplifier with gain Av = -R2/R1 = -10",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "V1",
+      "position": { "x": 100, "y": 200 },
+      "value": { "value": 1, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 230, "y": 200 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "resistor",
+      "name": "R2",
+      "position": { "x": 380, "y": 140 },
+      "value": { "value": 100000, "unit": "Ω" }
+    },
+    {
+      "type": "op_amp",
+      "name": "U1",
+      "position": { "x": 420, "y": 200 },
+      "value": { "value": 100000, "unit": "A/V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 420, "y": 250 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "V1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "U1:1" },
+    { "from": "U1:2", "to": "R2:0" },
+    { "from": "R2:1", "to": "U1:1" },
+    { "from": "U1:0", "to": "GND:0" },
+    { "from": "V1:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行直流分析。输入1V时输出约-10V（受供电轨限制）。增益公式：Av = -R2/R1 = -100k/10k = -10。",
+    "en": "Run DC analysis. Output ≈ -10V for 1V input (limited by supply rails). Gain formula: Av = -R2/R1 = -100k/10k = -10."
+  }
+}

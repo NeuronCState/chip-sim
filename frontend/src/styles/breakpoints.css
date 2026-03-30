@@ -1,0 +1,80 @@
+/**
+ * breakpoints.css — 响应式断点系统
+ * 移动优先（Mobile First）：基础样式 = xs，向上渐进增强
+ * 
+ * 断点：
+ *   xs  < 640px   手机竖屏    4列
+ *   sm  ≥ 640px   大屏手机    4列
+ *   md  ≥ 768px   平板竖屏    8列
+ *   lg  ≥ 1024px  平板横屏    12列
+ *   xl  ≥ 1280px  桌面显示器  12列
+ *   2xl ≥ 1536px  大屏桌面    12列
+ */
+
+/* === CSS 自定义属性暴露断点值（供 JS 读取） === */
+:root {
+  --bp-xs: 0;
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+}
+
+/* ============================================================
+   断点工具类（可选使用，组件内也可直接写 @media）
+   ============================================================ */
+
+/* 隐藏/显示工具 */
+.hide-xs  { display: none; }
+.show-xs  { display: block; }
+
+@media (min-width: 640px) {
+  .hide-sm  { display: none; }
+  .show-sm  { display: block; }
+  .hide-xs-up { display: none; }
+}
+
+@media (min-width: 768px) {
+  .hide-md  { display: none; }
+  .show-md  { display: block; }
+  .hide-sm-up { display: none; }
+}
+
+@media (min-width: 1024px) {
+  .hide-lg  { display: none; }
+  .show-lg  { display: block; }
+  .hide-md-up { display: none; }
+}
+
+@media (min-width: 1280px) {
+  .hide-xl  { display: none; }
+  .show-xl  { display: block; }
+  .hide-lg-up { display: none; }
+}
+
+@media (min-width: 1536px) {
+  .hide-2xl { display: none; }
+  .show-2xl { display: block; }
+  .hide-xl-up { display: none; }
+}
+
+/* 仅移动端显示 */
+.mobile-only  { display: block; }
+.desktop-only { display: none; }
+
+@media (min-width: 768px) {
+  .mobile-only  { display: none; }
+  .desktop-only { display: block; }
+}
+
+/* 文本响应式 */
+.text-responsive {
+  font-size: var(--tk-text-sm);
+}
+@media (min-width: 768px) {
+  .text-responsive { font-size: var(--tk-text-base); }
+}
+@media (min-width: 1024px) {
+  .text-responsive { font-size: var(--tk-text-lg); }
+}

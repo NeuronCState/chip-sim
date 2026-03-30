@@ -1,0 +1,232 @@
+/**
+ * McuSimulator.css — MCU 仿真平台布局
+ * 使用 Flexbox + Resizer 实现可拖拽三栏布局
+ */
+
+.mcu-simulator {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+/* ===== 主体：水平三栏 + Resizer ===== */
+.mcu-body {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ===== 面板通用 ===== */
+.mcu-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--sil-surface-raised, #edf3f7);
+  border-radius: var(--sil-radius-lg, 26px);
+  margin: 6px 0;
+  box-shadow: var(--sil-shadow-soft, 8px 9px 17px rgba(116,134,144,.22), -6px -6px 12px rgba(255,255,255,.74));
+}
+
+/* 收起按钮 */
+.mcu-expand-btn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--sil-text-soft, #5a707a);
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.mcu-expand-btn:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+  color: var(--sil-text-main, #1f333d);
+}
+
+/* 面板头部 */
+.mcu-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: var(--sil-text-main, #1f333d);
+}
+
+.mcu-btn-sm {
+  border: 0;
+  background: transparent;
+  color: var(--sil-text-soft, #5a707a);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.mcu-btn-sm:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+  color: var(--sil-text-main, #1f333d);
+}
+
+/* ===== 左栏 ===== */
+.mcu-left {
+  min-width: 32px;
+}
+
+.mcu-section {
+  flex-shrink: 0;
+}
+
+.mcu-section-grow {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 元件库网格 */
+.mcu-component-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  padding: 4px 8px 8px;
+}
+
+.mcu-comp-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: none;
+  background: transparent;
+  border-radius: var(--tk-radius-md, 8px);
+  cursor: grab;
+  transition: background var(--tk-transition-fast, 150ms ease);
+  color: var(--sil-text-main, #1f333d);
+}
+
+.mcu-comp-btn:hover {
+  background: var(--sil-surface-muted, #e6edf2);
+}
+
+.mcu-comp-btn:active {
+  cursor: grabbing;
+  background: var(--sil-mint-soft, #d7f0ea);
+}
+
+.mcu-comp-icon {
+  font-size: 18px;
+}
+
+.mcu-comp-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sil-text-soft, #5a707a);
+}
+
+/* PinListPanel 包裹层 */
+.mcu-pinlist-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 4px 4px;
+}
+
+/* LibraryReference 包裹层 */
+.mcu-libref-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ===== 中央画布 ===== */
+.mcu-canvas {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  margin: 6px 0;
+  position: relative;
+}
+
+/* ===== 浮出属性面板 ===== */
+.mcu-float-panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 280px;
+  max-height: 400px;
+  background: var(--sil-surface-raised, #edf3f7);
+  border-radius: var(--sil-radius-lg, 26px);
+  box-shadow: var(--sil-shadow-float, 14px 16px 28px rgba(107,125,135,.24), -9px -9px 18px rgba(255,255,255,.78));
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: mcuFloatIn 0.15s ease;
+}
+
+@keyframes mcuFloatIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mcu-float-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: var(--sil-text-main, #1f333d);
+}
+
+.mcu-float-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+}
+
+/* ===== 底栏 ===== */
+.mcu-bottom {
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.mcu-bottom.open {
+  background: var(--sil-surface-raised, #edf3f7);
+  border-radius: var(--sil-radius-lg, 26px);
+  box-shadow: var(--sil-shadow-soft, 8px 9px 17px rgba(116,134,144,.22), -6px -6px 12px rgba(255,255,255,.74));
+  margin: 0 6px 6px;
+}
+
+.mcu-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+}
+
+.mcu-bottom-body {
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+/* ===== 右栏 ===== */
+.mcu-right {
+  min-width: 32px;
+}

@@ -1,0 +1,1 @@
+export { WirePropertiesPanel } from './WirePropertiesPanel';

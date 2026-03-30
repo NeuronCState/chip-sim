@@ -1,0 +1,32 @@
+{
+  "id": "stm32-i2c-oled",
+  "name": "STM32 SSD1306 I2C OLED",
+  "nameEn": "STM32 SSD1306 I2C OLED Display",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "STM32通过I2C接口驱动SSD1306 128×64 OLED显示模块",
+  "descriptionEn": "STM32 drives SSD1306 128×64 OLED display module via I2C interface",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "i2c_slave", "name": "OLED1", "position": { "x": 450, "y": 200 }, "value": { "value": 128, "unit": "pixel" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 280, "y": 100 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 280, "y": 280 }, "value": { "value": 4700, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 400 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "VCC:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "U1:0" },
+    { "from": "R1:1", "to": "OLED1:0" },
+    { "from": "VCC:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "U1:1" },
+    { "from": "R2:1", "to": "OLED1:1" },
+    { "from": "VCC:1", "to": "OLED1:2" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "OLED1:3", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，I2C地址0x3C，先发初始化命令序列，再写入GRAM数据。SSD1306支持水平/垂直/页寻址模式。",
+    "en": "Run protocol simulation. I2C address 0x3C, send init command sequence, then write GRAM data. SSD1306 supports horizontal/vertical/page addressing modes."
+  }
+}

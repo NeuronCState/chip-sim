@@ -1,0 +1,222 @@
+/* MeasurementPanel.css */
+
+.measurement-panel {
+  background: var(--color-bg-input);
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text);
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.measurement-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--color-bg-input);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.measurement-panel-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.measurement-panel-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.mp-btn {
+  background: var(--color-border);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-text-dim);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mp-btn:hover {
+  background: var(--color-border-light);
+  color: var(--color-text-inverse);
+}
+
+.mp-btn-toggle {
+  background: transparent;
+  border: none;
+  font-size: 10px;
+  padding: 2px 4px;
+}
+
+.measurement-panel-empty,
+.measurement-panel-waiting {
+  padding: 20px;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.measurement-panel-empty p {
+  margin: 4px 0;
+}
+
+.measurement-panel-empty .hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.measurement-panel-body {
+  padding: 8px 12px;
+}
+
+/* 测量表格 */
+.measurement-table {
+  margin-bottom: 8px;
+}
+
+.measurement-table-header,
+.measurement-table-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 0.8fr;
+  gap: 4px;
+  padding: 4px 8px;
+  align-items: center;
+}
+
+.measurement-table-header {
+  background: var(--color-bg-panel);
+  border-radius: 4px 4px 0 0;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.measurement-table-row {
+  border-bottom: 1px solid var(--color-border);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+}
+
+.measurement-table-row:last-child {
+  border-bottom: none;
+}
+
+.measurement-probe-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.probe-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: bold;
+  color: var(--color-text-inverse);
+  flex-shrink: 0;
+}
+
+.probe-type-label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  margin-left: 4px;
+}
+
+.measurement-value {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--color-text);
+}
+
+/* 详细统计卡片 */
+.measurement-details {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.measurement-detail-card {
+  flex: 1;
+  min-width: 180px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.detail-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--color-bg-panel);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.detail-card-body {
+  padding: 6px 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  font-size: 11px;
+}
+
+.detail-row span:first-child {
+  color: var(--color-text-dim);
+}
+
+.detail-row span:last-child {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--color-text);
+}
+
+/* 相位差 */
+.phase-measurement {
+  margin-top: 10px;
+  padding: 8px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.phase-header {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-text-dim);
+  margin-bottom: 6px;
+}
+
+.phase-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 11px;
+}
+
+.phase-row span:first-child {
+  color: var(--color-text-dim);
+}
+
+.phase-value {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--color-warning);
+  font-weight: 600;
+}

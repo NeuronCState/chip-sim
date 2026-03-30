@@ -1,0 +1,52 @@
+{
+  "id": "timer555",
+  "name": "555 定时器电路",
+  "nameEn": "555 Timer Circuit",
+  "category": "power",
+  "difficulty": 3,
+  "description": "555 定时器非稳态模式，生成方波信号",
+  "descriptionEn": "555 timer astable mode, generate square wave signals",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "Vcc",
+      "position": { "x": 100, "y": 150 },
+      "value": { "value": 9, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 250, "y": 150 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "resistor",
+      "name": "R2",
+      "position": { "x": 250, "y": 250 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "capacitor",
+      "name": "C1",
+      "position": { "x": 400, "y": 300 },
+      "value": { "value": 1e-6, "unit": "F" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 100, "y": 350 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "Vcc:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "C1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "Vcc:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行瞬态分析（0 ~ 10ms），观察电容充放电波形。频率约 f = 1.44/((10k+2×10k)×1μF) ≈ 48Hz。",
+    "en": "Run transient analysis (0 ~ 10ms), observe capacitor waveform. Frequency ≈ f = 1.44/((10k+2×10k)×1μF) ≈ 48Hz."
+  }
+}

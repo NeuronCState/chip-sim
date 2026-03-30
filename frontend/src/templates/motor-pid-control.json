@@ -1,0 +1,35 @@
+{
+  "id": "motor-pid-control",
+  "name": "编码器PID速度控制",
+  "nameEn": "Encoder PID Speed Control",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "MCU读取编码器反馈速度，PID算法调节PWM输出实现直流电机精确速度控制",
+  "descriptionEn": "MCU reads encoder feedback speed, PID algorithm adjusts PWM output for precise DC motor speed control",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "dc_motor", "name": "M1", "position": { "x": 500, "y": 150 }, "value": { "value": 12, "unit": "V" } },
+    { "type": "mosfet_nmos", "name": "Q1", "position": { "x": 420, "y": 280 }, "value": { "value": 0, "unit": "" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 280, "y": 200 }, "value": { "value": 100, "unit": "Ω" } },
+    { "type": "diode", "name": "D1", "position": { "x": 500, "y": 60 }, "value": { "value": 0.7, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 350, "y": 40 }, "value": { "value": 12, "unit": "V" } },
+    { "type": "dc_source", "name": "V_logic", "position": { "x": 60, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "Q1:0" },
+    { "from": "VCC:1", "to": "M1:0" },
+    { "from": "M1:1", "to": "Q1:1" },
+    { "from": "Q1:2", "to": "GND:0" },
+    { "from": "M1:1", "to": "D1:0" },
+    { "from": "D1:1", "to": "VCC:1" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "V_logic:1", "to": "U1:1" },
+    { "from": "V_logic:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行时域仿真，MCU读取编码器A/B相脉冲计算转速，PID控制器（Kp=1.2, Ki=0.5, Kd=0.1）调整PWM占空比跟踪目标速度。",
+    "en": "Run time-domain simulation. MCU reads encoder A/B phase pulses to calculate speed, PID controller (Kp=1.2, Ki=0.5, Kd=0.1) adjusts PWM duty cycle to track target speed."
+  }
+}

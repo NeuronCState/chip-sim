@@ -1,0 +1,32 @@
+{
+  "id": "stm32-dac-audio",
+  "name": "STM32 DAC音频输出",
+  "nameEn": "STM32 DAC Audio Output",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "STM32内部12位DAC输出正弦波/音频信号，经RC低通滤波和运放缓冲驱动扬声器",
+  "descriptionEn": "STM32 internal 12-bit DAC outputs sine wave/audio signal via RC low-pass filter and op-amp buffer to speaker",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "dac", "name": "DAC1", "position": { "x": 250, "y": 200 }, "value": { "value": 12, "unit": "bit" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 370, "y": 180 }, "value": { "value": 1000, "unit": "Ω" } },
+    { "type": "capacitor", "name": "C1", "position": { "x": 470, "y": 180 }, "value": { "value": 1e-6, "unit": "F" } },
+    { "type": "op_amp", "name": "U2", "position": { "x": 550, "y": 200 }, "value": { "value": 100000, "unit": "A/V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 80, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "DAC1:0" },
+    { "from": "DAC1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "C1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "R1:1", "to": "U2:0" },
+    { "from": "U2:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:1" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行时域仿真，DAC输出440Hz正弦波查找表数据。R1和C1构成截止频率约160Hz的低通滤波器。运放U2提供低阻输出缓冲。",
+    "en": "Run time-domain simulation. DAC outputs 440Hz sine wave lookup table. R1 and C1 form ~160Hz low-pass filter. Op-amp U2 provides low-impedance output buffer."
+  }
+}

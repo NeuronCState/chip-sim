@@ -1,0 +1,293 @@
+/**
+ * 全局主题 CSS 变量
+ * 将 ThemeSystem.ts 的 ThemeTokens 映射为 CSS custom properties
+ * 命名规范：--color-xxx（统一前缀）
+ *
+ * 使用方式：
+ *   [data-theme="dark"] / [data-theme="light"] 作用域下的所有组件自动获得对应变量
+ * 组件中引用：var(--color-bg-app), var(--color-text) 等
+ */
+
+/* ==================== 暗色主题 ==================== */
+[data-theme="dark"] {
+  /* 背景 */
+  --color-bg-app: #0d0d1a;
+  --color-bg-panel: #16162a;
+  --color-bg-input: #1a1a2e;
+  --color-bg-toolbar: #12122a;
+  --color-bg-canvas: #0d0d1a;
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+
+  /* 边框 */
+  --color-border: #2a2a4a;
+  --color-border-light: #3a3a5a;
+  --color-border-accent: #4488ff;
+
+  /* 文本 */
+  --color-text: #e0e0e0;
+  --color-text-dim: #888888;
+  --color-text-muted: #555555;
+  --color-text-inverse: #0d0d1a;
+
+  /* 强调色 */
+  --color-accent: #0066cc;
+  --color-accent-hover: #0088ff;
+  --color-accent-subtle: rgba(0, 102, 204, 0.15);
+
+  /* 状态色 */
+  --color-success: #4ecdc4;
+  --color-success-subtle: rgba(78, 205, 196, 0.15);
+  --color-danger: #ff6b6b;
+  --color-danger-subtle: rgba(255, 107, 107, 0.15);
+  --color-warning: #ffaa00;
+  --color-warning-subtle: rgba(255, 170, 0, 0.15);
+  --color-info: #44aaff;
+  --color-info-subtle: rgba(68, 170, 255, 0.15);
+
+  /* 画布专用 */
+  --color-grid: #2a2a4a;
+  --color-grid-major: #3a3a5a;
+  --color-wire: #00d4ff;
+  --color-wire-selected: #ff6b6b;
+  --color-wire-preview: #8888ff;
+  --color-component: #e0e0e0;
+  --color-component-selected: #4488ff;
+  --color-component-hover: #66bbff;
+  --color-port: #4ecdc4;
+  --color-port-snap: #ffd93d;
+  --color-port-glow: rgba(78, 205, 196, 0.6);
+  --color-selection: #4488ff;
+  --color-node: #ff6b6b;
+  --color-node-ground: #4ecdc4;
+
+  /* 热力图 */
+  --color-heatmap-low: #1a3a6e;
+  --color-heatmap-mid: #cc8800;
+  --color-heatmap-high: #ff2222;
+
+  /* 动画光效 */
+  --color-glow: #00d4ff;
+  --color-flow: #00ffaa;
+  --color-pulse: #4488ff;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+
+  /* 兼容旧变量名（带 --vis- 前缀） */
+  --vis-bg-app: #0d0d1a;
+  --vis-bg-panel: #16162a;
+  --vis-bg-input: #1a1a2e;
+  --vis-bg-toolbar: #12122a;
+  --vis-border: #2a2a4a;
+  --vis-border-light: #3a3a5a;
+  --vis-text: #e0e0e0;
+  --vis-text-dim: #888888;
+  --vis-text-muted: #555555;
+  --vis-accent: #0066cc;
+  --vis-accent-hover: #0088ff;
+  --vis-glow-color: #00d4ff;
+  --vis-port-glow: rgba(78, 205, 196, 0.6);
+
+  /* 兼容 EditorPage.css 旧变量名 */
+  --bg-app: #0d0d1a;
+  --bg-panel: #16162a;
+  --bg-input: #1a1a2e;
+  --bg-toolbar: #12122a;
+  --border: #2a2a4a;
+  --border-light: #3a3a5a;
+  --text: #e0e0e0;
+  --text-dim: #888;
+  --text-muted: #555;
+  --accent: #0066cc;
+  --accent-hover: #0088ff;
+  --success: #4ecdc4;
+  --danger: #ff6b6b;
+  --warning: #ffaa00;
+
+  /* 兼容 ShortcutsHelp.css 变量名 */
+  --panel-bg: #1e1e2e;
+  --border-color: #333;
+  --text-primary: #e0e0e0;
+  --text-secondary: #888;
+  --hover-bg: #333;
+  --input-bg: #2a2a3a;
+  --accent-color: #7aa2f7;
+  --kbd-bg: #2a2a3a;
+  --kbd-color: #c0caf5;
+  --border-subtle: #2a2a3a;
+  --text-muted-custom: #666;
+}
+
+/* ==================== 亮色主题 ==================== */
+[data-theme="light"] {
+  /* 背景 */
+  --color-bg-app: #f0f2f5;
+  --color-bg-panel: #ffffff;
+  --color-bg-input: #f5f5f5;
+  --color-bg-toolbar: #ffffff;
+  --color-bg-canvas: #f8f9fa;
+  --color-bg-overlay: rgba(255, 255, 255, 0.7);
+
+  /* 边框 */
+  --color-border: #d9d9d9;
+  --color-border-light: #e8e8e8;
+  --color-border-accent: #1677ff;
+
+  /* 文本 */
+  --color-text: #1a1a2e;
+  --color-text-dim: #666666;
+  --color-text-muted: #999999;
+  --color-text-inverse: #ffffff;
+
+  /* 强调色 */
+  --color-accent: #1677ff;
+  --color-accent-hover: #4096ff;
+  --color-accent-subtle: rgba(22, 119, 255, 0.1);
+
+  /* 状态色 */
+  --color-success: #13c2c2;
+  --color-success-subtle: rgba(19, 194, 194, 0.1);
+  --color-danger: #ff4d4f;
+  --color-danger-subtle: rgba(255, 77, 79, 0.1);
+  --color-warning: #faad14;
+  --color-warning-subtle: rgba(250, 173, 20, 0.1);
+  --color-info: #1677ff;
+  --color-info-subtle: rgba(22, 119, 255, 0.1);
+
+  /* 画布专用 */
+  --color-grid: #e0e0e0;
+  --color-grid-major: #d0d0d0;
+  --color-wire: #1677ff;
+  --color-wire-selected: #ff4d4f;
+  --color-wire-preview: #7c9eff;
+  --color-component: #333333;
+  --color-component-selected: #1677ff;
+  --color-component-hover: #4096ff;
+  --color-port: #13c2c2;
+  --color-port-snap: #faad14;
+  --color-port-glow: rgba(19, 194, 194, 0.5);
+  --color-selection: #1677ff;
+  --color-node: #ff4d4f;
+  --color-node-ground: #13c2c2;
+
+  /* 热力图 */
+  --color-heatmap-low: #4488ff;
+  --color-heatmap-mid: #ffaa00;
+  --color-heatmap-high: #ff2222;
+
+  /* 动画光效 */
+  --color-glow: #1677ff;
+  --color-flow: #13c2c2;
+  --color-pulse: #1677ff;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-glow: 0 0 20px rgba(22, 119, 255, 0.2);
+
+  /* 兼容旧变量名 */
+  --vis-bg-app: #f0f2f5;
+  --vis-bg-panel: #ffffff;
+  --vis-bg-input: #f5f5f5;
+  --vis-bg-toolbar: #ffffff;
+  --vis-border: #d9d9d9;
+  --vis-border-light: #e8e8e8;
+  --vis-text: #1a1a2e;
+  --vis-text-dim: #666666;
+  --vis-text-muted: #999999;
+  --vis-accent: #1677ff;
+  --vis-accent-hover: #4096ff;
+  --vis-glow-color: #1677ff;
+  --vis-port-glow: rgba(19, 194, 194, 0.5);
+
+  /* 兼容 EditorPage.css 旧变量名 */
+  --bg-app: #f0f2f5;
+  --bg-panel: #ffffff;
+  --bg-input: #f5f5f5;
+  --bg-toolbar: #ffffff;
+  --border: #d9d9d9;
+  --border-light: #e8e8e8;
+  --text: #1a1a2e;
+  --text-dim: #666;
+  --text-muted: #999;
+  --accent: #1677ff;
+  --accent-hover: #4096ff;
+  --success: #13c2c2;
+  --danger: #ff4d4f;
+  --warning: #faad14;
+
+  /* 兼容 ShortcutsHelp.css 变量名 */
+  --panel-bg: #fff;
+  --border-color: #ddd;
+  --text-primary: #222;
+  --text-secondary: #666;
+  --hover-bg: #f0f0f0;
+  --input-bg: #f8f8f8;
+  --accent-color: #2563eb;
+  --kbd-bg: #f5f5f5;
+  --kbd-color: #333;
+  --border-subtle: #f0f0f0;
+  --text-muted-custom: #999;
+}
+
+/* ==================== 主题切换过渡动画 ==================== */
+[data-theme] {
+  transition:
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 面板和工具栏的过渡 */
+.editor-page,
+.top-toolbar,
+.editor-left,
+.editor-right,
+.status-bar,
+.canvas-toolbar,
+.panel-header,
+.waveform-panel,
+.simulator-control,
+.protocol-panel {
+  transition:
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 按钮过渡 */
+button,
+.tb-btn,
+.tb-btn-sm,
+.collapsed-btn,
+.wf-btn,
+.analysis-btn,
+.btn-action,
+.protocol-sim-btn,
+.control-buttons button {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.15s ease,
+    box-shadow 0.25s ease;
+}
+
+/* 输入框过渡 */
+input,
+select,
+.prop-input,
+.prop-select,
+.search-input,
+.param-input {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.25s ease;
+}

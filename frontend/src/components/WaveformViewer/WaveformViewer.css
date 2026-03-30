@@ -1,0 +1,262 @@
+/**
+ * 波形渲染器样式
+ * 支持暗色/亮色主题
+ */
+
+.wf-viewer {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel, #16162a);
+  border-top: 1px solid var(--border, var(--color-border));
+  min-height: 220px;
+  max-height: 600px;
+  resize: vertical;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ==================== 工具栏 ==================== */
+
+.wf-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border, var(--color-border));
+  flex-wrap: wrap;
+}
+
+.wf-viewer-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #e0e0e0);
+  margin-right: auto;
+}
+
+.wf-viewer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 10px;
+  background: var(--bg-input, #1a1a2e);
+  color: var(--text-dim, #aaa);
+  border: 1px solid var(--border, #3a3a5a);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.wf-viewer-btn:hover {
+  background: var(--border-light, #3a3a5a);
+  color: var(--text, #fff);
+  border-color: var(--color-accent, #0066cc);
+}
+
+.wf-viewer-btn:active {
+  transform: scale(0.96);
+}
+
+.wf-viewer-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--border, #3a3a5a);
+  flex-shrink: 0;
+}
+
+/* ==================== Canvas 区域 ==================== */
+
+.wf-viewer-canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+}
+
+.wf-viewer-canvas {
+  display: block;
+}
+
+/* 占位符 */
+.wf-viewer-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted, #666);
+  font-size: 14px;
+  text-align: center;
+}
+
+.wf-viewer-placeholder .hint {
+  font-size: 12px;
+  color: var(--text-muted, #555);
+  margin-top: 6px;
+}
+
+/* 加载动画 */
+.wf-viewer-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: var(--text-dim, #888);
+  font-size: 13px;
+}
+
+.wf-viewer-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border, #3a3a5a);
+  border-top-color: var(--color-accent, #0066cc);
+  border-radius: 50%;
+  animation: wf-spin 0.8s linear infinite;
+}
+
+@keyframes wf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 错误状态 */
+.wf-viewer-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 8px;
+  color: var(--color-danger, #ff6b6b);
+  font-size: 13px;
+}
+
+.wf-viewer-error-detail {
+  font-size: 11px;
+  color: var(--text-dim, #888);
+  max-width: 400px;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ==================== 通道图例 ==================== */
+
+.wf-viewer-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border, var(--color-border));
+  overflow-x: auto;
+  background: var(--bg-panel, #12122a);
+}
+
+.wf-channel-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--bg-input, #1e1e3a);
+  border: 1px solid var(--border, #3a3a5a);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--text, #ddd);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.wf-channel-tag:hover {
+  border-color: var(--border-light, #4a4a6a);
+  background: var(--border, #3a3a5a);
+}
+
+.wf-channel-hidden {
+  opacity: 0.35;
+  border-color: var(--border, #2a2a4a) !important;
+}
+
+.wf-channel-hidden .wf-channel-dot {
+  opacity: 0.3;
+}
+
+.wf-channel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ==================== 响应式 ==================== */
+
+@media (max-width: 1024px) {
+  .wf-viewer {
+    min-height: 180px;
+    max-height: 440px;
+  }
+
+  .wf-viewer-toolbar {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .wf-viewer-title {
+    font-size: 12px;
+  }
+
+  .wf-viewer-btn {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  .wf-viewer-legend {
+    padding: 3px 8px;
+    gap: 4px;
+  }
+
+  .wf-channel-tag {
+    padding: 1px 6px;
+    font-size: 10px;
+  }
+
+  .wf-channel-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .wf-viewer {
+    min-height: 150px;
+    max-height: 360px;
+  }
+
+  .wf-viewer-toolbar {
+    padding: 3px 6px;
+    gap: 3px;
+  }
+
+  .wf-viewer-title {
+    font-size: 11px;
+    margin-right: 4px;
+  }
+
+  .wf-viewer-btn {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+
+  .wf-viewer-sep {
+    display: none;
+  }
+
+  .wf-viewer-canvas-container {
+    min-height: 80px;
+  }
+}

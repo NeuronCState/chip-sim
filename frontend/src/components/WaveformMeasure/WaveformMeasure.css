@@ -1,0 +1,209 @@
+/**
+ * 波形测量工具样式
+ */
+
+.waveform-measure {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border, var(--color-border));
+  background: var(--bg-panel, #12122a);
+  font-size: 11px;
+  color: var(--text, #ddd);
+}
+
+/* 工具栏 */
+.measure-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--border, var(--color-border));
+  flex-wrap: wrap;
+}
+
+.measure-title {
+  font-size: 12px;
+  color: var(--text-dim, #aaa);
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.measure-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: var(--bg-input, #1a1a2e);
+  color: var(--text-dim, #aaa);
+  border: 1px solid var(--border, #3a3a5a);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.measure-btn:hover {
+  background: var(--border-light, #3a3a5a);
+  color: var(--text, #fff);
+}
+
+.measure-btn-active {
+  background: var(--color-accent-subtle, rgba(0, 102, 204, 0.2));
+  color: var(--text, #fff);
+  border-color: var(--color-accent, #0066cc);
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 游标读数 */
+.cursor-readout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 12px;
+  border-bottom: 1px solid rgba(42, 42, 74, 0.3);
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+
+.cursor-label {
+  font-weight: 600;
+  min-width: 40px;
+}
+
+.cursor-x-value {
+  color: var(--text-dim, #888);
+  min-width: 100px;
+}
+
+.cursor-channel-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.channel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Δ 差值读数 */
+.delta-readout {
+  padding: 6px 12px;
+  background: rgba(0, 102, 204, 0.05);
+  border-bottom: 1px solid rgba(42, 42, 74, 0.3);
+}
+
+.delta-header {
+  font-weight: 600;
+  color: var(--color-accent, #00cc88);
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.delta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+.delta-freq {
+  color: var(--color-warning, #ffaa00);
+  margin-left: 8px;
+}
+
+/* 统计表 */
+.measure-stats {
+  padding: 6px 12px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.stats-title {
+  font-size: 11px;
+  color: var(--text-dim, #aaa);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.stats-table {
+  font-size: 11px;
+}
+
+.stats-header,
+.stats-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) repeat(6, minmax(50px, 0.8fr));
+  gap: 4px 8px;
+  padding: 3px 0;
+  align-items: center;
+}
+
+.stats-header {
+  color: var(--text-dim, #888);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border, var(--color-border));
+  padding-bottom: 4px;
+  margin-bottom: 2px;
+}
+
+.stats-row {
+  border-bottom: 1px solid rgba(42, 42, 74, 0.2);
+}
+
+.stats-channel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .measure-toolbar {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .measure-title {
+    font-size: 11px;
+  }
+
+  .measure-btn {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  .cursor-readout {
+    padding: 3px 8px;
+    gap: 8px;
+    font-size: 10px;
+  }
+
+  .delta-readout {
+    padding: 4px 8px;
+  }
+
+  .measure-stats {
+    padding: 4px 8px;
+  }
+
+  .stats-header,
+  .stats-row {
+    font-size: 10px;
+    gap: 2px 4px;
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "sensor-ntc-temp",
+  "name": "NTC温度传感器电路",
+  "nameEn": "NTC Temperature Sensor Circuit",
+  "category": "analog",
+  "difficulty": 2,
+  "description": "NTC热敏电阻分压测温电路，配合ADC采集温度信号",
+  "descriptionEn": "NTC thermistor voltage divider for temperature measurement with ADC",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "Vcc",
+      "position": { "x": 100, "y": 180 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 260, "y": 180 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "ntc_thermistor",
+      "name": "NTC1",
+      "position": { "x": 260, "y": 310 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "adc",
+      "name": "ADC1",
+      "position": { "x": 460, "y": 230 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 260, "y": 420 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "Vcc:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "ADC1:0" },
+    { "from": "R1:1", "to": "NTC1:0" },
+    { "from": "NTC1:1", "to": "GND:0" },
+    { "from": "Vcc:0", "to": "GND:0" },
+    { "from": "ADC1:1", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "NTC阻值随温度升高而降低。25°C时阻值10kΩ，分压点约1.65V。温度升高时NTC阻值下降，分压点电压降低。通过ADC采集电压可反推温度。",
+    "en": "NTC resistance decreases as temperature rises. At 25°C, NTC=10kΩ, midpoint voltage≈1.65V. ADC reads voltage to calculate temperature."
+  }
+}

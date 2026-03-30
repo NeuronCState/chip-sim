@@ -1,0 +1,32 @@
+{
+  "id": "stm32-pwm-motor",
+  "name": "STM32 TIM PWM电机调速",
+  "nameEn": "STM32 TIM PWM Motor Speed Control",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "STM32定时器产生PWM信号经MOSFET驱动直流电机，通过占空比调节转速",
+  "descriptionEn": "STM32 timer generates PWM to drive DC motor via MOSFET, speed controlled by duty cycle",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "mosfet_nmos", "name": "Q1", "position": { "x": 350, "y": 250 }, "value": { "value": 0, "unit": "" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 230, "y": 200 }, "value": { "value": 100, "unit": "Ω" } },
+    { "type": "dc_motor", "name": "M1", "position": { "x": 350, "y": 120 }, "value": { "value": 12, "unit": "V" } },
+    { "type": "diode", "name": "D1", "position": { "x": 350, "y": 60 }, "value": { "value": 0.7, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 200, "y": 60 }, "value": { "value": 12, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 400 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "R1:1", "to": "Q1:0" },
+    { "from": "VCC:1", "to": "M1:0" },
+    { "from": "M1:1", "to": "Q1:1" },
+    { "from": "Q1:2", "to": "GND:0" },
+    { "from": "M1:1", "to": "D1:0" },
+    { "from": "D1:1", "to": "VCC:1" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，改变PWM占空比（0-100%）观察电机转速变化。D1为续流二极管保护MOSFET。",
+    "en": "Run digital simulation, change PWM duty cycle (0-100%) to observe motor speed change. D1 is a flyback diode protecting the MOSFET."
+  }
+}

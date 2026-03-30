@@ -1,0 +1,200 @@
+{
+  "series": "ESP8266",
+  "name": "ESP8266",
+  "package": "QFN-32",
+  "flash": 4194304,
+  "ram": 81920,
+  "clock": 80000000,
+  "pinCount": 21,
+  "pins": [
+    {
+      "id": "GPIO0",
+      "port": "GPIO",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "SPI_CS2"
+      ]
+    },
+    {
+      "id": "GPIO1",
+      "port": "GPIO",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "UART0_TX"
+      ]
+    },
+    {
+      "id": "GPIO2",
+      "port": "GPIO",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "I2C_SDA"
+      ]
+    },
+    {
+      "id": "GPIO3",
+      "port": "GPIO",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "UART0_RX"
+      ]
+    },
+    {
+      "id": "GPIO4",
+      "port": "GPIO",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "I2C_SCL"
+      ]
+    },
+    {
+      "id": "GPIO5",
+      "port": "GPIO",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "SPI_CS"
+      ]
+    },
+    {
+      "id": "GPIO6",
+      "port": "GPIO",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO7",
+      "port": "GPIO",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO8",
+      "port": "GPIO",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO9",
+      "port": "GPIO",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO10",
+      "port": "GPIO",
+      "bit": 10,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO11",
+      "port": "GPIO",
+      "bit": 11,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO12",
+      "port": "GPIO",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "SPI_MISO"
+      ]
+    },
+    {
+      "id": "GPIO13",
+      "port": "GPIO",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "SPI_MOSI"
+      ]
+    },
+    {
+      "id": "GPIO14",
+      "port": "GPIO",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "SPI_SCLK"
+      ]
+    },
+    {
+      "id": "GPIO15",
+      "port": "GPIO",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "SPI_CS",
+        "PWM"
+      ]
+    },
+    {
+      "id": "GPIO16",
+      "port": "GPIO",
+      "bit": 16,
+      "functions": [
+        "GPIO",
+        "WAKE"
+      ]
+    },
+    {
+      "id": "GND",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "VCC",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "CH_PD",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "ENABLE"
+      ]
+    },
+    {
+      "id": "RST",
+      "port": "CONTROL",
+      "bit": 1,
+      "functions": [
+        "RESET"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "WiFi"
+  ]
+}

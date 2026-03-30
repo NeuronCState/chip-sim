@@ -1,0 +1,39 @@
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--sil-surface-muted);
+  border-radius: var(--sil-radius-md);
+  padding: 4px;
+  box-shadow: var(--sil-shadow-pressed);
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sil-text-soft);
+  border-radius: calc(var(--sil-radius-md) - 4px);
+  cursor: pointer;
+  transition: all var(--sil-transition-spring);
+  outline: none;
+  white-space: nowrap;
+}
+
+.tab:hover:not(.active) {
+  color: var(--sil-text-main);
+  background: var(--sil-surface-raised);
+}
+
+.tab.active {
+  background: var(--sil-surface-raised);
+  color: var(--sil-text-main);
+  box-shadow: var(--sil-shadow-soft);
+}
+
+.content {
+  margin-top: 12px;
+}

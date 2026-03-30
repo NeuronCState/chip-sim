@@ -1,0 +1,368 @@
+{
+  "series": "Arduino",
+  "name": "Arduino Leonardo",
+  "package": "TQFP-44",
+  "flash": 32768,
+  "ram": 2560,
+  "clock": 16000000,
+  "pinCount": 38,
+  "pins": [
+    {
+      "id": "D0",
+      "port": "D",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "UART_RX"
+      ]
+    },
+    {
+      "id": "D1",
+      "port": "D",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "UART_TX"
+      ]
+    },
+    {
+      "id": "D2",
+      "port": "D",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "INT2"
+      ]
+    },
+    {
+      "id": "D3",
+      "port": "D",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "INT3"
+      ]
+    },
+    {
+      "id": "D4",
+      "port": "D",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D5",
+      "port": "D",
+      "bit": 5,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D6",
+      "port": "D",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D7",
+      "port": "D",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D8",
+      "port": "D",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D9",
+      "port": "D",
+      "bit": 9,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D10",
+      "port": "D",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D11",
+      "port": "D",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "PWM"
+      ]
+    },
+    {
+      "id": "D12",
+      "port": "D",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D13",
+      "port": "D",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D14",
+      "port": "D",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "SPI_MISO"
+      ]
+    },
+    {
+      "id": "D15",
+      "port": "D",
+      "bit": 15,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "SPI_SCK"
+      ]
+    },
+    {
+      "id": "D16",
+      "port": "D",
+      "bit": 16,
+      "functions": [
+        "GPIO",
+        "DIGITAL",
+        "SPI_MOSI"
+      ]
+    },
+    {
+      "id": "D17",
+      "port": "D",
+      "bit": 17,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D18",
+      "port": "D",
+      "bit": 18,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "D19",
+      "port": "D",
+      "bit": 19,
+      "functions": [
+        "GPIO",
+        "DIGITAL"
+      ]
+    },
+    {
+      "id": "A0",
+      "port": "A",
+      "bit": 0,
+      "functions": [
+        "ADC",
+        "ADC_CH0"
+      ]
+    },
+    {
+      "id": "A1",
+      "port": "A",
+      "bit": 1,
+      "functions": [
+        "ADC",
+        "ADC_CH1"
+      ]
+    },
+    {
+      "id": "A2",
+      "port": "A",
+      "bit": 2,
+      "functions": [
+        "ADC",
+        "ADC_CH2"
+      ]
+    },
+    {
+      "id": "A3",
+      "port": "A",
+      "bit": 3,
+      "functions": [
+        "ADC",
+        "ADC_CH3"
+      ]
+    },
+    {
+      "id": "A4",
+      "port": "A",
+      "bit": 4,
+      "functions": [
+        "ADC",
+        "ADC_CH4"
+      ]
+    },
+    {
+      "id": "A5",
+      "port": "A",
+      "bit": 5,
+      "functions": [
+        "ADC",
+        "ADC_CH5"
+      ]
+    },
+    {
+      "id": "A6",
+      "port": "A",
+      "bit": 6,
+      "functions": [
+        "ADC",
+        "ADC_CH6"
+      ]
+    },
+    {
+      "id": "A7",
+      "port": "A",
+      "bit": 7,
+      "functions": [
+        "ADC",
+        "ADC_CH7"
+      ]
+    },
+    {
+      "id": "A8",
+      "port": "A",
+      "bit": 8,
+      "functions": [
+        "ADC",
+        "ADC_CH8"
+      ]
+    },
+    {
+      "id": "A9",
+      "port": "A",
+      "bit": 9,
+      "functions": [
+        "ADC",
+        "ADC_CH9"
+      ]
+    },
+    {
+      "id": "A10",
+      "port": "A",
+      "bit": 10,
+      "functions": [
+        "ADC",
+        "ADC_CH10"
+      ]
+    },
+    {
+      "id": "A11",
+      "port": "A",
+      "bit": 11,
+      "functions": [
+        "ADC",
+        "ADC_CH11"
+      ]
+    },
+    {
+      "id": "5V",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER_5V"
+      ]
+    },
+    {
+      "id": "3V3",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER_3V3"
+      ]
+    },
+    {
+      "id": "GND1",
+      "port": "POWER",
+      "bit": 2,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "GND2",
+      "port": "POWER",
+      "bit": 3,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "VIN",
+      "port": "POWER",
+      "bit": 4,
+      "functions": [
+        "POWER_IN"
+      ]
+    },
+    {
+      "id": "RESET",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "USB_Native"
+  ]
+}

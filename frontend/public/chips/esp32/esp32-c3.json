@@ -1,0 +1,238 @@
+{
+  "series": "ESP32-C3",
+  "name": "ESP32-C3",
+  "package": "QFN-32",
+  "flash": 4194304,
+  "ram": 409600,
+  "clock": 160000000,
+  "pinCount": 25,
+  "pins": [
+    {
+      "id": "GPIO0",
+      "port": "GPIO",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "ADC1_CH0"
+      ]
+    },
+    {
+      "id": "GPIO1",
+      "port": "GPIO",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "ADC1_CH1"
+      ]
+    },
+    {
+      "id": "GPIO2",
+      "port": "GPIO",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "ADC1_CH2",
+        "I2C_SDA"
+      ]
+    },
+    {
+      "id": "GPIO3",
+      "port": "GPIO",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "ADC1_CH3",
+        "I2C_SCL"
+      ]
+    },
+    {
+      "id": "GPIO4",
+      "port": "GPIO",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "ADC1_CH4",
+        "SPI_CS"
+      ]
+    },
+    {
+      "id": "GPIO5",
+      "port": "GPIO",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO6",
+      "port": "GPIO",
+      "bit": 6,
+      "functions": [
+        "GPIO",
+        "SPI_MOSI"
+      ]
+    },
+    {
+      "id": "GPIO7",
+      "port": "GPIO",
+      "bit": 7,
+      "functions": [
+        "GPIO",
+        "SPI_SCLK"
+      ]
+    },
+    {
+      "id": "GPIO8",
+      "port": "GPIO",
+      "bit": 8,
+      "functions": [
+        "GPIO",
+        "SPI_MISO"
+      ]
+    },
+    {
+      "id": "GPIO9",
+      "port": "GPIO",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO10",
+      "port": "GPIO",
+      "bit": 10,
+      "functions": [
+        "GPIO",
+        "UART0_TX"
+      ]
+    },
+    {
+      "id": "GPIO11",
+      "port": "GPIO",
+      "bit": 11,
+      "functions": [
+        "GPIO",
+        "UART0_RX"
+      ]
+    },
+    {
+      "id": "GPIO12",
+      "port": "GPIO",
+      "bit": 12,
+      "functions": [
+        "GPIO",
+        "JTAG_TCK"
+      ]
+    },
+    {
+      "id": "GPIO13",
+      "port": "GPIO",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "JTAG_TMS"
+      ]
+    },
+    {
+      "id": "GPIO14",
+      "port": "GPIO",
+      "bit": 14,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO15",
+      "port": "GPIO",
+      "bit": 15,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO16",
+      "port": "GPIO",
+      "bit": 16,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO17",
+      "port": "GPIO",
+      "bit": 17,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO18",
+      "port": "GPIO",
+      "bit": 18,
+      "functions": [
+        "GPIO",
+        "USB_D-"
+      ]
+    },
+    {
+      "id": "GPIO19",
+      "port": "GPIO",
+      "bit": 19,
+      "functions": [
+        "GPIO",
+        "USB_D+"
+      ]
+    },
+    {
+      "id": "GPIO20",
+      "port": "GPIO",
+      "bit": 20,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GPIO21",
+      "port": "GPIO",
+      "bit": 21,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "GND",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "3V3",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "POWER"
+      ]
+    },
+    {
+      "id": "EN",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "USB_Serial_JTAG",
+    "RISC-V"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "uart-comm",
+  "name": "UART串口通信电路",
+  "nameEn": "UART Serial Communication",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "两设备间UART串口通信，交叉TX/RX连接",
+  "descriptionEn": "UART serial communication between two devices with cross TX/RX connection",
+  "components": [
+    {
+      "type": "uart_tx",
+      "name": "MCU_TX",
+      "position": { "x": 100, "y": 150 },
+      "value": { "value": 115200, "unit": "bps" }
+    },
+    {
+      "type": "uart_rx",
+      "name": "MCU_RX",
+      "position": { "x": 100, "y": 280 },
+      "value": { "value": 115200, "unit": "bps" }
+    },
+    {
+      "type": "uart_rx",
+      "name": "PC_RX",
+      "position": { "x": 500, "y": 150 },
+      "value": { "value": 115200, "unit": "bps" }
+    },
+    {
+      "type": "uart_tx",
+      "name": "PC_TX",
+      "position": { "x": 500, "y": 280 },
+      "value": { "value": 115200, "unit": "bps" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 300, "y": 340 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "MCU_TX:0", "to": "PC_RX:0" },
+    { "from": "PC_TX:0", "to": "MCU_RX:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行协议仿真，设置波特率115200。观察TX发送和RX接收的UART波形。注意TX-RX交叉连接。",
+    "en": "Run protocol simulation at 115200 baud. Observe TX transmit and RX receive UART waveforms. Note TX-RX cross connection."
+  }
+}

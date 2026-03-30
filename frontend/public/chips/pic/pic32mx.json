@@ -1,0 +1,488 @@
+{
+  "series": "PIC",
+  "name": "PIC32MX",
+  "package": "TQFP-64",
+  "flash": 524288,
+  "ram": 32768,
+  "clock": 80000000,
+  "pinCount": 57,
+  "pins": [
+    {
+      "id": "RA0",
+      "port": "A",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "AN0"
+      ]
+    },
+    {
+      "id": "RA1",
+      "port": "A",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "UART"
+      ]
+    },
+    {
+      "id": "RA2",
+      "port": "A",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RA3",
+      "port": "A",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB0",
+      "port": "B",
+      "bit": 0,
+      "functions": [
+        "GPIO",
+        "AN4"
+      ]
+    },
+    {
+      "id": "RB1",
+      "port": "B",
+      "bit": 1,
+      "functions": [
+        "GPIO",
+        "AN5"
+      ]
+    },
+    {
+      "id": "RB2",
+      "port": "B",
+      "bit": 2,
+      "functions": [
+        "GPIO",
+        "AN6"
+      ]
+    },
+    {
+      "id": "RB3",
+      "port": "B",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "AN7"
+      ]
+    },
+    {
+      "id": "RB4",
+      "port": "B",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB5",
+      "port": "B",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB6",
+      "port": "B",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB7",
+      "port": "B",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB8",
+      "port": "B",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB9",
+      "port": "B",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB10",
+      "port": "B",
+      "bit": 10,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB11",
+      "port": "B",
+      "bit": 11,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB12",
+      "port": "B",
+      "bit": 12,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB13",
+      "port": "B",
+      "bit": 13,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB14",
+      "port": "B",
+      "bit": 14,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RB15",
+      "port": "B",
+      "bit": 15,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC0",
+      "port": "C",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC1",
+      "port": "C",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC2",
+      "port": "C",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC3",
+      "port": "C",
+      "bit": 3,
+      "functions": [
+        "GPIO",
+        "SPI"
+      ]
+    },
+    {
+      "id": "RC4",
+      "port": "C",
+      "bit": 4,
+      "functions": [
+        "GPIO",
+        "SPI"
+      ]
+    },
+    {
+      "id": "RC5",
+      "port": "C",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC6",
+      "port": "C",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC7",
+      "port": "C",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC8",
+      "port": "C",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC9",
+      "port": "C",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC10",
+      "port": "C",
+      "bit": 10,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC11",
+      "port": "C",
+      "bit": 11,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC12",
+      "port": "C",
+      "bit": 12,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RC13",
+      "port": "C",
+      "bit": 13,
+      "functions": [
+        "GPIO",
+        "I2C"
+      ]
+    },
+    {
+      "id": "RC14",
+      "port": "C",
+      "bit": 14,
+      "functions": [
+        "GPIO",
+        "I2C"
+      ]
+    },
+    {
+      "id": "RC15",
+      "port": "C",
+      "bit": 15,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD0",
+      "port": "D",
+      "bit": 0,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD1",
+      "port": "D",
+      "bit": 1,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD2",
+      "port": "D",
+      "bit": 2,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD3",
+      "port": "D",
+      "bit": 3,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD4",
+      "port": "D",
+      "bit": 4,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD5",
+      "port": "D",
+      "bit": 5,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD6",
+      "port": "D",
+      "bit": 6,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD7",
+      "port": "D",
+      "bit": 7,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD8",
+      "port": "D",
+      "bit": 8,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD9",
+      "port": "D",
+      "bit": 9,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD10",
+      "port": "D",
+      "bit": 10,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD11",
+      "port": "D",
+      "bit": 11,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD12",
+      "port": "D",
+      "bit": 12,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD13",
+      "port": "D",
+      "bit": 13,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD14",
+      "port": "D",
+      "bit": 14,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "RD15",
+      "port": "D",
+      "bit": 15,
+      "functions": [
+        "GPIO"
+      ]
+    },
+    {
+      "id": "VDD",
+      "port": "POWER",
+      "bit": 0,
+      "functions": [
+        "POWER_3V3"
+      ]
+    },
+    {
+      "id": "VSS",
+      "port": "POWER",
+      "bit": 1,
+      "functions": [
+        "GROUND"
+      ]
+    },
+    {
+      "id": "MCLR",
+      "port": "CONTROL",
+      "bit": 0,
+      "functions": [
+        "RESET"
+      ]
+    },
+    {
+      "id": "OSC1",
+      "port": "CLOCK",
+      "bit": 0,
+      "functions": [
+        "CRYSTAL_IN"
+      ]
+    },
+    {
+      "id": "OSC2",
+      "port": "CLOCK",
+      "bit": 1,
+      "functions": [
+        "CRYSTAL_OUT"
+      ]
+    }
+  ],
+  "peripherals": [
+    "GPIO",
+    "ADC",
+    "SPI",
+    "I2C",
+    "UART",
+    "PWM",
+    "Timer",
+    "USB",
+    "DMA"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "stm32-dma-adc",
+  "name": "STM32 DMA多通道ADC采集",
+  "nameEn": "STM32 DMA Multi-channel ADC Acquisition",
+  "category": "embedded",
+  "difficulty": 3,
+  "description": "STM32通过DMA方式自动采集多通道ADC数据，CPU零干预实现高速连续采样",
+  "descriptionEn": "STM32 auto-acquires multi-channel ADC data via DMA, CPU-free high-speed continuous sampling",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "adc", "name": "ADC1", "position": { "x": 400, "y": 160 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 300, "y": 80 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 300, "y": 160 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R3", "position": { "x": 300, "y": 240 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "dc_source", "name": "Vref", "position": { "x": 200, "y": 60 }, "value": { "value": 3.3, "unit": "V" } },
+    { "type": "dc_source", "name": "Vin1", "position": { "x": 200, "y": 140 }, "value": { "value": 1.65, "unit": "V" } },
+    { "type": "dc_source", "name": "Vin2", "position": { "x": 200, "y": 220 }, "value": { "value": 2.5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 350, "y": 400 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "Vref:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "ADC1:0" },
+    { "from": "Vin1:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "ADC1:1" },
+    { "from": "Vin2:1", "to": "R3:0" },
+    { "from": "R3:1", "to": "ADC1:2" },
+    { "from": "U1:0", "to": "ADC1:3" },
+    { "from": "ADC1:4", "to": "GND:0" },
+    { "from": "Vref:0", "to": "GND:0" },
+    { "from": "Vin1:0", "to": "GND:0" },
+    { "from": "Vin2:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行混合仿真，DMA将ADC数据自动搬运到SRAM缓冲区。12位精度下Vin=1.65V时ADC值约2048。",
+    "en": "Run mixed simulation. DMA auto-transfers ADC data to SRAM buffer. At 12-bit resolution, Vin=1.65V yields ADC value ~2048."
+  }
+}

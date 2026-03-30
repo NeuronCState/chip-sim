@@ -1,0 +1,777 @@
+/**
+ * 电路画布 — Canvas 2D + 可视化动画引擎
+ * 功能：芯片 + 元件 + 引脚 + 连线 + 拖拽 + 自动吸附连接
+ * 动画：LED亮度/PWM、电流动画、引脚电平颜色、元件响应、悬停高亮+tooltip
+ */
+
+import { useRef, useEffect, useState, useCallback } from 'react';
+import type { SelectedElement } from './interaction';
+import './WebGLCanvas.css';
+
+// ========== 类型 ==========
+interface Pin {
+  id: string;
+  name: string;
+  side: 'left' | 'right';
+  index: number;
+  x: number; y: number;
+  connected: boolean;
+  /** 引脚电平状态 */
+  level: 'high' | 'low' | 'floating';
+}
+
+interface CanvasComponent {
+  id: string; type: string; name: string;
+  x: number; y: number; w: number; h: number;
+  rotation: number; selected: boolean;
+  pins: { id: string; name: string; offsetX: number; offsetY: number; connected: boolean; level: 'high' | 'low' | 'floating' }[];
+  /** 仿真状态 */
+  simState: ComponentSimState;
+}
+
+/** 元件仿真可视化状态 */
+interface ComponentSimState {
+  /** LED/PWM 占空比 0-1 */
+  pwmDuty: number;
+  /** 继电器是否通电 */
+  relayEnergized: boolean;
+  /** 电机转速 0-1 */
+  motorSpeed: number;
+  /** 蜂鸣器是否发声 */
+  buzzerActive: boolean;
+  /** 蜂鸣器频率 */
+  buzzerFreq: number;
+}
+
+interface Wire {
+  id: string;
+  from: { componentId: string; pinId: string };
+  to: { componentId: string; pinId: string };
+  selected: boolean;
+  /** 线上电流（正值=正方向） */
+  current: number;
+}
+
+interface ViewTransform { scale: number; ox: number; oy: number; }
+
+interface Props {
+  chipFamily: string;
+  chipModel: string;
+  onSelect: (el: SelectedElement | null) => void;
+}
+
+const GRID = 20;
+const CHIP_PINS_COUNT: Record<string, number> = { C51: 40, STM32: 48, ESP32: 38 };
+
+/** 默认仿真状态 */
+const DEFAULT_SIM_STATE: ComponentSimState = {
+  pwmDuty: 0, relayEnergized: false, motorSpeed: 0,
+  buzzerActive: false, buzzerFreq: 2000,
+};
+
+// 预设元件模板
+const COMPONENT_TEMPLATES: Record<string, { w: number; h: number; pins: { id: string; name: string; ox: number; oy: number }[] }> = {
+  led:      { w: 32, h: 32, pins: [{ id: 'anode', name: '+', ox: 0, oy: -20 }, { id: 'cathode', name: '-', ox: 0, oy: 20 }] },
+  button:   { w: 32, h: 32, pins: [{ id: 'a', name: 'A', ox: -20, oy: 0 }, { id: 'b', name: 'B', ox: 20, oy: 0 }] },
+  resistor: { w: 50, h: 16, pins: [{ id: 'a', name: 'A', ox: -30, oy: 0 }, { id: 'b', name: 'B', ox: 30, oy: 0 }] },
+  capacitor:{ w: 20, h: 32, pins: [{ id: 'a', name: 'A', ox: 0, oy: -20 }, { id: 'b', name: 'B', ox: 0, oy: 20 }] },
+  buzzer:   { w: 32, h: 32, pins: [{ id: 'positive', name: '+', ox: 0, oy: -20 }, { id: 'negative', name: '-', ox: 0, oy: 20 }] },
+  sensor:   { w: 36, h: 36, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -24 }, { id: 'gnd', name: 'GND', ox: 0, oy: 24 }, { id: 'data', name: 'DATA', ox: 24, oy: 0 }] },
+  display:  { w: 48, h: 32, pins: [{ id: 'vcc', name: 'VCC', ox: -30, oy: -10 }, { id: 'gnd', name: 'GND', ox: -30, oy: 10 }, { id: 'sda', name: 'SDA', ox: 30, oy: -10 }, { id: 'scl', name: 'SCL', ox: 30, oy: 10 }] },
+  motor:    { w: 36, h: 36, pins: [{ id: 'positive', name: '+', ox: 0, oy: -24 }, { id: 'negative', name: '-', ox: 0, oy: 24 }] },
+  power:    { w: 32, h: 32, pins: [{ id: 'positive', name: '+', ox: 0, oy: -20 }, { id: 'negative', name: '-', ox: 0, oy: 20 }] },
+};
+
+// ========== 工具函数 ==========
+
+/** 引脚电平对应颜色 */
+function pinLevelColor(level: 'high' | 'low' | 'floating'): string {
+  switch (level) {
+    case 'high': return '#2ecc71';      // 绿色
+    case 'low': return '#6a8a9a';       // 灰色
+    case 'floating': return '#f1c40f';  // 黄色
+  }
+}
+
+// ========== 组件 ==========
+export function WebGLCanvas({ chipFamily, chipModel, onSelect }: Props) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef(0);
+  const tfRef = useRef<ViewTransform>({ scale: 1, ox: 0, oy: 0 });
+  const compsRef = useRef<CanvasComponent[]>([]);
+  const wiresRef = useRef<Wire[]>([]);
+  const chipPinsRef = useRef<Pin[]>([]);
+  /** 动画时间累加器 */
+  const animTimeRef = useRef(0);
+  const lastFrameTimeRef = useRef(0);
+  /** 悬停元件信息 */
+  const hoverCompRef = useRef<{ id: string; name: string; type: string; x: number; y: number } | null>(null);
+  const [, forceUpdate] = useState(0);
+
+  const [drag, setDrag] = useState({
+    mode: 'none' as 'none' | 'pan' | 'move' | 'wire',
+    sx: 0, sy: 0, sox: 0, soy: 0,
+    tid: undefined as string | undefined,
+    wireFrom: undefined as { componentId: string; pinId: string; x: number; y: number } | undefined,
+  });
+  const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number; target: { type: string; id: string } } | null>(null);
+  const [hoverPin, setHoverPin] = useState<{ x: number; y: number; name: string } | null>(null);
+  const [hoverComp, setHoverComp] = useState<{ x: number; y: number; name: string; type: string; details: string } | null>(null);
+
+  // 初始化芯片引脚
+  useEffect(() => {
+    const pinCount = CHIP_PINS_COUNT[chipFamily] || 40;
+    const halfPins = pinCount / 2;
+    const chipH = pinCount <= 40 ? 200 : pinCount <= 48 ? 160 : 140;
+    const pins: Pin[] = [];
+    for (let i = 0; i < halfPins; i++) {
+      const py = -chipH / 2 + 10 + i * ((chipH - 20) / Math.max(halfPins - 1, 1));
+      pins.push({ id: `L${i}`, name: `${chipFamily === 'C51' ? 'P' + Math.floor(i/8) + '_' + (i%8) : 'P' + String.fromCharCode(65 + Math.floor(i/16)) + (i%16)}`, side: 'left', index: i, x: -60 - 14, y: py, connected: false, level: 'floating' });
+      pins.push({ id: `R${i}`, name: `${chipFamily === 'C51' ? 'P' + Math.floor((i+halfPins)/8) + '_' + ((i+halfPins)%8) : 'P' + String.fromCharCode(65 + Math.floor((i+halfPins)/16)) + ((i+halfPins)%16)}`, side: 'right', index: i, x: 60 + 14, y: py, connected: false, level: 'floating' });
+    }
+    chipPinsRef.current = pins;
+    compsRef.current = [];
+    wiresRef.current = [];
+    forceUpdate(n => n + 1);
+  }, [chipFamily]);
+
+  // ========== 渲染 ==========
+  useEffect(() => {
+    const cvs = canvasRef.current;
+    if (!cvs) return;
+    const ctx = cvs.getContext('2d');
+    if (!ctx) return;
+
+    let running = true;
+    const draw = (now?: number) => {
+      if (!running) return;
+
+      // 计算帧间隔，更新动画时间
+      const dt = lastFrameTimeRef.current > 0 && now ? (now - lastFrameTimeRef.current) / 1000 : 0.016;
+      lastFrameTimeRef.current = now || 0;
+      animTimeRef.current += dt;
+
+      const dpr = window.devicePixelRatio || 1;
+      const W = cvs.clientWidth, H = cvs.clientHeight;
+      if (W < 10 || H < 10) { rafRef.current = requestAnimationFrame(draw); return; }
+      cvs.width = W * dpr; cvs.height = H * dpr;
+      ctx.save(); ctx.scale(dpr, dpr);
+
+      const T = tfRef.current;
+      const C = compsRef.current;
+      const Ws = wiresRef.current;
+      const pins = chipPinsRef.current;
+      const animT = animTimeRef.current;
+
+      // 背景+网格
+      ctx.fillStyle = '#1a2d36'; ctx.fillRect(0, 0, W, H);
+      const gs = GRID * T.scale;
+      ctx.strokeStyle = '#243d4d'; ctx.lineWidth = 0.5; ctx.beginPath();
+      for (let x = T.ox % gs; x < W; x += gs) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (let y = T.oy % gs; y < H; y += gs) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(W / 2 + T.ox, H / 2 + T.oy);
+      ctx.scale(T.scale, T.scale);
+
+      // 芯片
+      const chipW = 120, chipH = pins.length <= 40 ? 200 : pins.length <= 48 ? 160 : 140;
+      ctx.fillStyle = '#2a4a5a'; ctx.strokeStyle = '#4a7a8a'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.roundRect(-chipW / 2, -chipH / 2, chipW, chipH, 4); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#e0f0f8'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(chipModel, 0, 0);
+
+      // 芯片引脚（带电平颜色）
+      for (const pin of pins) {
+        const pColor = pinLevelColor(pin.level);
+        ctx.fillStyle = pin.connected ? pColor : (pin.level === 'floating' ? '#f1c40f88' : pColor + '88');
+        ctx.fillRect(pin.x - 3, pin.y - 2, pin.side === 'left' ? -14 : 14, 4);
+
+        // 引脚名
+        ctx.fillStyle = '#8ab0c4'; ctx.font = '8px monospace';
+        ctx.textAlign = pin.side === 'left' ? 'right' : 'left';
+        ctx.fillText(pin.name, pin.x + (pin.side === 'left' ? -18 : 18), pin.y + 3);
+
+        // 高电平引脚发光效果
+        if (pin.level === 'high') {
+          ctx.save();
+          ctx.globalAlpha = 0.25 + 0.1 * Math.sin(animT * 3);
+          ctx.shadowColor = '#2ecc71';
+          ctx.shadowBlur = 8;
+          ctx.fillStyle = '#2ecc71';
+          ctx.beginPath();
+          ctx.arc(pin.x + (pin.side === 'left' ? -7 : 7), pin.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // 连线（带动画流动小点）
+      for (const w of Ws) {
+        const fromComp = w.from.componentId === '__chip__' ? null : C.find(c => c.id === w.from.componentId);
+        const toComp = w.to.componentId === '__chip__' ? null : C.find(c => c.id === w.to.componentId);
+        const fromPin = w.from.componentId === '__chip__' ? pins.find(p => p.id === w.from.pinId) : fromComp?.pins.find(p => p.id === w.from.pinId);
+        const toPin = w.to.componentId === '__chip__' ? pins.find(p => p.id === w.to.pinId) : toComp?.pins.find(p => p.id === w.to.pinId);
+        if (!fromPin || !toPin) continue;
+
+        const fx = w.from.componentId === '__chip__' ? (fromPin as Pin).x : (fromComp!.x + (fromPin as CanvasComponent['pins'][0]).offsetX);
+        const fy = w.from.componentId === '__chip__' ? (fromPin as Pin).y : (fromComp!.y + (fromPin as CanvasComponent['pins'][0]).offsetY);
+        const tx = w.to.componentId === '__chip__' ? (toPin as Pin).x : (toComp!.x + (toPin as CanvasComponent['pins'][0]).offsetX);
+        const ty = w.to.componentId === '__chip__' ? (toPin as Pin).y : (toComp!.y + (toPin as CanvasComponent['pins'][0]).offsetY);
+
+        ctx.strokeStyle = w.selected ? '#58cebe' : '#4ecdc4';
+        ctx.lineWidth = w.selected ? 2.5 : 1.5;
+        const midX = (fx + tx) / 2;
+        ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(midX, fy); ctx.lineTo(midX, ty); ctx.lineTo(tx, ty); ctx.stroke();
+
+        // === 电流流动动画（小点沿连线移动）===
+        if (Math.abs(w.current) > 0.001) {
+          const segments = [
+            { x1: fx, y1: fy, x2: midX, y2: fy },
+            { x1: midX, y1: fy, x2: midX, y2: ty },
+            { x1: midX, y1: ty, x2: tx, y2: ty },
+          ];
+          // 计算总长度
+          let totalLen = 0;
+          const segLens = segments.map(s => {
+            const l = Math.hypot(s.x2 - s.x1, s.y2 - s.y1);
+            totalLen += l;
+            return l;
+          });
+
+          if (totalLen > 0) {
+            const dotSpacing = 18; // 点间距
+            const numDots = Math.max(1, Math.ceil(totalLen / dotSpacing));
+            const flowSpeed = Math.sign(w.current) * Math.min(Math.abs(w.current) * 30, 80); // 速度与电流成正比
+            const flowOffset = (animT * flowSpeed) % dotSpacing;
+
+            for (let d = 0; d < numDots; d++) {
+              let dist = ((d * dotSpacing + flowOffset) % totalLen + totalLen) % totalLen;
+              // 找到所在段
+              let accLen = 0;
+              for (let s = 0; s < segments.length; s++) {
+                if (dist <= accLen + segLens[s]) {
+                  const t = (dist - accLen) / segLens[s];
+                  const px = segments[s].x1 + (segments[s].x2 - segments[s].x1) * t;
+                  const py = segments[s].y1 + (segments[s].y2 - segments[s].y1) * t;
+                  const alpha = 0.6 + 0.4 * Math.sin(animT * 5 + d * 0.7);
+                  ctx.fillStyle = `rgba(0,255,200,${alpha})`;
+                  ctx.beginPath();
+                  ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+                  ctx.fill();
+                  // 发光
+                  ctx.save();
+                  ctx.globalAlpha = alpha * 0.3;
+                  ctx.shadowColor = '#00ffc8';
+                  ctx.shadowBlur = 6;
+                  ctx.beginPath();
+                  ctx.arc(px, py, 2, 0, Math.PI * 2);
+                  ctx.fill();
+                  ctx.restore();
+                  break;
+                }
+                accLen += segLens[s];
+              }
+            }
+          }
+        }
+      }
+
+      // 画线预览（拖拽中）
+      if (drag.mode === 'wire' && drag.wireFrom) {
+        const mx = (drag.sx - (W / 2 + T.ox)) / T.scale;
+        const my = (drag.sy - (H / 2 + T.oy)) / T.scale;
+        ctx.strokeStyle = '#8888ff'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]);
+        const midX = (drag.wireFrom.x + mx) / 2;
+        ctx.beginPath(); ctx.moveTo(drag.wireFrom.x, drag.wireFrom.y); ctx.lineTo(midX, drag.wireFrom.y); ctx.lineTo(midX, my); ctx.lineTo(mx, my); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // 元件（含动画效果）
+      for (const c of C) {
+        ctx.save(); ctx.translate(c.x, c.y);
+        if (c.rotation) ctx.rotate((c.rotation * Math.PI) / 180);
+
+        const sim = c.simState;
+
+        // 悬停高亮
+        const isHovered = hoverCompRef.current?.id === c.id;
+
+        // 选中框
+        if (c.selected) {
+          ctx.strokeStyle = '#58cebe'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+          ctx.strokeRect(-c.w / 2 - 5, -c.h / 2 - 5, c.w + 10, c.h + 10);
+          ctx.setLineDash([]);
+        }
+
+        // 悬停高亮框
+        if (isHovered && !c.selected) {
+          ctx.strokeStyle = 'rgba(88,206,190,0.5)'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+          ctx.strokeRect(-c.w / 2 - 4, -c.h / 2 - 4, c.w + 8, c.h + 8);
+          ctx.setLineDash([]);
+        }
+
+        const baseFill = c.selected ? '#3a6a7a' : isHovered ? '#355d6d' : '#2d5060';
+        const baseStroke = c.selected ? '#58cebe' : isHovered ? '#5a9aad' : '#4a7a8a';
+        ctx.fillStyle = baseFill;
+        ctx.strokeStyle = baseStroke;
+        ctx.lineWidth = 1.5;
+
+        if (c.type === 'led') {
+          // === LED 亮度动画 ===
+          const brightness = sim.pwmDuty;
+          // 外圈
+          ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          // 内核 - 亮度随 PWM 占空比变化
+          if (brightness > 0.01) {
+            // 发光效果
+            const glowAlpha = brightness * 0.6;
+            const glowRadius = 14 + brightness * 12;
+            const gradient = ctx.createRadialGradient(0, 0, 3, 0, 0, glowRadius);
+            gradient.addColorStop(0, `rgba(255,217,61,${glowAlpha})`);
+            gradient.addColorStop(0.5, `rgba(255,174,0,${glowAlpha * 0.5})`);
+            gradient.addColorStop(1, 'rgba(255,174,0,0)');
+            ctx.fillStyle = gradient;
+            ctx.beginPath(); ctx.arc(0, 0, glowRadius, 0, Math.PI * 2); ctx.fill();
+
+            // LED 内核
+            const coreR = 5 + brightness * 3;
+            ctx.fillStyle = `rgba(255,${Math.round(217 - brightness * 80)},${Math.round(61 - brightness * 40)},${0.7 + brightness * 0.3})`;
+            ctx.beginPath(); ctx.arc(0, 0, coreR, 0, Math.PI * 2); ctx.fill();
+
+            // 脉冲效果
+            const pulse = 0.8 + 0.2 * Math.sin(animT * 8 * brightness);
+            ctx.globalAlpha = brightness * 0.15 * pulse;
+            ctx.fillStyle = '#ffd93d';
+            ctx.beginPath(); ctx.arc(0, 0, glowRadius * 0.8, 0, Math.PI * 2); ctx.fill();
+            ctx.globalAlpha = 1;
+          } else {
+            ctx.fillStyle = '#4a3a2a';
+            ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI * 2); ctx.fill();
+          }
+        } else if (c.type === 'button') {
+          ctx.beginPath(); ctx.roundRect(-14, -14, 28, 28, 5); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#78b6ec'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI * 2); ctx.fill();
+        } else if (c.type === 'resistor') {
+          ctx.beginPath(); ctx.moveTo(-25, 0); ctx.lineTo(-18, 0);
+          for (let i = 0; i < 3; i++) { ctx.lineTo(-13 + i * 10, -5); ctx.lineTo(-8 + i * 10, 5); }
+          ctx.lineTo(18, 0); ctx.lineTo(25, 0); ctx.stroke();
+        } else if (c.type === 'capacitor') {
+          ctx.beginPath(); ctx.moveTo(0, -16); ctx.lineTo(0, -4); ctx.moveTo(-8, -4); ctx.lineTo(8, -4);
+          ctx.moveTo(-8, 4); ctx.lineTo(8, 4); ctx.moveTo(0, 4); ctx.lineTo(0, 16); ctx.stroke();
+        } else if (c.type === 'buzzer') {
+          // === 蜂鸣器动画 ===
+          ctx.beginPath(); ctx.roundRect(-14, -14, 28, 28, 14); ctx.fill(); ctx.stroke();
+          ctx.strokeStyle = '#78b6ec'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI * 2); ctx.stroke();
+
+          // 声波动画
+          if (sim.buzzerActive) {
+            const numRings = 3;
+            for (let r = 0; r < numRings; r++) {
+              const phase = (animT * 3 + r * 0.33) % 1;
+              const ringR = 14 + phase * 16;
+              const ringAlpha = (1 - phase) * 0.5;
+              ctx.strokeStyle = `rgba(120,182,236,${ringAlpha})`;
+              ctx.lineWidth = 1.5 * (1 - phase);
+              ctx.beginPath(); ctx.arc(0, 0, ringR, 0, Math.PI * 2); ctx.stroke();
+            }
+          }
+        } else if (c.type === 'motor') {
+          // === 电机旋转动画 ===
+          ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          // 转子
+          if (sim.motorSpeed > 0.01) {
+            const rotorAngle = animT * sim.motorSpeed * 15;
+            ctx.strokeStyle = '#78b6ec';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 3; i++) {
+              const a = rotorAngle + (i * Math.PI * 2) / 3;
+              ctx.beginPath();
+              ctx.moveTo(0, 0);
+              ctx.lineTo(Math.cos(a) * 10, Math.sin(a) * 10);
+              ctx.stroke();
+            }
+            // 转速指示
+            ctx.fillStyle = '#58cebe';
+            ctx.font = '7px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${Math.round(sim.motorSpeed * 100)}%`, 0, 22);
+          } else {
+            ctx.strokeStyle = '#5a6a7a';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(-6, -6); ctx.lineTo(6, 6); ctx.moveTo(6, -6); ctx.lineTo(-6, 6); ctx.stroke();
+          }
+        } else if (c.type === 'sensor' || c.type === 'display') {
+          ctx.beginPath(); ctx.roundRect(-c.w / 2, -c.h / 2, c.w, c.h, 4); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#e0f0f8'; ctx.font = '9px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(c.type.slice(0, 3).toUpperCase(), 0, 0);
+        } else {
+          ctx.beginPath(); ctx.roundRect(-c.w / 2, -c.h / 2, c.w, c.h, 4); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#e0f0f8'; ctx.font = '9px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(c.type.slice(0, 3).toUpperCase(), 0, 0);
+        }
+
+        // 元件引脚（带电平颜色）
+        for (const p of c.pins) {
+          const pColor = pinLevelColor(p.level);
+          ctx.fillStyle = p.connected ? pColor : (p.level === 'floating' ? '#f1c40f88' : pColor + '88');
+          ctx.beginPath(); ctx.arc(p.offsetX, p.offsetY, 3, 0, Math.PI * 2); ctx.fill();
+
+          // 高电平引脚发光
+          if (p.level === 'high') {
+            ctx.save();
+            ctx.globalAlpha = 0.3 + 0.15 * Math.sin(animT * 4);
+            ctx.shadowColor = '#2ecc71';
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = '#2ecc71';
+            ctx.beginPath();
+            ctx.arc(p.offsetX, p.offsetY, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+
+        // 名称
+        ctx.fillStyle = '#c0d8e4'; ctx.font = '10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText(c.name, 0, c.h / 2 + 6);
+
+        ctx.restore();
+      }
+
+      ctx.restore();
+
+      // HUD
+      ctx.fillStyle = 'rgba(138,176,196,0.5)'; ctx.font = '11px monospace'; ctx.textAlign = 'left';
+      ctx.fillText(`${Math.round(T.scale * 100)}%  |  元件: ${C.length}  |  连线: ${Ws.length}`, 12, H - 8);
+
+      // 悬停引脚提示
+      if (hoverPin) {
+        // 背景
+        const text = hoverPin.name;
+        ctx.font = '11px monospace';
+        const tw = ctx.measureText(text).width + 12;
+        const px = hoverPin.x - tw / 2;
+        const py = hoverPin.y - 26;
+        ctx.fillStyle = 'rgba(42,74,90,0.92)';
+        ctx.strokeStyle = 'rgba(88,206,190,0.7)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.roundRect(px, py, tw, 20, 4); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#58cebe'; ctx.textAlign = 'center';
+        ctx.fillText(text, hoverPin.x, py + 13);
+      }
+
+      // 悬停元件 tooltip
+      if (hoverComp && !hoverPin) {
+        const lines = [
+          `📌 ${hoverComp.name}`,
+          `类型: ${hoverComp.type}`,
+          hoverComp.details,
+        ].filter(Boolean);
+        ctx.font = '11px monospace';
+        const maxW = Math.max(...lines.map(l => ctx.measureText(l).width));
+        const tw = maxW + 20;
+        const th = lines.length * 18 + 12;
+        const px = hoverComp.x - tw / 2;
+        const py = hoverComp.y - th - 10;
+
+        ctx.fillStyle = 'rgba(30,50,65,0.95)';
+        ctx.strokeStyle = 'rgba(88,206,190,0.6)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.roundRect(px, py, tw, th, 6); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = '#e0f0f8'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        lines.forEach((line, i) => {
+          ctx.fillStyle = i === 0 ? '#58cebe' : '#c0d8e4';
+          ctx.font = i === 0 ? 'bold 11px monospace' : '11px monospace';
+          ctx.fillText(line, px + 10, py + 8 + i * 18);
+        });
+      }
+
+      ctx.restore();
+      rafRef.current = requestAnimationFrame(draw);
+    };
+    rafRef.current = requestAnimationFrame(draw);
+    return () => { running = false; cancelAnimationFrame(rafRef.current); };
+  }, [chipModel, drag, hoverPin, hoverComp]);
+
+  // ========== 坐标 ==========
+  const s2c = useCallback((sx: number, sy: number) => {
+    const r = canvasRef.current?.getBoundingClientRect();
+    if (!r) return { x: 0, y: 0 };
+    const T = tfRef.current;
+    return { x: (sx - r.left - r.width / 2 - T.ox) / T.scale, y: (sy - r.top - r.height / 2 - T.oy) / T.scale };
+  }, []);
+
+  const c2s = useCallback((cx: number, cy: number) => {
+    const r = canvasRef.current?.getBoundingClientRect();
+    if (!r) return { x: 0, y: 0 };
+    const T = tfRef.current;
+    return { x: cx * T.scale + r.width / 2 + T.ox + r.left, y: cy * T.scale + r.height / 2 + T.oy + r.top };
+  }, []);
+
+  // 查找最近的引脚
+  const findNearestPin = useCallback((cx: number, cy: number, maxDist: number = 15) => {
+    const pins = chipPinsRef.current;
+    const comps = compsRef.current;
+    let nearest: { componentId: string; pinId: string; x: number; y: number; name: string } | null = null;
+    let minDist = maxDist;
+
+    for (const p of pins) {
+      const d = Math.sqrt((cx - p.x) ** 2 + (cy - p.y) ** 2);
+      if (d < minDist) { minDist = d; nearest = { componentId: '__chip__', pinId: p.id, x: p.x, y: p.y, name: p.name }; }
+    }
+    for (const c of comps) {
+      for (const p of c.pins) {
+        const px = c.x + p.offsetX, py = c.y + p.offsetY;
+        const d = Math.sqrt((cx - px) ** 2 + (cy - py) ** 2);
+        if (d < minDist) { minDist = d; nearest = { componentId: c.id, pinId: p.id, x: px, y: py, name: `${c.name}.${p.name}` }; }
+      }
+    }
+    return nearest;
+  }, []);
+
+  // ========== 鼠标事件 ==========
+  const onDown = useCallback((e: React.MouseEvent) => {
+    setCtxMenu(null);
+    const p = s2c(e.clientX, e.clientY);
+
+    if (e.button === 2) {
+      const hitComp = [...compsRef.current].reverse().find(c => p.x >= c.x-c.w/2 && p.x <= c.x+c.w/2 && p.y >= c.y-c.h/2 && p.y <= c.y+c.h/2);
+      if (hitComp) { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY, target: { type: 'component', id: hitComp.id } }); }
+      return;
+    }
+
+    const nearPin = findNearestPin(p.x, p.y, 12);
+    if (nearPin) {
+      setDrag({ mode: 'wire', sx: e.clientX, sy: e.clientY, sox: 0, soy: 0, tid: undefined, wireFrom: nearPin });
+      return;
+    }
+
+    const hitComp = [...compsRef.current].reverse().find(c =>
+      p.x >= c.x-c.w/2 && p.x <= c.x+c.w/2 && p.y >= c.y-c.h/2 && p.y <= c.y+c.h/2
+    );
+    if (hitComp) {
+      compsRef.current = compsRef.current.map(c => ({ ...c, selected: c.id === hitComp.id }));
+      forceUpdate(n => n + 1);
+      onSelect({ type: 'component', id: hitComp.id, name: hitComp.name, properties: { type: hitComp.type } });
+      setDrag({ mode: 'move', sx: e.clientX, sy: e.clientY, sox: hitComp.x, soy: hitComp.y, tid: hitComp.id, wireFrom: undefined });
+      return;
+    }
+
+    compsRef.current = compsRef.current.map(c => ({ ...c, selected: false }));
+    forceUpdate(n => n + 1);
+    onSelect(null);
+    setDrag({ mode: 'pan', sx: e.clientX, sy: e.clientY, sox: tfRef.current.ox, soy: tfRef.current.oy, tid: undefined, wireFrom: undefined });
+  }, [s2c, findNearestPin, onSelect]);
+
+  const onMove = useCallback((e: React.MouseEvent) => {
+    if (drag.mode === 'pan') {
+      tfRef.current = { ...tfRef.current, ox: drag.sox + e.clientX - drag.sx, oy: drag.soy + e.clientY - drag.sy };
+    } else if (drag.mode === 'move' && drag.tid) {
+      const dx = (e.clientX - drag.sx) / tfRef.current.scale;
+      const dy = (e.clientY - drag.sy) / tfRef.current.scale;
+      compsRef.current = compsRef.current.map(c =>
+        c.id === drag.tid ? { ...c, x: Math.round((drag.sox + dx) / GRID) * GRID, y: Math.round((drag.soy + dy) / GRID) * GRID } : c
+      );
+    } else if (drag.mode === 'wire') {
+      setDrag(prev => ({ ...prev, sx: e.clientX, sy: e.clientY }));
+    }
+
+    const p = s2c(e.clientX, e.clientY);
+
+    // 悬停引脚检测
+    const near = findNearestPin(p.x, p.y, 10);
+    if (near) {
+      const sp = c2s(near.x, near.y);
+      const r = canvasRef.current?.getBoundingClientRect();
+      setHoverPin({ x: sp.x - (r?.left || 0), y: sp.y - (r?.top || 0), name: near.name });
+      setHoverComp(null);
+      hoverCompRef.current = null;
+    } else {
+      setHoverPin(null);
+      // 悬停元件检测
+      const hitComp = [...compsRef.current].reverse().find(c =>
+        p.x >= c.x - c.w / 2 - 4 && p.x <= c.x + c.w / 2 + 4 && p.y >= c.y - c.h / 2 - 4 && p.y <= c.y + c.h / 2 + 4
+      );
+      if (hitComp) {
+        const sp = c2s(hitComp.x, hitComp.y);
+        const r = canvasRef.current?.getBoundingClientRect();
+        let details = '';
+        if (hitComp.type === 'led') details = `PWM: ${Math.round(hitComp.simState.pwmDuty * 100)}%`;
+        else if (hitComp.type === 'motor') details = `转速: ${Math.round(hitComp.simState.motorSpeed * 100)}%`;
+        else if (hitComp.type === 'buzzer') details = hitComp.simState.buzzerActive ? `发声中 ${hitComp.simState.buzzerFreq}Hz` : '静音';
+        else if (hitComp.type === 'resistor') details = '1kΩ';
+        setHoverComp({ x: sp.x - (r?.left || 0), y: sp.y - (r?.top || 0), name: hitComp.name, type: hitComp.type, details });
+        hoverCompRef.current = { id: hitComp.id, name: hitComp.name, type: hitComp.type, x: hitComp.x, y: hitComp.y };
+      } else {
+        setHoverComp(null);
+        hoverCompRef.current = null;
+      }
+    }
+  }, [drag, s2c, findNearestPin, c2s]);
+
+  const onUp = useCallback((e: React.MouseEvent) => {
+    if (drag.mode === 'wire' && drag.wireFrom) {
+      const p = s2c(e.clientX, e.clientY);
+      const nearPin = findNearestPin(p.x, p.y, 15);
+      if (nearPin && (nearPin.componentId !== drag.wireFrom.componentId || nearPin.pinId !== drag.wireFrom.pinId)) {
+        const newWire: Wire = {
+          id: `w${Date.now()}`,
+          from: { componentId: drag.wireFrom.componentId, pinId: drag.wireFrom.pinId },
+          to: { componentId: nearPin.componentId, pinId: nearPin.pinId },
+          selected: false,
+          current: 0, // 初始无电流
+        };
+        wiresRef.current = [...wiresRef.current, newWire];
+        markPinConnected(drag.wireFrom.componentId, drag.wireFrom.pinId, true);
+        markPinConnected(nearPin.componentId, nearPin.pinId, true);
+        forceUpdate(n => n + 1);
+      }
+    }
+    setDrag({ mode: 'none', sx: 0, sy: 0, sox: 0, soy: 0, tid: undefined, wireFrom: undefined });
+  }, [drag, s2c, findNearestPin]);
+
+  const markPinConnected = (compId: string, pinId: string, connected: boolean) => {
+    if (compId === '__chip__') {
+      chipPinsRef.current = chipPinsRef.current.map(p => p.id === pinId ? { ...p, connected } : p);
+    } else {
+      compsRef.current = compsRef.current.map(c =>
+        c.id === compId ? { ...c, pins: c.pins.map(p => p.id === pinId ? { ...p, connected } : p) } : c
+      );
+    }
+  };
+
+  // ========== 拖放新元件 ==========
+  const onDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    const type = e.dataTransfer.getData('component-type');
+    if (!type || !COMPONENT_TEMPLATES[type]) return;
+    const p = s2c(e.clientX, e.clientY);
+    const tpl = COMPONENT_TEMPLATES[type];
+    const sx = Math.round(p.x / GRID) * GRID;
+    const sy = Math.round(p.y / GRID) * GRID;
+
+    const newComp: CanvasComponent = {
+      id: `c${Date.now()}`,
+      type,
+      name: `${type.charAt(0).toUpperCase()}${type.slice(1)}${compsRef.current.filter(c => c.type === type).length + 1}`,
+      x: sx, y: sy,
+      w: tpl.w, h: tpl.h,
+      rotation: 0, selected: false,
+      pins: tpl.pins.map(p => ({ ...p, offsetX: p.ox, offsetY: p.oy, connected: false, level: 'floating' as const })),
+      simState: { ...DEFAULT_SIM_STATE },
+    };
+    compsRef.current = [...compsRef.current, newComp];
+
+    for (const pin of newComp.pins) {
+      const px = sx + pin.offsetX, py = sy + pin.offsetY;
+      const nearChipPin = findNearestPin(px, py, 40);
+      if (nearChipPin && nearChipPin.componentId === '__chip__') {
+        const wire: Wire = {
+          id: `w${Date.now()}_${pin.id}`,
+          from: { componentId: '__chip__', pinId: nearChipPin.pinId },
+          to: { componentId: newComp.id, pinId: pin.id },
+          selected: false,
+          current: 0,
+        };
+        wiresRef.current = [...wiresRef.current, wire];
+        markPinConnected('__chip__', nearChipPin.pinId, true);
+        pin.connected = true;
+      }
+    }
+    forceUpdate(n => n + 1);
+  }, [s2c, findNearestPin]);
+
+  // ========== 右键菜单 ==========
+  const ctxAction = useCallback((act: string, target: { type: string; id: string }) => {
+    setCtxMenu(null);
+    if (act === 'delete') {
+      wiresRef.current = wiresRef.current.filter(w => w.from.componentId !== target.id && w.to.componentId !== target.id);
+      compsRef.current = compsRef.current.filter(c => c.id !== target.id);
+      forceUpdate(n => n + 1); onSelect(null);
+    } else if (act === 'rotate') {
+      compsRef.current = compsRef.current.map(c => c.id === target.id ? { ...c, rotation: (c.rotation + 90) % 360 } : c);
+      forceUpdate(n => n + 1);
+    }
+  }, [onSelect]);
+
+  // 非被动 wheel
+  useEffect(() => {
+    const cvs = canvasRef.current;
+    if (!cvs) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      tfRef.current = { ...tfRef.current, scale: Math.max(0.2, Math.min(5, tfRef.current.scale * (e.deltaY > 0 ? 0.9 : 1.1))) };
+    };
+    cvs.addEventListener('wheel', handler, { passive: false });
+    return () => cvs.removeEventListener('wheel', handler);
+  }, []);
+
+  // ========== 模拟仿真数据（演示用） ==========
+  // 周期性更新元件仿真状态，模拟MCU输出
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const t = Date.now() / 1000;
+      compsRef.current = compsRef.current.map(c => {
+        if (c.type === 'led') {
+          // 模拟 PWM 呼吸灯效果
+          const newDuty = (Math.sin(t * 1.5) + 1) / 2;
+          return { ...c, simState: { ...c.simState, pwmDuty: newDuty } };
+        }
+        if (c.type === 'motor') {
+          const newSpeed = Math.max(0, (Math.sin(t * 0.8) + 1) / 2);
+          return { ...c, simState: { ...c.simState, motorSpeed: newSpeed } };
+        }
+        if (c.type === 'buzzer') {
+          const active = Math.sin(t * 2) > 0;
+          return { ...c, simState: { ...c.simState, buzzerActive: active } };
+        }
+        return c;
+      });
+      // 更新引脚电平
+      chipPinsRef.current = chipPinsRef.current.map(p => {
+        const newLevel = p.connected
+          ? (Math.sin(t * 1.2 + p.index * 0.5) > 0.3 ? 'high' : Math.sin(t * 1.2 + p.index * 0.5) < -0.3 ? 'low' : 'floating')
+          : 'floating';
+        return { ...p, level: newLevel as 'high' | 'low' | 'floating' };
+      });
+      // 更新连线电流
+      wiresRef.current = wiresRef.current.map(w => {
+        const newCurrent = Math.sin(t * 1.5 + w.id.charCodeAt(1) * 0.3) * 0.5;
+        return { ...w, current: newCurrent };
+      });
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="webgl-canvas-wrapper">
+      <canvas
+        ref={canvasRef}
+        className="webgl-canvas"
+        onMouseDown={onDown}
+        onMouseMove={onMove}
+        onMouseUp={onUp}
+        onMouseLeave={() => {
+          setDrag({ mode: 'none', sx: 0, sy: 0, sox: 0, soy: 0, tid: undefined, wireFrom: undefined });
+          setHoverPin(null);
+          setHoverComp(null);
+          hoverCompRef.current = null;
+        }}
+        onDragOver={e => e.preventDefault()}
+        onDrop={onDrop}
+        onContextMenu={e => e.preventDefault()}
+        style={{ cursor: drag.mode === 'pan' ? 'grabbing' : drag.mode === 'wire' ? 'crosshair' : 'grab' }}
+      />
+      {ctxMenu && (
+        <div className="canvas-context-menu" style={{ left: ctxMenu.x, top: ctxMenu.y }}>
+          <button onClick={() => ctxAction('rotate', ctxMenu.target)}>🔄 旋转</button>
+          <button onClick={() => ctxAction('copy', ctxMenu.target)}>📋 复制</button>
+          <hr />
+          <button onClick={() => ctxAction('delete', ctxMenu.target)} className="danger">🗑️ 删除</button>
+        </div>
+      )}
+    </div>
+  );
+}

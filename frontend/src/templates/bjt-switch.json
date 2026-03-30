@@ -1,0 +1,65 @@
+{
+  "id": "bjt-switch",
+  "name": "三极管NPN开关电路",
+  "nameEn": "BJT NPN Transistor Switch",
+  "category": "analog",
+  "difficulty": 2,
+  "description": "NPN三极管作为电子开关，GPIO信号控制负载通断",
+  "descriptionEn": "NPN transistor as electronic switch, GPIO controls load on/off",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "Vcc",
+      "position": { "x": 100, "y": 120 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R_load",
+      "position": { "x": 250, "y": 120 },
+      "value": { "value": 1000, "unit": "Ω" }
+    },
+    {
+      "type": "dc_source",
+      "name": "GPIO",
+      "position": { "x": 100, "y": 260 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R_base",
+      "position": { "x": 230, "y": 260 },
+      "value": { "value": 10000, "unit": "Ω" }
+    },
+    {
+      "type": "bjt_npn",
+      "name": "Q1",
+      "position": { "x": 380, "y": 200 },
+      "value": { "value": 100, "unit": "β" }
+    },
+    {
+      "type": "ground",
+      "name": "GND1",
+      "position": { "x": 380, "y": 340 },
+      "value": { "value": 0, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND2",
+      "position": { "x": 100, "y": 340 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "Vcc:1", "to": "R_load:0" },
+    { "from": "R_load:1", "to": "Q1:1" },
+    { "from": "GPIO:1", "to": "R_base:0" },
+    { "from": "R_base:1", "to": "Q1:0" },
+    { "from": "Q1:2", "to": "GND1:0" },
+    { "from": "GPIO:0", "to": "GND2:0" }
+  ],
+  "simulationNotes": {
+    "zh": "修改GPIO电压（0V/3.3V）观察开关状态。高电平时Q1饱和导通，负载电流 Ic ≈ (Vcc - Vce_sat)/R_load ≈ 4.8mA。",
+    "en": "Toggle GPIO voltage (0V/3.3V) to observe switch state. When HIGH, Q1 saturates and load current Ic ≈ (Vcc - Vce_sat)/R_load ≈ 4.8mA."
+  }
+}

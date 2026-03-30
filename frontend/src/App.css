@@ -1,0 +1,870 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+/* variables.css 已合并到 styles/tokens.css，不再单独引入 */
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--sil-bg-deep);
+  color: var(--sil-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== App Shell ===== */
+.sil-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--sil-bg-soft);
+}
+
+/* ===== Top Bar ===== */
+.sil-topbar {
+  height: var(--sil-topbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--sil-shadow-soft);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.sil-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sil-logo {
+  font-size: 24px;
+}
+
+.sil-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sil-text-main);
+  letter-spacing: -0.5px;
+}
+
+.sil-topbar-center {
+  display: flex;
+  align-items: center;
+}
+
+.sil-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== App Tabs ===== */
+.sil-app-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--sil-surface-muted);
+  box-shadow: var(--sil-outline-soft);
+}
+
+.sil-app-tab {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sil-text-soft);
+  background: transparent;
+  transition: all var(--sil-transition-spring);
+}
+
+.sil-app-tab:hover {
+  color: var(--sil-text-main);
+}
+
+.sil-app-tab.active {
+  background: var(--sil-mint-soft);
+  color: #123943;
+  box-shadow: var(--sil-outline-soft), var(--sil-shadow-soft);
+}
+
+/* ===== Tab Content ===== */
+.sil-tab-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mcu-simulator {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+/* ===== MCU Sections & Panels ===== */
+.mcu-section {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mcu-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sil-text-main, #e2e8f0);
+  flex-shrink: 0;
+}
+
+.mcu-section-grow {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 元件网格 */
+.mcu-component-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px 8px 8px;
+}
+
+.mcu-comp-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--sil-text-main, #e2e8f0);
+  cursor: grab;
+  transition: background 0.12s ease, border-color 0.12s ease;
+  font-size: 11px;
+}
+
+.mcu-comp-btn:hover {
+  background: var(--sil-surface-muted, rgba(109, 128, 139, 0.12));
+  border-color: var(--sil-border, rgba(109, 128, 139, 0.2));
+}
+
+/* 通用小按钮 */
+.mcu-btn-sm {
+  border: 0;
+  background: transparent;
+  color: var(--sil-text-soft, #94a3b8);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.mcu-btn-sm:hover {
+  background: var(--sil-surface-muted, rgba(109, 128, 139, 0.15));
+  color: var(--sil-text-main, #e2e8f0);
+}
+
+/* 浮出属性面板 */
+.mcu-float-panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 280px;
+  max-height: 400px;
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 128, 139, 0.12);
+  border-radius: var(--sil-radius-lg, 12px);
+  box-shadow: var(--sil-shadow-float, 0 8px 32px rgba(0,0,0,0.3));
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: floatIn 0.15s ease;
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mcu-float-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.12);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.mcu-float-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+/* 底栏 bar */
+.mcu-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--sil-radius-md);
+}
+
+/* ===== Main Layout (CSS Grid 三栏) ===== */
+.sil-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sil-sidebar-width) 1fr var(--sil-right-panel-width);
+  grid-template-rows: 1fr;
+  gap: 12px;
+  padding: 12px;
+  min-height: 0;
+}
+
+/* ===== Left Sidebar ===== */
+.sil-sidebar {
+  background: var(--sil-surface-raised);
+  border-radius: var(--sil-radius-lg);
+  box-shadow: var(--sil-shadow-soft), var(--sil-outline-soft);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sil-sidebar-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+}
+
+.sil-sidebar-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sil-text-main);
+}
+
+.sil-component-list {
+  flex: 1;
+  padding: 8px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sil-component-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  border-radius: var(--sil-radius-sm);
+  cursor: pointer;
+  transition: all var(--sil-transition-spring);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--sil-text-main);
+  text-align: left;
+  width: 100%;
+}
+
+.sil-component-item:hover {
+  background: var(--sil-surface-muted);
+  box-shadow: var(--sil-shadow-soft);
+}
+
+.sil-component-item.active {
+  background: var(--sil-mint-soft);
+  box-shadow: var(--sil-shadow-soft);
+  color: var(--sil-mint-strong);
+  font-weight: 600;
+}
+
+.sil-component-icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+}
+
+.sil-component-label {
+  flex: 1;
+}
+
+.sil-sidebar-chip-info {
+  padding: 12px 20px;
+  border-top: 1px solid rgba(109, 128, 139, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sil-chip-badge {
+  background: var(--sil-ocean-soft);
+  color: var(--sil-ocean-strong);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.sil-chip-model {
+  font-size: 12px;
+  color: var(--sil-text-soft);
+}
+
+/* ===== Canvas Area ===== */
+.sil-canvas-area {
+  background: var(--sil-bg-top);
+  border-radius: var(--sil-radius-lg);
+  box-shadow: var(--sil-shadow-pressed);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sil-canvas-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.sil-canvas-icon {
+  font-size: 64px;
+  opacity: 0.3;
+}
+
+.sil-canvas-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--sil-text-soft);
+  opacity: 0.6;
+}
+
+.sil-canvas-hint {
+  font-size: 13px;
+  color: var(--sil-text-soft);
+  opacity: 0.4;
+}
+
+/* ===== Bottom Panel ===== */
+.sil-bottom-panel {
+  border-top: 1px solid rgba(109, 128, 139, 0.1);
+  flex-shrink: 0;
+}
+
+.sil-bottom-toggle {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: var(--sil-surface-muted);
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  color: var(--sil-text-soft);
+  cursor: pointer;
+  transition: background var(--sil-transition-spring);
+}
+
+.sil-bottom-toggle:hover {
+  background: var(--sil-surface-pressed);
+}
+
+.sil-bottom-panel.open .sil-bottom-toggle {
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+}
+
+.sil-bottom-content {
+  height: 180px;
+  padding: 16px;
+  background: var(--sil-surface-raised);
+  overflow-y: auto;
+}
+
+/* ===== Right Properties Panel ===== */
+.sil-properties {
+  background: var(--sil-surface-raised);
+  border-radius: var(--sil-radius-lg);
+  box-shadow: var(--sil-shadow-soft), var(--sil-outline-soft);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sil-properties-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+}
+
+.sil-properties-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sil-text-main);
+}
+
+.sil-properties-body {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.sil-props-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sil-props-hint {
+  font-size: 14px;
+  color: var(--sil-text-main);
+}
+
+.sil-props-placeholder {
+  font-size: 13px;
+  color: var(--sil-text-soft);
+  opacity: 0.7;
+}
+
+.sil-props-empty {
+  font-size: 13px;
+  color: var(--sil-text-soft);
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sil-panel-dark);
+  border-radius: 3px;
+}
+
+/* ============================================================
+   响应式适配（P2-3: App Shell）
+   ============================================================ */
+
+/* --- 移动端汉堡按钮（默认显示，桌面隐藏） --- */
+.sil-hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: var(--sil-radius-sm);
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--sil-text-main);
+  transition: background var(--sil-transition-spring);
+}
+.sil-hamburger:hover {
+  background: var(--sil-surface-muted);
+}
+
+@media (min-width: 768px) {
+  .sil-hamburger {
+    display: none;
+  }
+}
+
+/* --- 侧边栏抽屉遮罩（移动端） --- */
+.sil-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 99;
+}
+
+.sil-sidebar-backdrop.open {
+  display: block;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- 移动端（< 768px）：侧边栏抽屉、隐藏右面板 --- */
+@media (max-width: 767px) {
+  .sil-main {
+    grid-template-columns: 1fr;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  /* 侧边栏：左侧固定抽屉 */
+  .sil-sidebar {
+    position: fixed;
+    top: var(--sil-topbar-height);
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 80vw;
+    z-index: 100;
+    border-radius: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sil-sidebar.drawer-open {
+    transform: translateX(0);
+  }
+
+  /* 右侧属性面板：移动端隐藏 */
+  .sil-properties {
+    display: none;
+  }
+
+  /* 顶栏工具栏：溢出可滚动 */
+  .sil-topbar {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .sil-topbar-center {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex: 1;
+    min-width: 0;
+  }
+  .sil-topbar-center::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 标题缩小 */
+  .sil-title {
+    font-size: 16px;
+  }
+
+  /* 画布区域全宽 */
+  .sil-canvas-area {
+    border-radius: var(--sil-radius-md);
+  }
+
+  /* 底部面板高度缩小 */
+  .sil-bottom-content {
+    height: 120px;
+  }
+}
+
+/* --- 平板（≥ 768px, < 1024px）：两栏，隐藏右面板 --- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sil-main {
+    grid-template-columns: var(--sil-sidebar-width) 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .sil-properties {
+    display: none;
+  }
+
+  .sil-sidebar {
+    /* 平板端侧边栏固定显示 */
+    transform: none;
+    position: relative;
+  }
+}
+
+/* --- 桌面端（≥ 1024px）：完整三栏 --- */
+@media (min-width: 1024px) {
+  .sil-main {
+    grid-template-columns: var(--sil-sidebar-width) 1fr var(--sil-right-panel-width);
+  }
+
+  .sil-sidebar {
+    transform: none;
+    position: relative;
+  }
+}
+
+/* --- 大屏（≥ 1536px）：限制最大宽度 --- */
+@media (min-width: 1536px) {
+  .sil-main {
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+}
+
+/* --- 工具栏小屏溢出可滚动 --- */
+@media (max-width: 1023px) {
+  .sil-topbar-right {
+    flex-shrink: 0;
+  }
+}
+
+/* ===== MCU 可收起窗口 ===== */
+.mcu-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sil-sidebar-width) 1fr var(--sil-right-panel-width);
+  grid-template-rows: 1fr;
+  gap: 0;
+  min-height: 0;
+  transition: grid-template-columns 0.2s ease;
+}
+
+.mcu-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.2s ease;
+}
+
+.mcu-panel.open {
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 128, 139, 0.1);
+  border-radius: var(--sil-radius-lg);
+  margin: 8px;
+  box-shadow: var(--sil-shadow-soft);
+}
+
+.mcu-panel.collapsed {
+  width: 36px;
+  min-width: 36px;
+  margin: 8px 2px;
+}
+
+.mcu-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.mcu-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.mcu-panel-footer {
+  padding: 8px 12px;
+  border-top: 1px solid rgba(109, 128, 139, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mcu-collapse-btn,
+.mcu-expand-btn {
+  border: 0;
+  background: transparent;
+  color: var(--sil-text-soft);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.mcu-collapse-btn:hover,
+.mcu-expand-btn:hover {
+  background: var(--sil-surface-muted);
+  color: var(--sil-text-main);
+}
+
+.mcu-expand-btn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.mcu-canvas {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+/* 底栏 */
+.mcu-bottom {
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: height 0.2s ease;
+}
+
+.mcu-bottom.open {
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 128, 139, 0.1);
+  border-radius: var(--sil-radius-lg);
+  margin: 8px;
+  box-shadow: var(--sil-shadow-soft);
+}
+
+.mcu-bottom.collapsed {
+  height: auto;
+}
+
+.mcu-bottom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+}
+
+.mcu-bottom-body {
+  height: 180px;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+/* ===== 属性浮出层 ===== */
+.mcu-property-float {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 280px;
+  max-height: 400px;
+  background: var(--sil-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 128, 139, 0.12);
+  border-radius: var(--sil-radius-lg);
+  box-shadow: var(--sil-shadow-float), var(--sil-outline-soft);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: floatIn 0.15s ease;
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mcu-property-float-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.mcu-property-float-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+}
+
+/* ===== 文件列表 ===== */
+.mcu-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mcu-file-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--sil-text-main);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.mcu-file-item:hover { background: var(--sil-surface-muted); }
+.mcu-file-item.active { background: var(--sil-mint-soft); color: #123943; }
+.mcu-file-icon { font-size: 14px; }
+
+/* ===== 编辑器 Tab 栏 ===== */
+.mcu-editor-tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(109, 128, 139, 0.15);
+  margin-bottom: 4px;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.mcu-editor-tab {
+  border: 0;
+  padding: 6px 12px;
+  background: transparent;
+  color: var(--sil-text-soft);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.mcu-editor-tab:hover { color: var(--sil-text-main); }
+.mcu-editor-tab.active {
+  color: var(--sil-text-main);
+  border-bottom-color: var(--sil-mint);
+}

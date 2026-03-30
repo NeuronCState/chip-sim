@@ -1,0 +1,265 @@
+.network-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--panel-bg, #1e1e2e);
+  border-left: 1px solid var(--border-color, #333);
+  font-size: 13px;
+  color: var(--text-color, var(--color-border));
+  min-width: 240px;
+  max-width: 320px;
+}
+
+.network-panel-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color, #333);
+  background: var(--header-bg, #252535);
+}
+
+.network-panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #e0e0e0);
+}
+
+/* 标签页 */
+.network-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color, #333);
+  background: var(--header-bg, #252535);
+}
+
+.network-tabs button {
+  flex: 1;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #888);
+  font-size: 11px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.network-tabs button:hover {
+  color: var(--text-color, var(--color-border));
+  background: var(--hover-bg, #2a2a3a);
+}
+
+.network-tabs button.active {
+  color: var(--accent-color, var(--color-success));
+  border-bottom-color: var(--accent-color, var(--color-success));
+}
+
+/* 搜索框 */
+.network-search {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-color, #333);
+}
+
+.network-search input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 4px;
+  background: var(--input-bg, #1a1a2a);
+  color: var(--text-color, var(--color-border));
+  font-size: 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.network-search input:focus {
+  border-color: var(--accent-color, var(--color-success));
+}
+
+.network-search input::placeholder {
+  color: var(--text-muted, #555);
+}
+
+/* 列表容器 */
+.network-list,
+.unconnected-list,
+.labels-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+/* 空状态 */
+.empty-state {
+  padding: 20px 16px;
+  text-align: center;
+  color: var(--text-secondary, #888);
+}
+
+.empty-state p {
+  margin: 4px 0;
+}
+
+.empty-state .hint {
+  font-size: 11px;
+  color: var(--text-muted, #555);
+  line-height: 1.5;
+}
+
+/* 网络项 */
+.network-item {
+  border-bottom: 1px solid var(--border-light, #2a2a3a);
+}
+
+.network-item.highlighted {
+  background: var(--highlight-bg, rgba(78, 205, 196, 0.08));
+}
+
+.network-item-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  gap: 6px;
+  transition: background 0.1s;
+}
+
+.network-item-header:hover {
+  background: var(--hover-bg, #2a2a3a);
+}
+
+.net-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.net-name {
+  font-weight: 600;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.net-badge {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--badge-bg, #333);
+  color: var(--text-secondary, #888);
+}
+
+.net-badge.global {
+  background: rgba(255, 170, 0, 0.2);
+  color: var(--color-warning);
+}
+
+.net-stats {
+  flex: 1;
+  text-align: right;
+  font-size: 10px;
+  color: var(--text-muted, #666);
+}
+
+.expand-icon {
+  font-size: 8px;
+  color: var(--text-muted, #555);
+  flex-shrink: 0;
+}
+
+/* 网络详情 */
+.network-details {
+  padding: 6px 10px 10px 28px;
+  background: var(--detail-bg, #1a1a28);
+  border-top: 1px solid var(--border-light, #2a2a3a);
+}
+
+.network-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.btn-sm {
+  padding: 3px 8px;
+  border: 1px solid var(--border-color, var(--color-border-light));
+  border-radius: 3px;
+  background: var(--btn-bg, #2a2a3a);
+  color: var(--text-color, var(--color-border));
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-sm:hover {
+  background: var(--btn-hover-bg, #3a3a4a);
+  border-color: var(--accent-color, var(--color-success));
+  color: var(--accent-color, var(--color-success));
+}
+
+/* 端口列表 */
+.port-list {
+  margin-top: 4px;
+}
+
+.port-list-title {
+  font-size: 10px;
+  color: var(--text-muted, #666);
+  margin-bottom: 4px;
+}
+
+.port-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+  font-size: 11px;
+}
+
+.port-comp {
+  color: var(--text-color, var(--color-border));
+}
+
+.port-id {
+  color: var(--text-muted, #555);
+  font-size: 10px;
+}
+
+/* 未连接引脚 */
+.warning-banner {
+  padding: 8px 12px;
+  background: rgba(255, 170, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 170, 0, 0.2);
+  color: var(--color-warning);
+  font-size: 11px;
+}
+
+.unconnected-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-light, #2a2a3a);
+}
+
+.unconnected-item:hover {
+  background: var(--hover-bg, #2a2a3a);
+}
+
+.pin-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.pin-comp {
+  font-weight: 600;
+  color: var(--text-color, var(--color-border));
+}
+
+.pin-type {
+  color: var(--text-muted, #666);
+  font-size: 10px;
+}
+
+.pin-port {
+  color: var(--warning-color, #ffaa00);
+  font-size: 10px;
+}

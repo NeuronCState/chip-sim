@@ -1,0 +1,36 @@
+.segmented {
+  display: flex;
+  background: var(--sil-surface-muted);
+  border-radius: var(--sil-radius-md);
+  padding: 4px;
+  box-shadow: var(--sil-shadow-pressed);
+  gap: 2px;
+}
+
+.segment {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sil-text-soft);
+  border-radius: calc(var(--sil-radius-md) - 4px);
+  cursor: pointer;
+  transition: all var(--sil-transition-spring);
+  outline: none;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.segment:hover:not(.active) {
+  color: var(--sil-text-main);
+  background: var(--sil-surface-raised);
+}
+
+.segment.active {
+  background: var(--sil-surface-raised);
+  color: var(--sil-mint-strong);
+  box-shadow: var(--sil-shadow-soft);
+}

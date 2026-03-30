@@ -1,0 +1,680 @@
+/**
+ * 编辑器页面布局 — 三栏 + 顶栏 + 底栏 + 双主题
+ * 响应式断点：≥1200 / 900-1199 / 600-899 / <600
+ * 注意：主题 CSS 变量定义在 theme.css 中
+ */
+
+/* ====== 页面布局 ====== */
+.editor-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-app);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ====== 顶部工具栏 ====== */
+.top-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  min-height: 36px;
+  z-index: 20;
+  flex-wrap: wrap;
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolbar-right {
+  margin-left: auto;
+}
+
+.toolbar-brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.tb-btn {
+  padding: 3px 8px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.tb-btn:hover:not(:disabled) {
+  background: var(--bg-input);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.tb-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tb-active {
+  background: var(--color-accent) !important;
+  color: var(--color-text-inverse) !important;
+  border-color: var(--color-accent-hover) !important;
+}
+
+.tb-btn-test {
+  color: var(--success);
+}
+
+.tb-btn-test:hover {
+  background: rgba(78, 205, 196, 0.1);
+  border-color: var(--success);
+}
+
+.tb-btn-wizard {
+  color: var(--color-warning);
+}
+
+.tb-btn-wizard:hover {
+  background: var(--color-warning-subtle);
+  border-color: var(--color-warning);
+}
+
+.tb-btn-project {
+  color: var(--accent);
+}
+
+.tb-btn-project:hover {
+  background: rgba(0, 102, 204, 0.1);
+  border-color: var(--accent);
+}
+
+.tb-project-name {
+  margin-left: 4px;
+  font-weight: 500;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tb-btn-theme {
+  font-size: 16px;
+  padding: 2px 6px;
+}
+
+.tb-label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tb-label input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+
+.tb-routing {
+  display: flex;
+  gap: 2px;
+}
+
+.tb-btn-sm {
+  padding: 2px 6px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.tb-btn-sm:hover {
+  background: var(--bg-input);
+  color: var(--text);
+}
+
+.tb-btn-sm.tb-active {
+  background: var(--accent);
+  color: var(--color-text-inverse);
+  border-color: var(--accent-hover);
+}
+
+/* ====== "更多"下拉菜单 ====== */
+.toolbar-more-wrapper {
+  position: relative;
+}
+
+.tb-btn-more {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toolbar-more-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px;
+  min-width: 180px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tb-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.tb-dropdown-item:hover:not(:disabled) {
+  background: var(--bg-input);
+  color: var(--text);
+}
+
+.tb-dropdown-item:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tb-dropdown-item.tb-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tb-dropdown-sep {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ====== 主体 ====== */
+.editor-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ====== 侧边栏通用 ====== */
+.editor-left,
+.editor-right {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.25s ease, min-width 0.25s ease, opacity 0.2s ease;
+}
+
+.editor-left {
+  width: 240px;
+  min-width: 240px;
+  border-right: 1px solid var(--border);
+}
+
+.editor-right {
+  width: 240px;
+  min-width: 240px;
+  border-left: 1px solid var(--border);
+}
+
+/* 折叠面板头部 */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  min-height: 28px;
+}
+
+.panel-header-title {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.panel-header-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.panel-tab-btn {
+  padding: 2px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.panel-tab-btn:hover {
+  background: var(--bg-input);
+  color: var(--text);
+}
+
+.panel-tab-active {
+  background: var(--color-accent) !important;
+  color: var(--color-text-inverse) !important;
+  font-weight: 600;
+}
+
+.panel-collapse-btn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.15s;
+}
+
+.panel-collapse-btn:hover {
+  background: var(--bg-input);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* ====== 折叠状态下的图标栏 ====== */
+.collapsed-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  background: var(--bg-panel);
+  flex-shrink: 0;
+  width: 40px;
+  min-width: 40px;
+}
+
+.collapsed-left {
+  border-right: 1px solid var(--border);
+}
+
+.collapsed-right {
+  border-left: 1px solid var(--border);
+}
+
+.collapsed-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.15s;
+}
+
+.collapsed-btn:hover {
+  background: var(--bg-input);
+  border-color: var(--border);
+}
+
+/* ====== 中间画布区域 ====== */
+.editor-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.editor-canvas-area {
+  flex: 1;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+/* ====== 底部 Tab 面板 ====== */
+.bottom-tabs-container {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.bottom-tabs-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-toolbar);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.bottom-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.bottom-tab-btn:hover {
+  color: var(--text);
+  background: var(--bg-input);
+}
+
+.bottom-tab-active {
+  color: var(--accent) !important;
+  border-bottom-color: var(--accent) !important;
+  background: transparent !important;
+}
+
+.tab-icon {
+  font-size: 14px;
+}
+
+.tab-label {
+  font-size: 12px;
+}
+
+.bottom-tab-content {
+  overflow-y: auto;
+  max-height: 360px;
+}
+
+/* ====== 底部状态栏 ====== */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 3px 12px;
+  background: var(--bg-toolbar);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-height: 24px;
+}
+
+.status-item {
+  white-space: nowrap;
+}
+
+.status-right {
+  margin-left: auto;
+}
+
+/* ===================================================
+   响应式断点：大屏幕 ≥1200px（当前布局，三栏完整）
+   =================================================== */
+/* 默认就是大屏幕样式，无需额外规则 */
+
+/* ===================================================
+   响应式断点：中屏幕 900-1199px
+   侧边栏可折叠，底部 Tab 切换
+   =================================================== */
+@media (max-width: 1199px) {
+  .editor-left {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .editor-right {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .top-toolbar {
+    gap: 4px;
+    padding: 4px 8px;
+  }
+
+  .tb-btn {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .bottom-tab-content {
+    max-height: 300px;
+  }
+}
+
+/* ===================================================
+   响应式断点：小屏幕 600-899px
+   两侧面板改为折叠/展开模式，底部 Tab 切换
+   =================================================== */
+@media (max-width: 899px) {
+  .editor-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    min-width: 260px;
+    z-index: 15;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3);
+    animation: slideInLeft 0.2s ease;
+  }
+
+  .editor-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 260px;
+    min-width: 260px;
+    z-index: 15;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.3);
+    animation: slideInRight 0.2s ease;
+  }
+
+  .collapsed-sidebar {
+    width: 36px;
+    min-width: 36px;
+    padding: 6px 2px;
+  }
+
+  .collapsed-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .toolbar-brand {
+    font-size: 13px;
+  }
+
+  .toolbar-divider {
+    margin: 0 2px;
+  }
+
+  .bottom-tab-content {
+    max-height: 280px;
+  }
+
+  .status-bar {
+    gap: 10px;
+    font-size: 10px;
+  }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ===================================================
+   响应式断点：手机 <600px
+   全屏画布，面板通过底部 Tab 切换，侧边栏抽屉模式
+   =================================================== */
+@media (max-width: 599px) {
+  .top-toolbar {
+    padding: 3px 6px;
+    gap: 2px;
+    min-height: 32px;
+  }
+
+  .toolbar-brand {
+    font-size: 12px;
+    margin-right: 2px;
+  }
+
+  .tb-btn {
+    font-size: 11px;
+    padding: 2px 5px;
+  }
+
+  .tb-btn-more {
+    font-size: 11px;
+  }
+
+  .toolbar-section {
+    gap: 2px;
+  }
+
+  .toolbar-divider {
+    height: 16px;
+    margin: 0 2px;
+  }
+
+  /* 左侧栏全屏高度抽屉 */
+  .editor-left {
+    width: 80vw;
+    max-width: 300px;
+    min-width: 240px;
+  }
+
+  /* 右侧栏全屏高度抽屉 */
+  .editor-right {
+    width: 80vw;
+    max-width: 300px;
+    min-width: 240px;
+  }
+
+  .collapsed-sidebar {
+    width: 32px;
+    min-width: 32px;
+    padding: 4px 0;
+    gap: 4px;
+  }
+
+  .collapsed-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  /* 底部 Tab */
+  .bottom-tabs-bar {
+    gap: 0;
+  }
+
+  .bottom-tab-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .tab-label {
+    font-size: 11px;
+  }
+
+  .bottom-tab-content {
+    max-height: 240px;
+  }
+
+  /* 状态栏精简 */
+  .status-bar {
+    gap: 6px;
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  /* 下拉菜单适配 */
+  .toolbar-more-dropdown {
+    right: 0;
+    left: auto;
+    min-width: 160px;
+  }
+}
+
+/* ====== 打印或极小屏幕兜底 ====== */
+@media (max-width: 360px) {
+  .toolbar-brand {
+    display: none;
+  }
+
+  .bottom-tab-btn .tab-label {
+    display: none;
+  }
+
+  .bottom-tab-btn .tab-icon {
+    font-size: 16px;
+  }
+
+  .bottom-tab-btn {
+    padding: 6px 10px;
+  }
+}

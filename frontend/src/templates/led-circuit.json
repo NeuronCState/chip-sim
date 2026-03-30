@@ -1,0 +1,45 @@
+{
+  "id": "led-circuit",
+  "name": "LED 闪烁电路",
+  "nameEn": "LED Blink Circuit",
+  "category": "basic",
+  "difficulty": 1,
+  "description": "基础LED驱动电路，学习限流电阻计算",
+  "descriptionEn": "Basic LED driver circuit, learn current-limiting resistor calculation",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "V1",
+      "position": { "x": 100, "y": 200 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 250, "y": 200 },
+      "value": { "value": 330, "unit": "Ω" }
+    },
+    {
+      "type": "diode",
+      "name": "D1",
+      "position": { "x": 400, "y": 200 },
+      "value": { "value": 0.7, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND",
+      "position": { "x": 100, "y": 320 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "V1:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "D1:0" },
+    { "from": "D1:1", "to": "GND:0" },
+    { "from": "V1:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行直流分析，观察 LED 两端电压和回路电流。R1=330Ω 时电流约 13mA。",
+    "en": "Run DC analysis to observe LED voltage and loop current. Current is ~13mA with R1=330Ω."
+  }
+}

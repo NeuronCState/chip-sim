@@ -1,0 +1,73 @@
+{
+  "id": "buzzer-melody",
+  "name": "蜂鸣器驱动电路",
+  "nameEn": "Buzzer Driver Circuit",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "MCU GPIO通过NPN三极管驱动蜂鸣器，含续流二极管保护",
+  "descriptionEn": "MCU GPIO drives buzzer via NPN transistor with flyback diode protection",
+  "components": [
+    {
+      "type": "dc_source",
+      "name": "Vcc",
+      "position": { "x": 100, "y": 100 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "buzzer_active",
+      "name": "BZ1",
+      "position": { "x": 280, "y": 100 },
+      "value": { "value": 5, "unit": "V" }
+    },
+    {
+      "type": "diode",
+      "name": "D1",
+      "position": { "x": 430, "y": 100 },
+      "value": { "value": 0.7, "unit": "V" }
+    },
+    {
+      "type": "bjt_npn",
+      "name": "Q1",
+      "position": { "x": 380, "y": 230 },
+      "value": { "value": 100, "unit": "β" }
+    },
+    {
+      "type": "dc_source",
+      "name": "GPIO",
+      "position": { "x": 100, "y": 330 },
+      "value": { "value": 3.3, "unit": "V" }
+    },
+    {
+      "type": "resistor",
+      "name": "R1",
+      "position": { "x": 240, "y": 330 },
+      "value": { "value": 1000, "unit": "Ω" }
+    },
+    {
+      "type": "ground",
+      "name": "GND1",
+      "position": { "x": 380, "y": 370 },
+      "value": { "value": 0, "unit": "V" }
+    },
+    {
+      "type": "ground",
+      "name": "GND2",
+      "position": { "x": 100, "y": 400 },
+      "value": { "value": 0, "unit": "V" }
+    }
+  ],
+  "connections": [
+    { "from": "Vcc:1", "to": "BZ1:0" },
+    { "from": "BZ1:1", "to": "Q1:1" },
+    { "from": "BZ1:1", "to": "D1:1" },
+    { "from": "D1:0", "to": "Vcc:1" },
+    { "from": "GPIO:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "Q1:0" },
+    { "from": "Q1:2", "to": "GND1:0" },
+    { "from": "GPIO:0", "to": "GND2:0" }
+  ],
+  "simulationNotes": {
+    "zh": "GPIO高电平时Q1导通，电流流过蜂鸣器发声。D1为续流二极管，保护Q1免受蜂鸣器线圈反向电动势冲击。R1限制基极电流。",
+    "en": "When GPIO is HIGH, Q1 turns ON and current flows through the buzzer. D1 is a flyback diode protecting Q1 from inductive kickback. R1 limits base current."
+  }
+}

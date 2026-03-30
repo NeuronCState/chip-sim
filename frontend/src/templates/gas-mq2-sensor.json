@@ -1,0 +1,39 @@
+{
+  "id": "gas-mq2-sensor",
+  "name": "MQ-2烟雾/可燃气体检测",
+  "nameEn": "MQ-2 Smoke/Combustible Gas Detection",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "MQ-2气敏传感器检测烟雾/液化气/甲烷浓度，ADC采集+阈值报警",
+  "descriptionEn": "MQ-2 gas sensor detects smoke/LPG/methane concentration, ADC acquisition + threshold alarm",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 100, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "adc", "name": "ADC1", "position": { "x": 300, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ntc_thermistor", "name": "MQ2", "position": { "x": 450, "y": 150 }, "value": { "value": 1000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 450, "y": 280 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "buzzer_active", "name": "BZ1", "position": { "x": 450, "y": 380 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "led", "name": "LED1", "position": { "x": 300, "y": 350 }, "value": { "value": 2, "unit": "V" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 200, "y": 350 }, "value": { "value": 330, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 60, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 450 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "VCC:1", "to": "MQ2:0" },
+    { "from": "MQ2:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "GND:0" },
+    { "from": "MQ2:1", "to": "ADC1:0" },
+    { "from": "ADC1:1", "to": "U1:0" },
+    { "from": "U1:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "LED1:0" },
+    { "from": "LED1:1", "to": "GND:0" },
+    { "from": "U1:2", "to": "BZ1:0" },
+    { "from": "BZ1:1", "to": "GND:0" },
+    { "from": "VCC:1", "to": "U1:3" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "ADC1:2", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行混合仿真，MQ-2气敏电阻随气体浓度升高阻值下降，R1分压后ADC值增大。浓度超过阈值时MCU触发LED报警和蜂鸣器。需预热5分钟。",
+    "en": "Run mixed simulation. MQ-2 gas resistance drops with increasing gas concentration, R1 divider raises ADC value. MCU triggers LED alarm and buzzer above threshold. 5-minute warm-up required."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "c51-key-matrix",
+  "name": "C51 4×4矩阵键盘扫描",
+  "nameEn": "C51 4×4 Matrix Keypad Scan",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "51单片机P1口扫描4×4矩阵键盘，学习行列扫描检测按键",
+  "descriptionEn": "8051 MCU P1 port scans 4×4 matrix keypad, learning row-column scanning for key detection",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 150, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 380, "y": 60 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 380, "y": 110 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R3", "position": { "x": 380, "y": 160 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R4", "position": { "x": 380, "y": 210 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 280, "y": 40 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "R1:0" },
+    { "from": "U1:1", "to": "R2:0" },
+    { "from": "U1:2", "to": "R3:0" },
+    { "from": "U1:3", "to": "R4:0" },
+    { "from": "R1:1", "to": "GND:0" },
+    { "from": "R2:1", "to": "GND:0" },
+    { "from": "R3:1", "to": "GND:0" },
+    { "from": "R4:1", "to": "GND:0" },
+    { "from": "U1:4", "to": "VCC:1" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，观察P1口高低4位的行列扫描过程。按下不同按键，列线读到的值不同。",
+    "en": "Run digital simulation to observe row-column scanning of P1 upper/lower nibbles. Different key presses produce different column readings."
+  }
+}

@@ -1,0 +1,196 @@
+/**
+ * 智能布线工具栏样式
+ */
+
+.routing-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: var(--toolbar-bg, #1e1e3a);
+  border-bottom: 1px solid var(--border-color, #333);
+  position: relative;
+  z-index: 100;
+}
+
+.routing-toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.routing-toolbar-label {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+}
+
+.routing-toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border-light);
+  margin: 0 4px;
+}
+
+/* 路由模式按钮 */
+.routing-mode-buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.routing-mode-btn {
+  padding: 3px 10px;
+  font-size: 11px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.routing-mode-btn:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.routing-mode-btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.routing-mode-btn:only-child {
+  border-radius: 4px;
+}
+
+.routing-mode-btn:hover {
+  background: var(--color-border-light);
+}
+
+.routing-mode-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-inverse);
+}
+
+/* 操作按钮 */
+.routing-action-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.routing-action-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.routing-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.routing-action-btn.auto-route {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+}
+
+.routing-action-btn.auto-route:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.routing-action-btn.power-route {
+  background: #ff6b44;
+  color: var(--color-text-inverse);
+}
+
+.routing-action-btn.power-route:hover:not(:disabled) {
+  background: #ff7b55;
+}
+
+.routing-action-btn.beautify {
+  background: #9b59b6;
+  color: var(--color-text-inverse);
+}
+
+.routing-action-btn.beautify:hover:not(:disabled) {
+  background: #a86cc1;
+}
+
+.routing-action-btn.net-label {
+  background: #2ecc71;
+  color: var(--color-text-inverse);
+}
+
+.routing-action-btn.net-label:hover {
+  background: #3ddc84;
+}
+
+.routing-action-btn.net-label.active {
+  background: #27ae60;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 弹出面板 */
+.net-label-popup,
+.route-options-popup {
+  position: absolute;
+  top: 100%;
+  right: 12px;
+  width: 320px;
+  max-height: 400px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 200;
+}
+
+.net-label-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--color-border);
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.net-label-popup-close {
+  background: none;
+  border: none;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.net-label-popup-close:hover {
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .routing-toolbar {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+
+  .routing-toolbar-label {
+    display: none;
+  }
+
+  .net-label-popup,
+  .route-options-popup {
+    width: 280px;
+    right: 8px;
+  }
+}

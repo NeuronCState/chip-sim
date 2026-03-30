@@ -1,0 +1,264 @@
+/**
+ * 仿真控制面板样式 — 主题变量适配
+ */
+
+.simulator-control {
+  padding: 12px;
+  background: var(--bg-panel, #16162a);
+  border-top: 1px solid var(--border, var(--color-border));
+}
+
+.control-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--text, var(--color-border));
+}
+
+/* 连接状态 */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.connected {
+  background: var(--success, var(--color-success));
+  box-shadow: 0 0 4px var(--success, var(--color-success));
+}
+
+.status-dot.disconnected {
+  background: var(--danger, #ff6b6b);
+}
+
+.status-text {
+  font-size: 12px;
+  color: var(--text-dim, #888);
+}
+
+/* 分析类型选择器 */
+.analysis-selector {
+  margin-bottom: 10px;
+}
+
+.selector-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-dim, #888);
+  margin-bottom: 4px;
+}
+
+.analysis-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.analysis-btn {
+  flex: 1;
+  padding: 5px 8px;
+  background: var(--bg-input, #1e1e3a);
+  color: var(--text-dim, #aaa);
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.analysis-btn:hover:not(:disabled) {
+  background: var(--border, var(--color-border));
+  color: var(--text, #fff);
+}
+
+.analysis-btn.active {
+  background: var(--accent, var(--color-accent));
+  color: var(--color-text-inverse);
+  border-color: var(--accent-hover, #0088ff);
+}
+
+.analysis-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 参数输入 */
+.param-group {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.param-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.param-label {
+  flex: 1;
+  font-size: 11px;
+  color: var(--text-dim, #888);
+  white-space: nowrap;
+}
+
+.param-input {
+  width: 100px;
+  padding: 3px 6px;
+  background: var(--bg-app, #0d0d1a);
+  color: var(--text, #ddd);
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.param-input:focus {
+  outline: none;
+  border-color: var(--accent, var(--color-accent));
+}
+
+.param-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 控制按钮 */
+.control-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.control-buttons button {
+  padding: 6px 12px;
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.control-buttons button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-start {
+  flex: 1;
+  background: var(--color-success);
+  color: var(--color-text-inverse);
+}
+
+.btn-start:hover:not(:disabled) {
+  filter: brightness(1.2);
+}
+
+.btn-stop {
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+}
+
+.btn-stop:hover:not(:disabled) {
+  filter: brightness(1.2);
+}
+
+.btn-clear {
+  background: var(--bg-input, var(--color-border));
+  color: var(--text-dim, #aaa);
+  padding: 6px 10px;
+}
+
+.btn-clear:hover:not(:disabled) {
+  background: var(--border-light, #3a3a5a);
+  color: var(--text, #fff);
+}
+
+/* 状态栏 */
+.simulation-status-bar {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-idle {
+  background: var(--bg-input, #1e1e3a);
+  color: var(--text-muted, #666);
+}
+
+.status-running {
+  background: rgba(78, 205, 196, 0.1);
+  color: var(--success, var(--color-success));
+}
+
+.status-completed {
+  background: rgba(107, 203, 119, 0.1);
+  color: var(--color-success);
+}
+
+.status-error {
+  background: rgba(255, 77, 79, 0.1);
+  color: var(--danger, #ff6b6b);
+}
+
+/* 内联错误提示（替代 alert 弹窗） */
+.sim-inline-error {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 77, 79, 0.08);
+  border: 1px solid rgba(255, 77, 79, 0.3);
+  border-radius: 6px;
+  color: var(--danger, #ff6b6b);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sim-inline-error .error-dismiss {
+  float: right;
+  background: none;
+  border: none;
+  color: var(--danger, #ff6b6b);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.error-text {
+  color: var(--danger, #ff6b6b);
+  font-size: 11px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border, var(--color-border));
+  border-top-color: var(--success, var(--color-success));
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

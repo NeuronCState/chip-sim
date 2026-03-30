@@ -1,0 +1,29 @@
+{
+  "id": "c51-motor-step",
+  "name": "C51 28BYJ48步进电机驱动",
+  "nameEn": "C51 28BYJ48 Stepper Motor Driver",
+  "category": "embedded",
+  "difficulty": 2,
+  "description": "51单片机通过ULN2003驱动板控制28BYJ48五线四相步进电机",
+  "descriptionEn": "8051 MCU drives 28BYJ48 5-wire 4-phase stepper motor via ULN2003 driver board",
+  "components": [
+    { "type": "mcu", "name": "U1", "position": { "x": 120, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "stepper_motor", "name": "M1", "position": { "x": 480, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 100, "y": 60 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "U1:0", "to": "M1:0" },
+    { "from": "U1:1", "to": "M1:1" },
+    { "from": "U1:2", "to": "M1:2" },
+    { "from": "U1:3", "to": "M1:3" },
+    { "from": "VCC:1", "to": "M1:4" },
+    { "from": "VCC:1", "to": "U1:4" },
+    { "from": "VCC:0", "to": "GND:0" },
+    { "from": "U1:5", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行数字仿真，P1.0-P1.3依次输出四相八拍驱动序列（A→AB→B→BC→C→CD→D→DA），电机正转一步。",
+    "en": "Run digital simulation. P1.0-P1.3 output 4-phase 8-beat drive sequence (A→AB→B→BC→C→CD→D→DA), motor rotates one step forward."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "id": "audio-amplifier",
+  "name": "LM386音频放大器",
+  "nameEn": "LM386 Audio Amplifier",
+  "category": "analog",
+  "difficulty": 2,
+  "description": "LM386低电压音频功率放大器电路，放大麦克风或音频信号驱动扬声器",
+  "descriptionEn": "LM386 low-voltage audio power amplifier circuit, amplifies mic/audio signal to drive speaker",
+  "components": [
+    { "type": "ac_source", "name": "Vin", "position": { "x": 80, "y": 180 }, "value": { "value": 0.01, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 200, "y": 180 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "capacitor", "name": "C1", "position": { "x": 280, "y": 180 }, "value": { "value": 1e-6, "unit": "F" } },
+    { "type": "op_amp", "name": "U1", "position": { "x": 380, "y": 200 }, "value": { "value": 200, "unit": "gain" } },
+    { "type": "capacitor", "name": "C2", "position": { "x": 480, "y": 140 }, "value": { "value": 220e-6, "unit": "F" } },
+    { "type": "capacitor", "name": "C3", "position": { "x": 480, "y": 260 }, "value": { "value": 10e-6, "unit": "F" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 350, "y": 100 }, "value": { "value": 10, "unit": "Ω" } },
+    { "type": "dc_source", "name": "VCC", "position": { "x": 200, "y": 60 }, "value": { "value": 9, "unit": "V" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 420 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "Vin:1", "to": "R1:0" },
+    { "from": "R1:1", "to": "C1:0" },
+    { "from": "C1:1", "to": "U1:0" },
+    { "from": "VCC:1", "to": "U1:1" },
+    { "from": "U1:2", "to": "C2:0" },
+    { "from": "C2:1", "to": "GND:0" },
+    { "from": "U1:3", "to": "C3:0" },
+    { "from": "C3:1", "to": "GND:0" },
+    { "from": "U1:4", "to": "R2:0" },
+    { "from": "R2:1", "to": "GND:0" },
+    { "from": "Vin:0", "to": "GND:0" },
+    { "from": "VCC:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行交流仿真，输入10mV/1kHz正弦波，LM386增益200倍输出约2V。C1输入耦合隔直流，C2电源去耦，C3输出耦合驱动8Ω扬声器。",
+    "en": "Run AC simulation. Input 10mV/1kHz sine, LM386 gain 200x outputs ~2V. C1 input coupling blocks DC, C2 power decoupling, C3 output coupling drives 8Ω speaker."
+  }
+}

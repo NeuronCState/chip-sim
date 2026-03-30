@@ -1,0 +1,216 @@
+/**
+ * ProjectSettings - 项目设置样式
+ */
+
+.ps-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: ps-fadeIn 0.15s ease;
+}
+
+@keyframes ps-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ps-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 440px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+  animation: ps-slideUp 0.2s ease;
+}
+
+@keyframes ps-slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ps-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ps-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ps-close {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.ps-close:hover {
+  background: var(--bg-input);
+  color: var(--text);
+}
+
+.ps-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.ps-section {
+  margin-bottom: 24px;
+}
+
+.ps-section:last-child {
+  margin-bottom: 0;
+}
+
+.ps-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ps-section-danger {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.ps-section-danger .ps-section-title {
+  color: var(--color-danger);
+}
+
+.ps-field {
+  margin-bottom: 12px;
+}
+
+.ps-field label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.ps-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.ps-input:focus {
+  border-color: var(--accent);
+}
+
+.ps-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.ps-textarea:focus {
+  border-color: var(--accent);
+}
+
+.ps-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.ps-btn:hover:not(:disabled) {
+  background: var(--border);
+}
+
+.ps-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ps-btn-primary {
+  background: var(--accent);
+  color: var(--color-text-inverse);
+  border-color: var(--accent-hover);
+}
+
+.ps-btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.ps-btn-danger {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.ps-btn-danger:hover:not(:disabled) {
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.ps-export-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ps-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ps-info-item {
+  background: var(--bg-input);
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+
+.ps-info-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.ps-info-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}

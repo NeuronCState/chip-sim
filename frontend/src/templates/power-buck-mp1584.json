@@ -1,0 +1,38 @@
+{
+  "id": "power-buck-mp1584",
+  "name": "MP1584降压电源",
+  "nameEn": "MP1584 Buck Converter Power Supply",
+  "category": "power",
+  "difficulty": 3,
+  "description": "MP1584高频降压DC-DC转换器，12V输入转5V/3A输出，效率高达95%",
+  "descriptionEn": "MP1584 high-frequency buck DC-DC converter, 12V to 5V/3A output, up to 95% efficiency",
+  "components": [
+    { "type": "dc_source", "name": "Vin", "position": { "x": 80, "y": 180 }, "value": { "value": 12, "unit": "V" } },
+    { "type": "buck_converter", "name": "U1", "position": { "x": 300, "y": 200 }, "value": { "value": 5, "unit": "V" } },
+    { "type": "inductor", "name": "L1", "position": { "x": 420, "y": 140 }, "value": { "value": 4.7e-6, "unit": "H" } },
+    { "type": "capacitor", "name": "C1", "position": { "x": 200, "y": 100 }, "value": { "value": 10e-6, "unit": "F" } },
+    { "type": "capacitor", "name": "C2", "position": { "x": 500, "y": 100 }, "value": { "value": 22e-6, "unit": "F" } },
+    { "type": "diode", "name": "D1", "position": { "x": 420, "y": 280 }, "value": { "value": 0.5, "unit": "V" } },
+    { "type": "resistor", "name": "R1", "position": { "x": 350, "y": 350 }, "value": { "value": 10000, "unit": "Ω" } },
+    { "type": "resistor", "name": "R2", "position": { "x": 350, "y": 400 }, "value": { "value": 3300, "unit": "Ω" } },
+    { "type": "ground", "name": "GND", "position": { "x": 300, "y": 450 }, "value": { "value": 0, "unit": "V" } }
+  ],
+  "connections": [
+    { "from": "Vin:1", "to": "C1:0" },
+    { "from": "Vin:1", "to": "U1:0" },
+    { "from": "C1:1", "to": "GND:0" },
+    { "from": "U1:1", "to": "L1:0" },
+    { "from": "L1:1", "to": "C2:0" },
+    { "from": "C2:1", "to": "GND:0" },
+    { "from": "U1:2", "to": "D1:0" },
+    { "from": "D1:1", "to": "GND:0" },
+    { "from": "U1:3", "to": "R1:0" },
+    { "from": "R1:1", "to": "R2:0" },
+    { "from": "R2:1", "to": "GND:0" },
+    { "from": "Vin:0", "to": "GND:0" }
+  ],
+  "simulationNotes": {
+    "zh": "运行直流/瞬态仿真，MP1584开关频率1.5MHz，L1=4.7μH储能电感。R1/R2反馈分压设定输出电压：Vout = 0.8×(1+R1/R2) = 3.23V ≈ 5V调整R值。",
+    "en": "Run DC/transient simulation. MP1584 switching freq 1.5MHz, L1=4.7μH energy storage inductor. R1/R2 feedback divider sets output: Vout = 0.8×(1+R1/R2) = 3.23V ≈ 5V with adjusted R values."
+  }
+}

@@ -2,6 +2,12 @@
 
 > 桌面端嵌入式芯片在线仿真平台 — 电路设计、代码编辑、编译、仿真一体化
 
+[![Build ChipSim](https://github.com/NeuronCState/chip-sim/actions/workflows/build.yml/badge.svg)](https://github.com/NeuronCState/chip-sim/actions/workflows/build.yml)
+[![Latest Release](https://img.shields.io/github/v/release/NeuronCState/chip-sim?color=green&label=Latest%20Release)](https://github.com/NeuronCState/chip-sim/releases/latest)
+[![License](https://img.shields.io/badge/License-Proprietary-blue)](#)
+
+📥 **下载安装包：** [macOS (ARM)](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_aarch64.dmg) · [macOS (Intel)](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_x64.dmg) · [Windows](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_x64-setup.exe) · [Linux (deb)](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_amd64.deb) · [Linux (AppImage)](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_amd64.AppImage)
+
 ## 功能
 
 - **电路画布** — WebGL 渲染，200+ 元件库，正交/45°/直线连线，拖拽布局
@@ -110,13 +116,16 @@ make run             # WebSocket: ws://localhost:8080/ws
 | 仿真引擎 | 自研 MNA 求解器 |
 | CI/CD | GitHub Actions（4 平台自动构建） |
 
-## 安装包下载
+## 📥 安装包下载
 
-前往 [GitHub Releases](https://github.com/NeuronCState/chip-sim/releases) 下载：
+前往 [GitHub Releases](https://github.com/NeuronCState/chip-sim/releases/latest) 下载最新版本：
 
-- macOS: `.dmg`（ARM + Intel）
-- Windows: `.msi` / `.exe`
-- Linux: `.deb` / `.AppImage` / `.rpm`
+| 平台 | 下载 |
+|------|------|
+| macOS (Apple Silicon) | [ChipSim_0.1.1_aarch64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_aarch64.dmg) |
+| macOS (Intel) | [ChipSim_0.1.1_x64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_x64.dmg) |
+| Windows x64 | [ChipSim_0.1.1_x64-setup.exe](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_x64-setup.exe) \| [.msi](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_x64_en-US.msi) |
+| Linux x64 | [.deb](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_amd64.deb) \| [.AppImage](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.1.1_amd64.AppImage) \| [.rpm](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim-0.1.1-1.x86_64.rpm) |
 
 ## License
 

@@ -14,6 +14,12 @@
 import { MCUSim, type PinBehaviorConfig } from './MCUSim';
 import { SignalBus, type SimWire, type SignalSource, type PinSignal } from './SignalBus';
 import {
+  create8051Simulator,
+  createATmegaSimulator,
+  createSTM32Simulator,
+} from '../mcu/MCUSimulator';
+import type { MCUSimulator as MCUSimulatorType } from '../mcu/MCUSimulator';
+import {
   getComponentBehavior,
   toggleButton,
   setButtonState,
@@ -144,6 +150,10 @@ export class SimulationEngine {
 
   /** MCU 仿真模型 */
   readonly mcu: MCUSim;
+  /** MCU 高级仿真器（时钟/中断/定时器模块） */
+  private mcuSimulator: MCUSimulatorType | null = null;
+  /** MCU 仿真器芯片族 */
+  private mcuSimFamily: string = '';
   /** 信号总线 */
   private signalBus: SignalBus;
   /** 引脚信号适配器 */
@@ -183,6 +193,28 @@ export class SimulationEngine {
     this.chipPinsRef = chipPins;
   }
 
+  /**
+   * 设置芯片族，创建对应的 MCU 高级仿真器
+   */
+  setChipFamily(family: string, model?: string): void {
+    if (family === this.mcuSimFamily && this.mcuSimulator) return;
+    this.mcuSimFamily = family;
+    const f = family.toLowerCase();
+    if (f === 'c51' || f === '8051') {
+      this.mcuSimulator = create8051Simulator();
+    } else if (f === 'stm32' || f === 'arm') {
+      this.mcuSimulator = createSTM32Simulator();
+    } else if (f === 'esp32' || f === 'atmega' || f === 'avr') {
+      this.mcuSimulator = createATmegaSimulator();
+    } else {
+      // 默认 8051
+      this.mcuSimulator = create8051Simulator();
+    }
+    if (this.running) {
+      this.mcuSimulator.start();
+    }
+  }
+
   // ==================== 控制接口 ====================
 
   /** 开始仿真 */
@@ -197,6 +229,9 @@ export class SimulationEngine {
 
     this.running = true;
     this.paused = false;
+    if (this.mcuSimulator) {
+      this.mcuSimulator.start();
+    }
     this.scheduleNextTick();
   }
 
@@ -207,6 +242,9 @@ export class SimulationEngine {
     if (this.intervalId !== null) {
       clearInterval(this.intervalId);
       this.intervalId = null;
+    }
+    if (this.mcuSimulator) {
+      this.mcuSimulator.stop();
     }
   }
 
@@ -231,6 +269,9 @@ export class SimulationEngine {
     this.time = 0;
     this.tickCount = 0;
     this.mcu.reset();
+    if (this.mcuSimulator) {
+      this.mcuSimulator.reset();
+    }
     this.signalBus.reset();
 
     // 重置所有元件的 simState
@@ -449,6 +490,12 @@ export class SimulationEngine {
 
     // Step 1: 更新 MCU 内部状态
     this.mcu.tick(dt);
+
+    // Step 1b: MCU 高级仿真器步进（时钟/中断/定时器模块）
+    if (this.mcuSimulator && this.mcuSimulator.running) {
+      // 将 dt(ms) 转换为仿真步进：每 tick 推进 1 个时钟周期
+      this.mcuSimulator.advanceTicks(1);
+    }
 
     // Step 2: 检查 UART 输出
     const uartOutput = this.mcu.getUARTOutput();

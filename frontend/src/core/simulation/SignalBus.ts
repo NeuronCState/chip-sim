@@ -29,6 +29,10 @@ export interface SignalSource {
   setPinSignal(componentId: string, pinId: string, signal: PinSignal): void;
 }
 
+/** VCC/GND 引脚名模式 */
+const VCC_PINS = new Set(['VCC', 'VDD', 'VCC_IO', 'positive', 'vcc', 'VCC_IN']);
+const GND_PINS = new Set(['GND', 'VSS', 'VSSA', 'negative', 'gnd', 'VDD_GND']);
+
 /**
  * SignalBus
  *
@@ -38,6 +42,8 @@ export class SignalBus {
   private wires: SimWire[] = [];
   /** 连线电流缓存（wireId → current） */
   private wireCurrents: Map<string, number> = new Map();
+  /** 短路警告（已记录的，避免重复输出） */
+  private shortCircuitWarnings: Set<string> = new Set();
 
   /**
    * 设置连线列表
@@ -79,6 +85,23 @@ export class SignalBus {
       const toSignal = source.getPinSignal(wire.to.componentId, wire.to.pinId);
 
       if (!fromSignal || !toSignal) continue;
+
+      // 短路检测：VCC 引脚直接连接到 GND 引脚
+      const fromIsVCC = VCC_PINS.has(wire.from.pinId);
+      const fromIsGND = GND_PINS.has(wire.from.pinId);
+      const toIsVCC = VCC_PINS.has(wire.to.pinId);
+      const toIsGND = GND_PINS.has(wire.to.pinId);
+
+      if ((fromIsVCC && toIsGND) || (fromIsGND && toIsVCC)) {
+        const warnKey = `${wire.id}`;
+        if (!this.shortCircuitWarnings.has(warnKey)) {
+          this.shortCircuitWarnings.add(warnKey);
+          console.warn(
+            `[Short Circuit] VCC/GND 直连检测到短路！连线 ${wire.id}: ` +
+            `${wire.from.componentId}.${wire.from.pinId} ↔ ${wire.to.componentId}.${wire.to.pinId}`
+          );
+        }
+      }
 
       // 确定信号方向：输出 → 输入
       const fromIsOutput = fromSignal.mode === 'output' || fromSignal.mode === 'pwm' ||
@@ -137,5 +160,6 @@ export class SignalBus {
    */
   reset(): void {
     this.wireCurrents.clear();
+    this.shortCircuitWarnings.clear();
   }
 }

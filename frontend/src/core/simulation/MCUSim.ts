@@ -291,13 +291,11 @@ export class MCUSim {
     for (const [id, timer] of this.timers.entries()) {
       if (!timer.enabled) continue;
 
-      // 使用 tick 累积器模拟定时器中断
-      const elapsed = (this.time % (timer.period * 100)) / timer.period;
-      const prevElapsed = ((this.time - dt) % (timer.period * 100)) / timer.period;
+      // 正确的定时器周期计算：使用 tick 计数检测周期跨越
+      const ticks = Math.floor(this.time / timer.period);
+      const prevTicks = Math.floor((this.time - dt) / timer.period);
 
-      // 检测是否跨越了一个周期
-      if (Math.floor(elapsed) !== Math.floor(prevElapsed) ||
-          Math.floor(this.time / timer.period) !== Math.floor((this.time - dt) / timer.period)) {
+      if (ticks !== prevTicks) {
         try {
           timer.callback();
         } catch {

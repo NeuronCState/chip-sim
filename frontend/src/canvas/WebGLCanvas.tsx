@@ -30,23 +30,7 @@ interface CanvasComponent {
   simState: ComponentSimState;
 }
 
-/** 元件仿真可视化状态 */
-interface ComponentSimState {
-  /** LED/PWM 占空比 0-1 */
-  pwmDuty: number;
-  /** 继电器是否通电 */
-  relayEnergized: boolean;
-  /** 电机转速 0-1 */
-  motorSpeed: number;
-  /** 蜂鸣器是否发声 */
-  buzzerActive: boolean;
-  /** 蜂鸣器频率 */
-  buzzerFreq: number;
-  /** ADC 模拟值 0-4095 (12位) */
-  adcValue: number;
-  /** 传感器温度值 (°C) */
-  temperature: number;
-}
+// ComponentSimState 由 types.ts 统一提供，此处不再重复定义
 
 interface Wire {
   id: string;
@@ -1990,6 +1974,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
         wiresRef.current = [...wiresRef.current, newWire];
         markPinConnected(drag.wireFrom.componentId, drag.wireFrom.pinId, true);
         markPinConnected(nearPin.componentId, nearPin.pinId, true);
+        engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
         forceUpdate(n => n + 1);
       }
     }
@@ -2041,6 +2026,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
         pin.connected = true;
       }
     }
+    engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
     forceUpdate(n => n + 1);
   }, [s2c, findNearestPin]);
 
@@ -2050,6 +2036,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     if (act === 'delete') {
       wiresRef.current = wiresRef.current.filter(w => w.from.componentId !== target.id && w.to.componentId !== target.id);
       compsRef.current = compsRef.current.filter(c => c.id !== target.id);
+      engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
       forceUpdate(n => n + 1); onSelect(null);
     } else if (act === 'rotate') {
       compsRef.current = compsRef.current.map(c => c.id === target.id ? { ...c, rotation: (c.rotation + 90) % 360 } : c);
@@ -2069,9 +2056,21 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     return () => cvs.removeEventListener('wheel', handler);
   }, []);
 
-  // ========== 绑定仿真引擎数据并启动 tick 更新 ==========
+  // ========== 绑定仿真引擎数据（响应 loadTemplateId / chipFamily 变化） ==========
   useEffect(() => {
     const engine = engineRef.current;
+    engine.bindData(
+      compsRef.current as any,
+      wiresRef.current as any,
+      chipPinsRef.current as any,
+    );
+    engine.setChipFamily(chipFamily, chipModel);
+  }, [loadTemplateId, chipFamily, chipModel]);
+
+  // 注册引擎事件监听（只挂一次）
+  useEffect(() => {
+    const engine = engineRef.current;
+    // 初始绑定
     engine.bindData(
       compsRef.current as any,
       wiresRef.current as any,
@@ -2091,7 +2090,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     });
 
     return () => { unsub(); unsubUART(); };
-  }, [chipFamily]);
+  }, []);
 
   return (
     <div className="webgl-canvas-wrapper">

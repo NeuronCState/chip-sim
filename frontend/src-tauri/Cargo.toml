@@ -1,10 +1,10 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "ChipSim - MCU 仿真平台"
+authors = ["NeuronCState"]
 license = ""
-repository = ""
+repository = "https://github.com/NeuronCState/chip-sim"
 edition = "2021"
 rust-version = "1.77.2"
 
@@ -23,3 +23,5 @@ serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
 tauri = { version = "2.10.3", features = [] }
 tauri-plugin-log = "2"
+tempfile = "3"
+regex = "1"

@@ -19,11 +19,10 @@ function AppShell() {
   const [chip, setChip] = useState({ family: 'C51', model: 'AT89C51' });
   const [loadTemplateId, setLoadTemplateId] = useState<string | null>(null);
   const handleLoadTemplate = (id: string) => {
-    setLoadTemplateId(null);
     if (id === 'full-dev-board') {
       setChip({ family: 'STM32', model: 'stm32f103c8t6' });
     }
-    setTimeout(() => setLoadTemplateId(id), 50);
+    setLoadTemplateId(id);
   };
 
   return (

@@ -151,10 +151,12 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId }: Props) {
   const [libPinSplit, setLibPinSplit] = useState(0.5);
   const [pinConfigs, setPinConfigs] = useState<Record<string, string>>({});
 
-  const addToast = useCallback((msg: string, type: ToastItem['type'] = 'info') => {
-    setToasts(prev => [...prev, { id: Date.now().toString(), message: msg, type }]);
-  }, []);
   const dismissToast = useCallback((id: string) => setToasts(prev => prev.filter(t => t.id !== id)), []);
+  const addToast = useCallback((msg: string, type: ToastItem['type'] = 'info') => {
+    const id = Date.now().toString();
+    setToasts(prev => [...prev, { id, message: msg, type }]);
+    setTimeout(() => dismissToast(id), 4000);
+  }, [dismissToast]);
 
   /** 左-中分隔线拖拽 */
   const handleLeftResize = useCallback((delta: number) => {

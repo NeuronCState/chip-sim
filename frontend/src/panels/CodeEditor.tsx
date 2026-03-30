@@ -690,6 +690,8 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const modelsRef = useRef<Map<string, monaco.editor.ITextModel>>(new Map());
   const fileInputRef = useRef<HTMLInputElement>(null);
   const lastLoadedModelRef = useRef<string | null>(null);
+  const editorMountedRef = useRef(false);
+  const mountedRef = useRef(true);
 
   const isCodeFile = activeFile && !activePanel;
   const currentFile = files.find(f => f.path === activeFile);
@@ -709,10 +711,13 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
       setCompileResult(null);
       try {
         const result = await compileCode({ source: file.content, chip_family: chipFamily.toLowerCase(), chip_model: chipModel || '', filename: file.path.split('/').pop() || file.path });
+        if (!mountedRef.current) return;
         setCompileResult(result);
       } catch (e: any) {
+        if (!mountedRef.current) return;
         setCompileResult({ success: false, stdout: '', stderr: String(e), output_path: null, output_format: null });
       }
+      if (!mountedRef.current) return;
       setCompiling(false);
     };
     window.addEventListener('chip-sim:new-file', onNew);
@@ -729,6 +734,12 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     };
   }, [files, activeFile, chipFamily, chipModel, compiling]);
 
+  // mountedRef cleanup
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
   // 检测可用编译器（仅桌面版）
   useEffect(() => {
     if (isDesktop()) {
@@ -743,9 +754,10 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     }
   }, [selectedElement?.id]);
 
-  // 初始化 Monaco（等 activeFile 有值后容器才渲染，此时再创建编辑器）
+  // 初始化 Monaco（只初始化一次）
   useEffect(() => {
-    if (editorRef.current || !editorContainerRef.current) return;
+    if (editorMountedRef.current || !editorContainerRef.current) return;
+    editorMountedRef.current = true;
 
     monaco.editor.defineTheme('chip-sim-dark', {
       base: 'vs-dark', inherit: true,
@@ -792,9 +804,13 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     window.addEventListener('themechange', handler);
     return () => {
       window.removeEventListener('themechange', handler);
-      // 注意：不 dispose 编辑器，它跟随组件生命周期
+      editor.dispose();
+      modelsRef.current.forEach(m => m.dispose());
+      modelsRef.current.clear();
+      editorRef.current = null;
+      editorMountedRef.current = false;
     };
-  }, [activeFile]);
+  }, []);
 
   // 切换代码文件时更新 Monaco
   useEffect(() => {
@@ -815,7 +831,9 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
 
   // 各芯片系列自动加载示例文件
   useEffect(() => {
-    if (!chipModel || chipModel === lastLoadedModelRef.current) return;
+    if (!chipModel) return;
+    // 仅在芯片真正变化时加载（忽略大小写差异）
+    if (lastLoadedModelRef.current?.toLowerCase() === chipModel.toLowerCase() && files.length > 0) return;
     lastLoadedModelRef.current = chipModel;
 
     let examples: VFile[] | null = null;
@@ -824,7 +842,6 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     if (m.includes('stm32f103c8')) {
       examples = STM32F103_EXAMPLES;
     } else if (m.startsWith('stm32')) {
-      // 其他 STM32 型号也用 F103 示例（架构类似）
       examples = STM32F103_EXAMPLES;
     } else if (m.startsWith('esp32') || m.startsWith('esp8266')) {
       examples = ESP32_EXAMPLES;
@@ -839,11 +856,21 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
       setOpenTabs([examples[0].path]);
       setActiveFile(examples[0].path);
       setActivePanel(null);
-      // 清理旧的 Monaco models
       modelsRef.current.forEach(model => model.dispose());
       modelsRef.current.clear();
     }
   }, [chipModel]);
+
+  // 兜底：如果挂载后没有文件，自动加载 C51 示例
+  useEffect(() => {
+    if (files.length === 0 && !lastLoadedModelRef.current) {
+      lastLoadedModelRef.current = 'AT89C51';
+      setFiles(C51_EXAMPLES);
+      setOpenTabs(['main.c']);
+      setActiveFile('main.c');
+      setActivePanel(null);
+    }
+  }, []);
 
   // ========== 操作 ==========
   const openPanel = useCallback((panel: VirtualPanel) => {

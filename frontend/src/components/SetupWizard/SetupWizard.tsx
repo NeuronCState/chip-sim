@@ -52,24 +52,8 @@ const CHIP_FAMILIES = [
       { value: 'uno', label: 'Arduino Uno' },
       { value: 'mega', label: 'Arduino Mega' },
       { value: 'nano', label: 'Arduino Nano' },
-    ],
-  },
-  {
-    id: 'AVR', label: 'AVR', icon: '🔴',
-    desc: 'Atmel 8 位 MCU',
-    models: [
-      { value: 'atmega328p', label: 'ATmega328P' },
-      { value: 'atmega2560', label: 'ATmega2560' },
-      { value: 'attiny85', label: 'ATtiny85' },
-    ],
-  },
-  {
-    id: 'RISC-V', label: 'RISC-V', icon: '🟣',
-    desc: '开源指令集架构',
-    models: [
-      { value: 'ch32v', label: 'CH32V' },
-      { value: 'gd32vf103', label: 'GD32VF103' },
-      { value: 'bl602', label: 'BL602' },
+      { value: 'leonardo', label: 'Arduino Leonardo' },
+      { value: 'due', label: 'Arduino Due' },
     ],
   },
 ];

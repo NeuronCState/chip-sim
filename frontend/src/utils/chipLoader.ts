@@ -11,11 +11,6 @@ const FAMILY_DIR: Record<string, string> = {
   STM32: 'stm32',
   ESP32: 'esp32',
   Arduino: 'arduino',
-  AVR: 'avr',
-  PIC: 'pic',
-  MSP430: 'msp430',
-  NXP: 'nxp',
-  'RISC-V': 'riscv',
 };
 
 /** 已知的 model → filename 映射 (避免目录扫描) */
@@ -62,31 +57,6 @@ const MODEL_FILE_MAP: Record<string, Record<string, string>> = {
     'Arduino-Nano': 'nano.json',
     'Arduino-Leonardo': 'leonardo.json',
     'Arduino-Due': 'due.json',
-  },
-  AVR: {
-    ATmega328P: 'atmega328p.json',
-    ATmega2560: 'atmega2560.json',
-    ATtiny85: 'attiny85.json',
-  },
-  PIC: {
-    PIC16F877A: 'pic16f877a.json',
-    PIC18F4550: 'pic18f4550.json',
-    PIC32MX: 'pic32mx.json',
-  },
-  MSP430: {
-    MSP430G2553: 'g2553.json',
-    MSP430F5529: 'f5529.json',
-  },
-  NXP: {
-    LPC1768: 'lpc1768.json',
-    'IMX-RT1062': 'imxrt1062.json',
-    'i.MX RT1062': 'imxrt1062.json',
-  },
-  'RISC-V': {
-    CH32V: 'ch32v.json',
-    CH32V307: 'ch32v.json',
-    GD32VF103: 'gd32vf103.json',
-    BL602: 'bl602.json',
   },
 };
 

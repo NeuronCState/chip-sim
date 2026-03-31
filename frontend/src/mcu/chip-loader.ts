@@ -22,7 +22,7 @@ export interface ChipConfig {
   peripherals: string[];
 }
 
-export type ChipFamily = 'c51' | 'stm32' | 'esp32' | 'arduino' | 'avr' | 'pic' | 'msp430' | 'nxp' | 'riscv';
+export type ChipFamily = 'c51' | 'stm32' | 'esp32' | 'arduino';
 
 /**
  * Load chip configuration from JSON file
@@ -55,10 +55,5 @@ export function getAvailableChips(): Record<string, string[]> {
     stm32: ['stm32f103c8t6', 'stm32f103rct6', 'stm32f407vgt6', 'stm32f411ceu6', 'stm32f429iit6', 'stm32h743vit6', 'stm32g431cbt6', 'stm32l476rgt6', 'stm32wl55jci6'],
     esp32: ['esp32-wroom-32', 'esp32-s2', 'esp32-s3', 'esp32-c3', 'esp32-c6', 'esp8266'],
     arduino: ['uno', 'mega', 'nano', 'leonardo', 'due'],
-    avr: ['atmega328p', 'atmega2560', 'attiny85'],
-    pic: ['pic16f877a', 'pic18f4550', 'pic32mx'],
-    msp430: ['g2553', 'f5529'],
-    nxp: ['lpc1768', 'imxrt1062'],
-    riscv: ['ch32v', 'gd32vf103', 'bl602'],
   };
 }

@@ -721,8 +721,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     const pinCount = CHIP_PINS_COUNT[chipFamily] || 40;
         // 从芯片JSON加载真实引脚数据
     (async () => {
-      const family = chipFamily.toLowerCase();
-      const dir = family === 'riscv' ? 'riscv' : family;
+      const dir = chipFamily.toLowerCase();
       try {
         const res = await fetch(`/chips/${dir}/${chipModel}.json`);
         if (!res.ok) throw new Error('not found');

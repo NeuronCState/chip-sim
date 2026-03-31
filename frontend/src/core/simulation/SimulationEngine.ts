@@ -204,8 +204,6 @@ export class SimulationEngine {
       this.mcuSimulator = create8051Simulator();
     } else if (f === 'stm32' || f === 'arm') {
       this.mcuSimulator = createSTM32Simulator();
-    } else if (f === 'atmega' || f === 'avr') {
-      this.mcuSimulator = createATmegaSimulator();
     } else if (f === 'esp32') {
       // ESP32 仿真未实现，使用 STM32 仿真器作为更准确的占位（ARM 架构，GPIO 行为更接近 STM32）
       console.warn('ESP32 simulation using STM32 fallback model');

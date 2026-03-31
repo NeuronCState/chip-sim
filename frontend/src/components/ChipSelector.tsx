@@ -3,7 +3,6 @@ import { Segmented } from '../ui/Segmented';
 import { Dropdown } from '../ui/Dropdown';
 
 // ─── 芯片系列 → 型号映射 ───
-// value 必须与 public/chips/{family}/{model}.json 文件名一致（不含 .json）
 const chipSeries = {
   C51: [
     { value: 'at89c51', label: 'AT89C51' },
@@ -38,32 +37,16 @@ const chipSeries = {
     { value: 'leonardo', label: 'Arduino Leonardo' },
     { value: 'due', label: 'Arduino Due' },
   ],
-  AVR: [
-    { value: 'atmega328p', label: 'ATmega328P' },
-    { value: 'atmega2560', label: 'ATmega2560' },
-    { value: 'attiny85', label: 'ATtiny85' },
-  ],
-  'RISC-V': [
-    { value: 'ch32v', label: 'CH32V' },
-    { value: 'gd32vf103', label: 'GD32VF103' },
-    { value: 'bl602', label: 'BL602' },
-  ],
 };
 
 type ChipFamily = keyof typeof chipSeries;
 
-/**
- * 将 ChipSelector 系列名映射为 chip-loader 的 family 目录名
- * 例: 'RISCV' → 'riscv', 'MSP430' → 'msp430'
- */
 export function familyToDir(family: string): string {
   const map: Record<string, string> = {
     C51: 'c51',
     STM32: 'stm32',
     ESP32: 'esp32',
     Arduino: 'arduino',
-    AVR: 'avr',
-    'RISC-V': 'riscv',
   };
   return map[family] ?? family.toLowerCase();
 }
@@ -73,8 +56,6 @@ const seriesOptions = [
   { value: 'STM32', label: 'STM32' },
   { value: 'ESP32', label: 'ESP32' },
   { value: 'Arduino', label: 'Arduino' },
-  { value: 'AVR', label: 'AVR' },
-  { value: 'RISC-V', label: 'RISC-V' },
 ];
 
 export interface ChipSelectorProps {
@@ -100,24 +81,9 @@ export function ChipSelector({ onChipSelected, className }: ChipSelectorProps) {
   };
 
   return (
-    <div
-      className={className}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 12,
-      }}
-    >
-      <Segmented
-        options={seriesOptions}
-        value={family}
-        onChange={handleFamilyChange}
-      />
-      <Dropdown
-        options={chipSeries[family]}
-        value={model}
-        onChange={handleModelChange}
-      />
+    <div className={className} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <Segmented options={seriesOptions} value={family} onChange={handleFamilyChange} />
+      <Dropdown options={chipSeries[family]} value={model} onChange={handleModelChange} />
     </div>
   );
 }

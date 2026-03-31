@@ -43,6 +43,9 @@ func main() {
 		wsHandler.ServeHTTP(w, r)
 	})
 
+	// QEMU 仿真 WebSocket 端点
+	mux.HandleFunc("/ws/qemu", ws.HandleQEMU)
+
 	// 健康检查端点
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -81,6 +84,7 @@ func main() {
 	addr := fmt.Sprintf(":%d", *port)
 	log.Printf("🔌 Chip Sim Server starting on %s", addr)
 	log.Printf("   WebSocket: ws://localhost%s/ws", addr)
+	log.Printf("   QEMU WS:  ws://localhost%s/ws/qemu", addr)
 	log.Printf("   Health:    http://localhost%s/health", addr)
 	log.Printf("   API Info:  http://localhost%s/api/info", addr)
 	log.Printf("   REST AC:   http://localhost%s/api/simulation/ac-sweep", addr)

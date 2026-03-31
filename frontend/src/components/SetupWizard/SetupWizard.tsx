@@ -14,7 +14,7 @@ import './SetupWizard.css';
 
 const CHIP_FAMILIES = [
   {
-    id: 'C51', label: '51 系列', icon: '🔧',
+    id: 'C51', label: '51 系列', icon: '',
     desc: '经典 8051 内核单片机',
     models: [
       { value: 'at89c51', label: 'AT89C51' },
@@ -25,7 +25,7 @@ const CHIP_FAMILIES = [
     ],
   },
   {
-    id: 'STM32', label: 'STM32', icon: '⚡',
+    id: 'STM32', label: 'STM32', icon: '',
     desc: 'ARM Cortex-M 系列',
     models: [
       { value: 'stm32f103c8t6', label: 'STM32F103C8 (Blue Pill)' },
@@ -36,7 +36,7 @@ const CHIP_FAMILIES = [
     ],
   },
   {
-    id: 'ESP32', label: 'ESP32', icon: '📡',
+    id: 'ESP32', label: 'ESP32', icon: '',
     desc: 'Wi-Fi + 蓝牙 SoC',
     models: [
       { value: 'esp32-wroom-32', label: 'ESP32-WROOM-32' },
@@ -46,7 +46,7 @@ const CHIP_FAMILIES = [
     ],
   },
   {
-    id: 'Arduino', label: 'Arduino', icon: '🟢',
+    id: 'Arduino', label: 'Arduino', icon: '',
     desc: '开源硬件平台',
     models: [
       { value: 'uno', label: 'Arduino Uno' },
@@ -221,10 +221,10 @@ export function SetupWizard({ onComplete }: Props) {
               onClick={handleOpenFolder}
               disabled={importing}
             >
-              📂 {importing ? '正在导入...' : '打开已有工程文件夹'}
+              {importing ? '正在导入...' : '打开已有工程文件夹'}
             </button>
             {!fsSupported && (
-              <p className="wizard-hint">⚠ 当前浏览器不支持文件夹访问，请使用桌面版</p>
+              <p className="wizard-hint">! 当前浏览器不支持文件夹访问，请使用桌面版</p>
             )}
           </div>
         )}
@@ -244,7 +244,7 @@ export function SetupWizard({ onComplete }: Props) {
                   className={`wizard-model-item ${selectedModel === m.value ? 'selected' : ''}`}
                   onClick={() => handleSelectModel(m.value)}
                 >
-                  <span className="wizard-model-icon">🔲</span>
+                  <span className="wizard-model-icon" style={{color:'var(--sil-accent)'}}>&#9647;</span>
                   <span className="wizard-model-label">{m.label}</span>
                   <span className="wizard-model-value">{m.value}</span>
                 </button>
@@ -290,16 +290,16 @@ export function SetupWizard({ onComplete }: Props) {
                   style={{ flex: 1 }}
                 />
                 <button className="wizard-browse-btn" onClick={handlePickDir}>
-                  📁 浏览
+                  浏览
                 </button>
               </div>
               {!fsSupported && (
-                <p className="wizard-hint">⚠ 当前浏览器不支持选择文件夹，可手动输入路径</p>
+                <p className="wizard-hint">! 当前浏览器不支持选择文件夹，可手动输入路径</p>
               )}
             </div>
 
             <button className="wizard-confirm-btn" onClick={handleConfirm}>
-              🚀 进入仿真
+              进入仿真
             </button>
           </div>
         )}

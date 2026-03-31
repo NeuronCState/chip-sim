@@ -110,7 +110,7 @@ function AppShell() {
                   }}
                   onClick={() => setTplDropdownOpen(prev => !prev)}
                 >
-                  <span>📋</span>
+                  <span style={{ fontSize: 12, fontWeight: 700 }}>&#9776;</span>
                   <span>{activeTemplate ? activeTemplate.name : '电路模板'}</span>
                   <span style={{ fontSize: 8, opacity: 0.6 }}>{tplDropdownOpen ? '▲' : '▼'}</span>
                 </button>
@@ -153,7 +153,7 @@ function AppShell() {
                       onMouseLeave={e => (e.target as HTMLElement).style.background = 'transparent'}
                       onClick={() => handleLoadTemplate('__clear__')}
                     >
-                      🗑️ 清空画布
+                      清空画布
                     </button>
                   </div>
                 )}

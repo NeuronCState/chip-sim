@@ -717,9 +717,18 @@ function SelectRow({ label, value, options, onChange }: { label: string; value: 
 
 function ElementParams({ type, properties }: ElementParamsProps) {
   const [localProps, setLocalProps] = useState<Record<string, unknown>>({});
+  // 1b: 定时刷新 tick，让仿真状态实时更新
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => t + 1), 500);
+    return () => clearInterval(id);
+  }, []);
 
   // 合并传入的 properties 作为初始值
   const merged = { ...(properties || {}), ...localProps };
+  // 引用 tick 确保 re-render（放在 hidden span 中）
+  void tick;
 
   const setProp = (key: string, val: unknown) => {
     setLocalProps(prev => ({ ...prev, [key]: val }));
@@ -804,6 +813,8 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const [compiling, setCompiling] = useState(false);
   const [compileResult, setCompileResult] = useState<CompileResult | null>(null);
   const [compilers, setCompilers] = useState<CompilerInfo[]>([]);
+  // 1b: 仿真状态定时刷新
+  const [simTick, setSimTick] = useState(0);
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const modelsRef = useRef<Map<string, monaco.editor.ITextModel>>(new Map());
@@ -811,6 +822,11 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const lastLoadedModelRef = useRef<string | null>(null);
   const editorMountedRef = useRef(false);
   const mountedRef = useRef(true);
+  /** 用于 Ctrl+S 等闭包中访问最新 activeFile/files */
+  const activeFileRef = useRef(activeFile);
+  const filesRef = useRef(files);
+  activeFileRef.current = activeFile;
+  filesRef.current = files;
 
   const isCodeFile = activeFile && !activePanel;
   const currentFile = files.find(f => f.path === activeFile);
@@ -879,6 +895,12 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     return () => { mountedRef.current = false; };
   }, []);
 
+  // 1b: 仿真状态定时刷新（500ms 间隔触发 re-render）
+  useEffect(() => {
+    const id = setInterval(() => setSimTick(t => t + 1), 500);
+    return () => clearInterval(id);
+  }, []);
+
   // 检测可用编译器（仅桌面版）
   useEffect(() => {
     if (isDesktop()) {
@@ -939,10 +961,45 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     });
     editorRef.current = editor;
 
+    // 1a: LibraryReference 插入代码监听
+    const onInsertCode = (e: Event) => {
+      const code = (e as CustomEvent).detail;
+      if (editorRef.current && code) {
+        const model = editorRef.current.getModel();
+        if (model) {
+          const position = editorRef.current.getPosition();
+          if (position) {
+            editorRef.current.executeEdits('library-ref', [{
+              range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+              text: code,
+            }]);
+          }
+        }
+      }
+    };
+    window.addEventListener('chip-sim:insert-code', onInsertCode);
+
+    // 1c: Ctrl+S 快捷键 — 保存到 localStorage
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+      const currentModel = editor.getModel();
+      if (currentModel) {
+        const content = currentModel.getValue();
+        const filePath = filesRef.current.find(f => f.path === activeFileRef.current)?.path;
+        if (filePath) {
+          try {
+            localStorage.setItem(`chip-sim-file-${filePath}`, content);
+          } catch (e) {
+            console.warn('保存到 localStorage 失败:', e);
+          }
+        }
+      }
+    });
+
     const handler = () => monaco.editor.setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'chip-sim-dark' : 'vs');
     window.addEventListener('themechange', handler);
     return () => {
       window.removeEventListener('themechange', handler);
+      window.removeEventListener('chip-sim:insert-code', onInsertCode);
       editor.dispose();
       modelsRef.current.forEach(m => m.dispose());
       modelsRef.current.clear();
@@ -1010,6 +1067,18 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
       setActivePanel(null);
     }
   }, []);
+
+  // 1c: 加载 localStorage 中已保存的文件内容（覆盖默认示例）
+  useEffect(() => {
+    if (files.length === 0) return;
+    setFiles(prev => prev.map(f => {
+      const saved = localStorage.getItem(`chip-sim-file-${f.path}`);
+      if (saved !== null) {
+        return { ...f, content: saved };
+      }
+      return f;
+    }));
+  }, [files.length]); // 仅在文件列表长度变化时触发
 
   // ========== 操作 ==========
   const openPanel = useCallback((panel: VirtualPanel) => {
@@ -1155,7 +1224,9 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
           </div>
 
           {/* 内容区 */}
-          {activePanel === 'properties' && (
+          {activePanel === 'properties' && (() => {
+            void simTick;
+            return (
             <div className="ide-panel-content">
               {selectedElement ? (
                 <div className="prop-panel">
@@ -1189,14 +1260,26 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
 
                   <div className="prop-section">
                     <div className="prop-section-title">仿真状态</div>
-                    <div className="prop-row"><span className="prop-label">状态</span><span className="prop-value">就绪</span></div>
+                    {(() => {
+                      const simState = selectedElement.properties?.simState as Record<string, unknown> | undefined;
+                      if (simState && Object.keys(simState).length > 0) {
+                        return Object.entries(simState).map(([key, val]) => (
+                          <div key={key} className="prop-row">
+                            <span className="prop-label">{key}</span>
+                            <span className="prop-value" style={{ color: '#4ade80' }}>{String(val)}</span>
+                          </div>
+                        ));
+                      }
+                      return <div className="prop-row"><span className="prop-label">状态</span><span className="prop-value">就绪</span></div>;
+                    })()}
                   </div>
                 </div>
               ) : (
                 <div className="ide-empty"><p>点击画布上的元件查看属性</p></div>
               )}
             </div>
-          )}
+            );
+          })()}
 
           {activePanel === 'pins' && (
             <div className="ide-panel-content">

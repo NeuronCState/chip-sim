@@ -136,6 +136,39 @@ const COMPONENT_TEMPLATES: Record<string, { w: number; h: number; pins: { id: st
   battery: { w: 36, h: 24, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -22 }, { id: 'gnd', name: 'GND', ox: 0, oy: 22 }] },
   power:    { w: 32, h: 32, pins: [{ id: 'positive', name: '+', ox: 0, oy: -20 }, { id: 'negative', name: '-', ox: 0, oy: 20 }] },
   pin_header:      { w: 20, h: 20, pins: [{ id: 'pin', name: 'PIN', ox: 0, oy: 0 }] },
+  // === 传感器 ===
+  ntc_thermistor:  { w: 40, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'data', name: 'DATA', ox: 24, oy: 0 }] },
+  ptc_thermistor:  { w: 40, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'data', name: 'DATA', ox: 24, oy: 0 }] },
+  ds18b20:         { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'data', name: 'DATA', ox: 24, oy: 0 }] },
+  ldr:             { w: 40, h: 24, pins: [{ id: 'a', name: 'A', ox: -24, oy: 0 }, { id: 'b', name: 'B', ox: 24, oy: 0 }] },
+  photodiode:      { w: 32, h: 24, pins: [{ id: 'anode', name: 'A', ox: -10, oy: 18 }, { id: 'cathode', name: 'K', ox: 10, oy: 18 }] },
+  piezo_sensor:    { w: 32, h: 24, pins: [{ id: 'positive', name: '+', ox: -10, oy: 18 }, { id: 'negative', name: '-', ox: 10, oy: 18 }] },
+  accelerometer:   { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'sda', name: 'SDA', ox: 24, oy: -8 }, { id: 'scl', name: 'SCL', ox: 24, oy: 8 }] },
+  gyroscope:       { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'sda', name: 'SDA', ox: 24, oy: -8 }, { id: 'scl', name: 'SCL', ox: 24, oy: 8 }] },
+  // === 通信模块 ===
+  bluetooth_module: { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'txd', name: 'TXD', ox: -24, oy: -8 }, { id: 'rxd', name: 'RXD', ox: -24, oy: 8 }] },
+  wifi_module:     { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'txd', name: 'TXD', ox: -24, oy: -8 }, { id: 'rxd', name: 'RXD', ox: -24, oy: 8 }] },
+  can_transceiver: { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'txd', name: 'TXD', ox: -24, oy: 0 }, { id: 'rxd', name: 'RXD', ox: 24, oy: 0 }] },
+  rs485_transceiver: { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'ro', name: 'RO', ox: -24, oy: -8 }, { id: 'di', name: 'DI', ox: -24, oy: 8 }] },
+  usb_serial:      { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'txd', name: 'TXD', ox: -24, oy: 0 }, { id: 'rxd', name: 'RXD', ox: 24, oy: 0 }] },
+  // === 显示 ===
+  seven_segment:   { w: 32, h: 40, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -26 }, { id: 'gnd', name: 'GND', ox: 0, oy: 26 }, { id: 'data', name: 'DATA', ox: 24, oy: 0 }] },
+  led_indicator:   { w: 32, h: 24, pins: [{ id: 'anode', name: '+', ox: -10, oy: 18 }, { id: 'cathode', name: '-', ox: 10, oy: 18 }] },
+  // === 电源 ===
+  ldo:             { w: 36, h: 28, pins: [{ id: 'vin', name: 'VIN', ox: -24, oy: 0 }, { id: 'vout', name: 'VOUT', ox: 24, oy: 0 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }] },
+  buck_converter:  { w: 40, h: 32, pins: [{ id: 'vin', name: 'VIN', ox: -24, oy: 0 }, { id: 'vout', name: 'VOUT', ox: 24, oy: 0 }, { id: 'gnd', name: 'GND', ox: 0, oy: 22 }] },
+  boost_converter: { w: 40, h: 32, pins: [{ id: 'vin', name: 'VIN', ox: -24, oy: 0 }, { id: 'vout', name: 'VOUT', ox: 24, oy: 0 }, { id: 'gnd', name: 'GND', ox: 0, oy: 22 }] },
+  // === IC ===
+  timer_555:       { w: 40, h: 44, pins: [{ id: 'gnd', name: 'GND', ox: -24, oy: 14 }, { id: 'trig', name: 'TRG', ox: -24, oy: 5 }, { id: 'out', name: 'OUT', ox: 24, oy: -14 }, { id: 'reset', name: 'RST', ox: -24, oy: -5 }, { id: 'ctrl', name: 'CTL', ox: -24, oy: -14 }, { id: 'thr', name: 'THR', ox: 24, oy: 5 }, { id: 'dis', name: 'DIS', ox: 24, oy: 14 }, { id: 'vcc', name: 'VCC', ox: 0, oy: -28 }] },
+  voltage_regulator_7805: { w: 36, h: 28, pins: [{ id: 'vin', name: 'IN', ox: -24, oy: 0 }, { id: 'vout', name: 'OUT', ox: 24, oy: 0 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }] },
+  voltage_regulator_7812: { w: 36, h: 28, pins: [{ id: 'vin', name: 'IN', ox: -24, oy: 0 }, { id: 'vout', name: 'OUT', ox: 24, oy: 0 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }] },
+  eeprom_i2c:      { w: 36, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'sda', name: 'SDA', ox: 24, oy: -8 }, { id: 'scl', name: 'SCL', ox: 24, oy: 8 }] },
+  eeprom_spi:      { w: 36, h: 32, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -22 }, { id: 'gnd', name: 'GND', ox: 0, oy: 22 }, { id: 'miso', name: 'MISO', ox: -24, oy: -8 }, { id: 'mosi', name: 'MOSI', ox: -24, oy: 8 }, { id: 'sck', name: 'SCK', ox: 24, oy: -8 }, { id: 'cs', name: 'CS', ox: 24, oy: 8 }] },
+  // === DHT20/AHT20 温湿度 ===
+  aht20:           { w: 40, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'sda', name: 'SDA', ox: 24, oy: -8 }, { id: 'scl', name: 'SCL', ox: 24, oy: 8 }] },
+  dht20:           { w: 40, h: 28, pins: [{ id: 'vcc', name: 'VCC', ox: 0, oy: -20 }, { id: 'gnd', name: 'GND', ox: 0, oy: 20 }, { id: 'sda', name: 'SDA', ox: 24, oy: -8 }, { id: 'scl', name: 'SCL', ox: 24, oy: 8 }] },
+  // === 接插件变体 ===
+  dupont_wire:     { w: 20, h: 20, pins: [{ id: 'a', name: 'A', ox: -14, oy: 0 }, { id: 'b', name: 'B', ox: 14, oy: 0 }] },
 };
 
 // ========== MCU 电路模板 ==========
@@ -193,7 +226,7 @@ export const CIRCUIT_TEMPLATES: CircuitTemplate[] = [
 
       // ===== 通信 =====
       { type: 'bluetooth_module', name: '蓝牙', offsetX: 320, offsetY: -180 },
-      { type: 'pin_header', name: 'CH343P', offsetX: 320, offsetY: -100 },
+      { type: 'usb_serial', name: 'CH343P', offsetX: 320, offsetY: -100 },
       { type: 'pin_header', name: 'USB-C', offsetX: 320, offsetY: -20 },
 
       // ===== 显示 =====
@@ -218,9 +251,10 @@ export const CIRCUIT_TEMPLATES: CircuitTemplate[] = [
     ],
     wires: [
       // === 电源 ===
-      { from: { comp: '3.3V', pin: 'vcc' }, to: { comp: 'AP2112K', pin: 'a' } },
+      { from: { comp: '3.3V', pin: 'vcc' }, to: { comp: 'AP2112K', pin: 'vin' } },
       { from: { comp: '3.3V', pin: 'gnd' }, to: { comp: '__chip__', pin: 'VSS' } },
-      { from: { comp: 'AP2112K', pin: 'b' }, to: { comp: '__chip__', pin: 'VDD' } },
+      { from: { comp: 'AP2112K', pin: 'vout' }, to: { comp: '__chip__', pin: 'VDD' } },
+      { from: { comp: 'AP2112K', pin: 'gnd' }, to: { comp: '__chip__', pin: 'VSS' } },
       { from: { comp: '__chip__', pin: 'VDD' }, to: { comp: 'C1', pin: 'a' } },
       { from: { comp: 'C1', pin: 'b' }, to: { comp: '__chip__', pin: 'VSS' } },
       { from: { comp: '__chip__', pin: 'VDD' }, to: { comp: 'C2', pin: 'a' } },
@@ -266,12 +300,12 @@ export const CIRCUIT_TEMPLATES: CircuitTemplate[] = [
       { from: { comp: '__chip__', pin: 'PB15' }, to: { comp: '编码器', pin: 'b' } },
 
       // === 通信 PA2/PA3/PB10/PB11 ===
-      { from: { comp: '__chip__', pin: 'PB10' }, to: { comp: '蓝牙', pin: 'pin' } },
-      { from: { comp: '蓝牙', pin: 'pin' }, to: { comp: '__chip__', pin: 'PB11' } },
+      { from: { comp: '__chip__', pin: 'PB10' }, to: { comp: '蓝牙', pin: 'rxd' } },
+      { from: { comp: '蓝牙', pin: 'txd' }, to: { comp: '__chip__', pin: 'PB11' } },
       { from: { comp: '蓝牙', pin: 'vcc' }, to: { comp: '__chip__', pin: 'VDD' } },
       { from: { comp: '蓝牙', pin: 'gnd' }, to: { comp: '__chip__', pin: 'VSS' } },
-      { from: { comp: '__chip__', pin: 'PA2' }, to: { comp: 'CH343P', pin: 'pin' } },
-      { from: { comp: 'CH343P', pin: 'pin' }, to: { comp: '__chip__', pin: 'PA3' } },
+      { from: { comp: '__chip__', pin: 'PA2' }, to: { comp: 'CH343P', pin: 'rxd' } },
+      { from: { comp: '__chip__', pin: 'PA3' }, to: { comp: 'CH343P', pin: 'txd' } },
 
       // === 显示 PB6/PB7/PA6/PA7/PB0 ===
       { from: { comp: '__chip__', pin: 'PB6' }, to: { comp: 'OLED', pin: 'scl' } },
@@ -305,7 +339,101 @@ export const CIRCUIT_TEMPLATES: CircuitTemplate[] = [
       { from: { comp: '__chip__', pin: 'PB7' }, to: { comp: 'DHT20', pin: 'sda' } },
       { from: { comp: 'DHT20', pin: 'vcc' }, to: { comp: '__chip__', pin: 'VDD' } },
       { from: { comp: 'DHT20', pin: 'gnd' }, to: { comp: '__chip__', pin: 'VSS' } },
-    ],  },
+    ],
+  },
+  {
+    id: 'blink-led',
+    name: 'LED闪烁',
+    components: [
+      { type: 'resistor', name: 'R1', offsetX: 100, offsetY: -30 },
+      { type: 'led', name: 'LED1', offsetX: 160, offsetY: -30 },
+      { type: 'ground', name: 'GND', offsetX: 160, offsetY: 40 },
+    ],
+    wires: [
+      { from: { comp: '__chip__', pin: 'gpio' }, to: { comp: 'R1', pin: 'a' } },
+      { from: { comp: 'R1', pin: 'b' }, to: { comp: 'LED1', pin: 'anode' } },
+      { from: { comp: 'LED1', pin: 'cathode' }, to: { comp: 'GND', pin: 'gnd' } },
+    ],
+  },
+  {
+    id: 'key-led',
+    name: '按键控制LED',
+    components: [
+      { type: 'resistor', name: 'R1', offsetX: 100, offsetY: -40 },
+      { type: 'led', name: 'LED1', offsetX: 160, offsetY: -40 },
+      { type: 'ground', name: 'GND1', offsetX: 220, offsetY: -40 },
+      { type: 'resistor', name: 'R2', offsetX: 100, offsetY: 30 },
+      { type: 'button', name: 'KEY1', offsetX: 160, offsetY: 30 },
+      { type: 'ground', name: 'GND2', offsetX: 220, offsetY: 30 },
+    ],
+    wires: [
+      // GPIO输出 → 电阻 → LED → GND
+      { from: { comp: '__chip__', pin: 'gpio1' }, to: { comp: 'R1', pin: 'a' } },
+      { from: { comp: 'R1', pin: 'b' }, to: { comp: 'LED1', pin: 'anode' } },
+      { from: { comp: 'LED1', pin: 'cathode' }, to: { comp: 'GND1', pin: 'gnd' } },
+      // VDD → 上拉电阻 → GPIO输入, GPIO输入 → 按键 → GND
+      { from: { comp: '__chip__', pin: 'VDD' }, to: { comp: 'R2', pin: 'a' } },
+      { from: { comp: 'R2', pin: 'b' }, to: { comp: '__chip__', pin: 'gpio2' } },
+      { from: { comp: '__chip__', pin: 'gpio2' }, to: { comp: 'KEY1', pin: 'a' } },
+      { from: { comp: 'KEY1', pin: 'b' }, to: { comp: 'GND2', pin: 'gnd' } },
+    ],
+  },
+  {
+    id: 'uart-comm',
+    name: '串口通信',
+    components: [
+      { type: 'pin_header', name: 'CH343P', offsetX: 160, offsetY: -20 },
+      { type: 'ground', name: 'GND', offsetX: 160, offsetY: 60 },
+    ],
+    wires: [
+      { from: { comp: '__chip__', pin: 'tx' }, to: { comp: 'CH343P', pin: 'pin' } },
+      { from: { comp: 'CH343P', pin: 'pin' }, to: { comp: '__chip__', pin: 'rx' } },
+      { from: { comp: '__chip__', pin: 'VDD' }, to: { comp: 'CH343P', pin: 'pin' } },
+      { from: { comp: 'CH343P', pin: 'pin' }, to: { comp: 'GND', pin: 'gnd' } },
+    ],
+  },
+  {
+    id: 'oled-display',
+    name: 'OLED显示',
+    components: [
+      { type: 'oled_display', name: 'OLED1', offsetX: 140, offsetY: 0 },
+      { type: 'resistor', name: 'R_SCL', offsetX: 80, offsetY: -60 },
+      { type: 'resistor', name: 'R_SDA', offsetX: 80, offsetY: 60 },
+      { type: 'ground', name: 'GND', offsetX: 240, offsetY: 60 },
+    ],
+    wires: [
+      { from: { comp: '__chip__', pin: 'gpio' }, to: { comp: 'R_SCL', pin: 'a' } },
+      { from: { comp: 'R_SCL', pin: 'b' }, to: { comp: 'OLED1', pin: 'scl' } },
+      { from: { comp: '__chip__', pin: 'gpio2' }, to: { comp: 'R_SDA', pin: 'a' } },
+      { from: { comp: 'R_SDA', pin: 'b' }, to: { comp: 'OLED1', pin: 'sda' } },
+      { from: { comp: 'OLED1', pin: 'vcc' }, to: { comp: '__chip__', pin: 'VDD' } },
+      { from: { comp: 'OLED1', pin: 'gnd' }, to: { comp: 'GND', pin: 'gnd' } },
+    ],
+  },
+  {
+    id: 'motor-drive',
+    name: '电机驱动',
+    components: [
+      { type: 'dc_motor', name: 'M1', offsetX: 200, offsetY: -40 },
+      { type: 'relay', name: 'RL1', offsetX: 130, offsetY: 0 },
+      { type: 'diode', name: 'D1', offsetX: 60, offsetY: 20 },
+      { type: 'resistor', name: 'R1', offsetX: 60, offsetY: -40 },
+      { type: 'ground', name: 'GND', offsetX: 200, offsetY: 60 },
+    ],
+    wires: [
+      // GPIO → 电阻 → 继电器线圈COIL+ → (线圈) → COIL- → GND
+      { from: { comp: '__chip__', pin: 'gpio' }, to: { comp: 'R1', pin: 'a' } },
+      { from: { comp: 'R1', pin: 'b' }, to: { comp: 'RL1', pin: 'coil_a' } },
+      { from: { comp: 'RL1', pin: 'coil_b' }, to: { comp: 'GND', pin: 'gnd' } },
+      // 续流二极管并联线圈（阴极接COIL+，阳极接COIL-）
+      { from: { comp: 'RL1', pin: 'coil_a' }, to: { comp: 'D1', pin: 'cathode' } },
+      { from: { comp: 'D1', pin: 'anode' }, to: { comp: 'RL1', pin: 'coil_b' } },
+      // 继电器NO触点控制电机
+      { from: { comp: '__chip__', pin: 'VDD' }, to: { comp: 'RL1', pin: 'com' } },
+      { from: { comp: 'RL1', pin: 'no' }, to: { comp: 'M1', pin: 'positive' } },
+      { from: { comp: 'M1', pin: 'negative' }, to: { comp: 'GND', pin: 'gnd' } },
+    ],
+  },
 ];
 // ========== 工具函数 ==========
 
@@ -328,7 +456,12 @@ function getComponentName(type: string): string {
     battery: 'BAT', ldo: 'U', buck_converter: 'U', boost_converter: 'U',
     timer_555: 'U', voltage_regulator_7805: 'U', voltage_regulator_7812: 'U',
     eeprom_i2c: 'U', eeprom_spi: 'U', ferrite_bead: 'FB',
-    ground: 'GND', pin_header: 'J',
+    ground: 'GND', pin_header: 'J', ntc_thermistor: 'NTC', ptc_thermistor: 'PTC',
+    ds18b20: 'U', ldr: 'R', photodiode: 'D', piezo_sensor: 'PZ',
+    bluetooth_module: 'BT', wifi_module: 'WIF', can_transceiver: 'CAN', rs485_transceiver: 'RS4',
+    usb_serial: 'USB', ldo: 'U', buck_converter: 'DC', boost_converter: 'DC',
+    aht20: 'U', dht20: 'U', accelerometer: 'ACC', gyroscope: 'GYR',
+    seven_segment: 'SEG', led_indicator: 'LED', dupont_wire: 'W',
   };
   return map[type] || type.slice(0, 3).toUpperCase();
 }
@@ -359,18 +492,35 @@ function getPinSide(pin: { offsetX: number; offsetY: number }): 'left' | 'right'
   return oy <= 0 ? 'top' : 'bottom';
 }
 
-/** 线段与轴对齐矩形碰撞检测 */
+/** 线段与旋转矩形碰撞检测 */
 function lineHitsRect(x1: number, y1: number, x2: number, y2: number,
-  rx: number, ry: number, rw: number, rh: number): boolean {
-  const l = rx - rw / 2, r = rx + rw / 2;
-  const t = ry - rh / 2, b = ry + rh / 2;
-  const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
-  const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
-  // 快速排除
+  rx: number, ry: number, rw: number, rh: number, rotation: number = 0): boolean {
+  // 如果没有旋转，使用快速轴对齐检测
+  if (!rotation || rotation % 360 === 0) {
+    const l = rx - rw / 2, r = rx + rw / 2;
+    const t = ry - rh / 2, b = ry + rh / 2;
+    const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
+    const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+    if (maxX < l || minX > r || maxY < t || minY > b) return false;
+    if (x1 === x2) return minX <= r && maxX >= l;
+    if (y1 === y2) return minY <= b && maxY >= t;
+    return false;
+  }
+  // 旋转情况：将线段端点变换到元件本地坐标系
+  const rad = -rotation * Math.PI / 180;
+  const cos = Math.cos(rad), sin = Math.sin(rad);
+  const lx1 = (x1 - rx) * cos - (y1 - ry) * sin;
+  const ly1 = (x1 - rx) * sin + (y1 - ry) * cos;
+  const lx2 = (x2 - rx) * cos - (y2 - ry) * sin;
+  const ly2 = (x2 - rx) * sin + (y2 - ry) * cos;
+  // 在本地坐标系中做轴对齐检测
+  const l = -rw / 2, r = rw / 2, t = -rh / 2, b = rh / 2;
+  const minX = Math.min(lx1, lx2), maxX = Math.max(lx1, lx2);
+  const minY = Math.min(ly1, ly2), maxY = Math.max(ly1, ly2);
   if (maxX < l || minX > r || maxY < t || minY > b) return false;
-  if (x1 === x2) return minX <= r && maxX >= l; // 垂直线段
-  if (y1 === y2) return minY <= b && maxY >= t; // 水平线段
-  return false; // 正交走线只有水平/垂直
+  if (lx1 === lx2) return minX <= r && maxX >= l;
+  if (ly1 === ly2) return minY <= b && maxY >= t;
+  return false;
 }
 
 /** 智能正交走线：避开元件body，返回路径点数组 */
@@ -381,7 +531,7 @@ function calculateWirePath(
   pinB: { x: number; y: number },
   dirB: 'left' | 'right' | 'top' | 'bottom',
   srcB: { x: number; y: number; w: number; h: number } | null,
-  allComps: { x: number; y: number; w: number; h: number; id: string }[],
+  allComps: { x: number; y: number; w: number; h: number; id: string; rotation?: number }[],
   excludeAId: string | null,
   excludeBId: string | null,
 ): { x: number; y: number }[] {
@@ -390,7 +540,7 @@ function calculateWirePath(
   function segCollides(x1: number, y1: number, x2: number, y2: number): boolean {
     for (const c of allComps) {
       if (c.id === excludeAId || c.id === excludeBId) continue;
-      if (lineHitsRect(x1, y1, x2, y2, c.x, c.y, c.w, c.h)) return true;
+      if (lineHitsRect(x1, y1, x2, y2, c.x, c.y, c.w, c.h, c.rotation || 0)) return true;
     }
     return false;
   }
@@ -457,6 +607,40 @@ function simBtnStyle(disabled: boolean): React.CSSProperties {
   };
 }
 
+// ========== 持久化 ==========
+function debounce<F extends (...args: any[]) => void>(fn: F, ms: number) {
+  let t: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<F>) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+const STORAGE_PREFIX = 'chip-sim-state-';
+
+function saveState(model: string, comps: CanvasComponent[], wires: Wire[], pins: Pin[]) {
+  try {
+    const data = {
+      components: comps.map(c => ({ id: c.id, type: c.type, name: c.name, x: c.x, y: c.y, w: c.w, h: c.h, rotation: c.rotation, pins: c.pins })),
+      wires: wires.map(w => ({ id: w.id, from: w.from, to: w.to })),
+      chipPins: pins.map(p => ({ id: p.id, connected: p.connected })),
+    };
+    localStorage.setItem(STORAGE_PREFIX + model, JSON.stringify(data));
+  } catch { /* quota exceeded */ }
+}
+
+function loadState(model: string): { components: CanvasComponent[]; wires: Wire[] } | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_PREFIX + model);
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (!d.components || !d.wires) return null;
+    const comps: CanvasComponent[] = d.components.map((c: any) => ({
+      ...c, selected: false, simState: { ...DEFAULT_SIM_STATE_ },
+      pins: c.pins.map((p: any) => ({ ...p, level: 'floating' as const })),
+    }));
+    const wires: Wire[] = d.wires.map((w: any) => ({ ...w, selected: false, current: 0 }));
+    return { components: comps, wires };
+  } catch { return null; }
+}
+
 export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef(0);
@@ -510,6 +694,17 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     forceUpdate(n => n + 1);
   }, []);
 
+  // 持久化
+  const debouncedSaveRef = useRef(debounce(() => {
+    saveState(chipModel, compsRef.current, wiresRef.current, chipPinsRef.current);
+  }, 500));
+  useEffect(() => { debouncedSaveRef.current = debounce(() => {
+    saveState(chipModel, compsRef.current, wiresRef.current, chipPinsRef.current);
+  }, 500); }, [chipModel]);
+  const handleSave = useCallback(() => {
+    saveState(chipModel, compsRef.current, wiresRef.current, chipPinsRef.current);
+  }, [chipModel]);
+
   /** 标记引脚连接状态 */
   const markPinConnected = (compId: string, pinId: string, connected: boolean) => {
     if (compId === '__chip__') {
@@ -557,11 +752,34 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
         }
         chipPinsRef.current = fallback;
       }
-      compsRef.current = [];
-      wiresRef.current = [];
+      // 尝试从 localStorage 恢复之前的状态
+      const saved = loadState(chipModel);
+      if (saved) {
+        compsRef.current = saved.components;
+        wiresRef.current = saved.wires;
+        // 恢复引脚连接状态
+        const pinConn = new Map<string, Set<string>>();
+        for (const w of saved.wires) {
+          if (!pinConn.has(w.from.componentId)) pinConn.set(w.from.componentId, new Set());
+          if (!pinConn.has(w.to.componentId)) pinConn.set(w.to.componentId, new Set());
+          pinConn.get(w.from.componentId)!.add(w.from.pinId);
+          pinConn.get(w.to.componentId)!.add(w.to.pinId);
+        }
+        chipPinsRef.current = chipPinsRef.current.map(p => ({
+          ...p, connected: pinConn.has('__chip__') && pinConn.get('__chip__')!.has(p.id),
+        }));
+        for (const c of compsRef.current) {
+          if (pinConn.has(c.id)) {
+            c.pins = c.pins.map(p => ({ ...p, connected: pinConn.get(c.id)!.has(p.id) }));
+          }
+        }
+      } else {
+        compsRef.current = [];
+        wiresRef.current = [];
+      }
       forceUpdate(n => n + 1);
     })();
-  }, [chipFamily]);
+  }, [chipFamily, chipModel]);
 
   // ========== 加载电路模板 ==========
   useEffect(() => {
@@ -2023,6 +2241,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
         markPinConnected(drag.wireFrom.componentId, drag.wireFrom.pinId, true);
         markPinConnected(nearPin.componentId, nearPin.pinId, true);
         engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
+        debouncedSaveRef.current();
         forceUpdate(n => n + 1);
       }
     }
@@ -2075,6 +2294,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
       }
     }
     engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
+    debouncedSaveRef.current();
     forceUpdate(n => n + 1);
   }, [s2c, findNearestPin]);
 
@@ -2085,13 +2305,16 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
       wiresRef.current = wiresRef.current.filter(w => w.from.componentId !== target.id && w.to.componentId !== target.id);
       compsRef.current = compsRef.current.filter(c => c.id !== target.id);
       engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
+      debouncedSaveRef.current();
       forceUpdate(n => n + 1); onSelect(null);
     } else if (act === 'delete-wire') {
       wiresRef.current = wiresRef.current.filter(w => w.id !== target.id);
       engineRef.current.bindData(compsRef.current as any, wiresRef.current as any, chipPinsRef.current as any);
+      debouncedSaveRef.current();
       forceUpdate(n => n + 1);
     } else if (act === 'rotate') {
       compsRef.current = compsRef.current.map(c => c.id === target.id ? { ...c, rotation: (c.rotation + 90) % 360 } : c);
+      debouncedSaveRef.current();
       forceUpdate(n => n + 1);
     }
   }, [onSelect]);
@@ -2300,6 +2523,15 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
           title="重置"
           style={simBtnStyle(false)}
         >⏹</button>
+        <button
+          onClick={handleSave}
+          title="保存电路"
+          style={{
+            ...simBtnStyle(false),
+            borderColor: 'rgba(88,206,190,0.6)',
+            background: 'rgba(42,74,90,0.9)',
+          }}
+        >💾</button>
       </div>
 
       {ctxMenu && (

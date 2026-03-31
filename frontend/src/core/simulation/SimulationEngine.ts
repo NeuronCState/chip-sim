@@ -207,8 +207,9 @@ export class SimulationEngine {
     } else if (f === 'atmega' || f === 'avr') {
       this.mcuSimulator = createATmegaSimulator();
     } else if (f === 'esp32') {
-      // ESP32 仿真未实现，使用 8051 仿真器作为占位
-      this.mcuSimulator = create8051Simulator();
+      // ESP32 仿真未实现，使用 STM32 仿真器作为更准确的占位（ARM 架构，GPIO 行为更接近 STM32）
+      console.warn('ESP32 simulation using STM32 fallback model');
+      this.mcuSimulator = createSTM32Simulator();
     } else {
       // 默认 8051
       this.mcuSimulator = create8051Simulator();

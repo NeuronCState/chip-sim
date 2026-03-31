@@ -16,26 +16,6 @@ const BAUD_RATES = [
   { value: '921600', label: '921600' },
 ] as const;
 
-/* 模拟串口输出数据 */
-const MOCK_LINES = [
-  '[BOOT] STM32F103C8T6 初始化完成',
-  '[SYS]  时钟频率: 72 MHz',
-  '[GPIO] PA0 配置为输出模式',
-  '[UART] USART2 波特率 115200',
-  '[ADC]  通道 0 校准完成',
-  '[INFO] 系统就绪，等待指令...',
-  '[DATA] ADC CH0 = 2048 (1.65V)',
-  '[DATA] ADC CH0 = 2103 (1.68V)',
-  '[DATA] ADC CH0 = 1987 (1.62V)',
-  '[GPIO] PA0 翻转 → HIGH',
-  '[GPIO] PA0 翻转 → LOW',
-  '[DATA] ADC CH0 = 2051 (1.65V)',
-  '[UART] 收到命令: LED_ON',
-  '[GPIO] PC13 输出 LOW (LED ON)',
-  '[UART] 收到命令: STATUS',
-  '[UART] 发送: OK 72MHz 3.3V',
-];
-
 /* ── 逐字动画行组件 ─────────────────────── */
 
 interface TypewriterLineProps {
@@ -83,10 +63,7 @@ export function SerialMonitor() {
   const [input, setInput] = useState('');
   const [baudRate, setBaudRate] = useState('115200');
   const [autoScroll, setAutoScroll] = useState(true);
-  const [isRunning, setIsRunning] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const lineIdx = useRef(0);
 
   /* 自动滚动 */
   useEffect(() => {
@@ -111,30 +88,6 @@ export function SerialMonitor() {
       setTypingLine(null);
     }
   }, [typingLine]);
-
-  /* 模拟串口数据 → 加入逐字队列 */
-  const startSimulation = useCallback(() => {
-    setIsRunning(true);
-    lineIdx.current = 0;
-    timerRef.current = setInterval(() => {
-      const ts = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-      const line = MOCK_LINES[lineIdx.current % MOCK_LINES.length];
-      setPendingLines(prev => [...prev, `[${ts}] ${line}`]);
-      lineIdx.current += 1;
-    }, 1200); // 每行间隔 1.2s
-  }, []);
-
-  const stopSimulation = useCallback(() => {
-    setIsRunning(false);
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, []);
 
   /* 监听仿真引擎 UART 输出事件 */
   useEffect(() => {
@@ -174,13 +127,7 @@ export function SerialMonitor() {
             value={baudRate}
             onChange={setBaudRate}
           />
-          <Button
-            variant={isRunning ? 'danger' : 'primary'}
-            size="sm"
-            onClick={isRunning ? stopSimulation : startSimulation}
-          >
-            {isRunning ? '停止' : '开始'}
-          </Button>
+          <span className={styles.statusIndicator}>● 监听中</span>
           <Button variant="ghost" size="sm" onClick={handleClear}>
             清空
           </Button>
@@ -194,7 +141,7 @@ export function SerialMonitor() {
         <div ref={scrollRef} className={styles.output}>
           {lines.length === 0 && !typingLine && pendingLines.length === 0 && (
             <div className={styles.emptyHint}>
-              等待 UART 数据... 点击"开始"模拟串口输出
+              等待仿真 UART 数据输出...
             </div>
           )}
           {/* 已完成的行 */}

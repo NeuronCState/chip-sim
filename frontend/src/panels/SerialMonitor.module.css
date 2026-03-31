@@ -23,6 +23,12 @@
   color: var(--sil-text-soft);
 }
 
+.statusIndicator {
+  font-size: 11px;
+  color: var(--sil-mint);
+  user-select: none;
+}
+
 /* 输出区域 — 内凹阴影模拟终端质感 */
 .output {
   flex: 1;

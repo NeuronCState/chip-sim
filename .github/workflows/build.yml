@@ -72,7 +72,8 @@ jobs:
             cp $(which qemu-system-arm) frontend/src-tauri/resources/qemu/
             cp $(which qemu-system-xtensa) frontend/src-tauri/resources/qemu/ 2>/dev/null || true
           elif [ "$RUNNER_OS" == "Windows" ]; then
-            echo "Windows: QEMU 由用户安装，跳过"
+            winget install --id SoftwareFreedomConservancy.QEMU -e --accept-package-agreements --accept-source-agreements
+            cp "/c/Program Files/qemu/qemu-system-arm.exe" frontend/src-tauri/resources/qemu/ 2>/dev/null || true
           fi
           # 确保目录非空（Tauri glob 不能匹配空目录）
           [ -z "$(ls -A frontend/src-tauri/resources/qemu/ 2>/dev/null)" ] && touch frontend/src-tauri/resources/qemu/.keep

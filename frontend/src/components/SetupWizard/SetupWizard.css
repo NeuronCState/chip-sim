@@ -1,0 +1,283 @@
+/* SetupWizard — 多阶段项目创建引导 */
+
+.wizard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sil-bg-deep);
+  animation: wizardFadeIn 0.3s ease;
+}
+
+@keyframes wizardFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.wizard-card {
+  width: 520px;
+  max-width: 92vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--sil-surface-raised, #edf3f7);
+  border-radius: 20px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(109, 128, 139, 0.1);
+  padding: 32px 28px;
+  animation: wizardSlideUp 0.35s ease;
+}
+
+@keyframes wizardSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 进度指示器 */
+.wizard-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.wizard-step-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--sil-surface-muted, #d0d7de);
+  color: var(--sil-text-soft);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.wizard-step-dot.active {
+  background: var(--sil-accent, #0969da);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--sil-accent-soft, #dbeafe);
+}
+
+.wizard-step-dot.done {
+  background: var(--sil-mint, #2ecc71);
+  color: #fff;
+}
+
+.wizard-step-line {
+  width: 48px;
+  height: 2px;
+  background: var(--sil-surface-muted, #d0d7de);
+  transition: background 0.25s ease;
+}
+
+.wizard-step-line.done {
+  background: var(--sil-mint, #2ecc71);
+}
+
+/* 区域 */
+.wizard-section {
+  animation: wizardSlideUp 0.25s ease;
+}
+
+.wizard-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sil-text-main);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wizard-back-btn {
+  border: none;
+  background: var(--sil-surface-muted, #e6edf2);
+  color: var(--sil-text-soft);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.wizard-back-btn:hover {
+  background: var(--sil-surface-pressed, #d0d7de);
+  color: var(--sil-text-main);
+}
+
+.wizard-desc {
+  font-size: 13px;
+  color: var(--sil-text-soft);
+  margin-bottom: 20px;
+}
+
+/* 阶段 1：芯片系列网格 */
+.wizard-family-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.wizard-family-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 8px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--sil-surface-muted, #e6edf2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.wizard-family-card:hover {
+  background: var(--sil-surface-pressed, #d0d7de);
+  border-color: var(--sil-accent, #0969da);
+}
+
+.wizard-family-card.selected {
+  background: var(--sil-accent-soft, #dbeafe);
+  border-color: var(--sil-accent, #0969da);
+}
+
+.wizard-family-icon {
+  font-size: 24px;
+}
+
+.wizard-family-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sil-text-main);
+}
+
+.wizard-family-desc {
+  font-size: 10px;
+  color: var(--sil-text-soft);
+}
+
+.wizard-family-count {
+  font-size: 10px;
+  color: var(--sil-accent, #0969da);
+  font-weight: 600;
+}
+
+/* 阶段 2：芯片型号列表 */
+.wizard-model-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wizard-model-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--sil-surface-muted, #e6edf2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.wizard-model-item:hover {
+  background: var(--sil-surface-pressed, #d0d7de);
+  border-color: var(--sil-accent, #0969da);
+}
+
+.wizard-model-item.selected {
+  background: var(--sil-accent-soft, #dbeafe);
+  border-color: var(--sil-accent, #0969da);
+}
+
+.wizard-model-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.wizard-model-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sil-text-main);
+  flex: 1;
+}
+
+.wizard-model-value {
+  font-size: 11px;
+  color: var(--sil-text-soft);
+  font-family: monospace;
+}
+
+/* 阶段 3：工程名称 */
+.wizard-name-input-wrap {
+  margin-bottom: 20px;
+}
+
+.wizard-name-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sil-text-soft);
+  margin-bottom: 6px;
+}
+
+.wizard-name-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--sil-border, #d0d7de);
+  border-radius: 10px;
+  background: var(--sil-bg-soft, #fff);
+  color: var(--sil-text-main);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.wizard-name-input:focus {
+  border-color: var(--sil-accent, #0969da);
+  box-shadow: 0 0 0 3px var(--sil-accent-soft, #dbeafe);
+}
+
+.wizard-name-input::placeholder {
+  color: var(--sil-text-soft);
+  opacity: 0.6;
+}
+
+.wizard-confirm-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--sil-accent, #0969da);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.wizard-confirm-btn:hover {
+  background: #0860c5;
+  box-shadow: 0 4px 12px rgba(9, 105, 218, 0.3);
+}
+
+.wizard-confirm-btn:active {
+  transform: scale(0.98);
+}

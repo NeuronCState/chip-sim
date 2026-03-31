@@ -1,6 +1,6 @@
 /**
  * ChipSim — 主入口
- * 顶栏：ChipSim | [芯片选择器] | [MCU/电路 Tab] | [主题]
+ * 向导 → 选择芯片 → 输入工程名 → 进入仿真
  */
 
 import { useState, useRef, useEffect } from 'react';
@@ -8,6 +8,7 @@ import { ThemeProvider } from './theme/ThemeProvider';
 import { McuSimulator } from './pages/McuSimulator';
 import { EditorPage } from './features/editor/EditorPage';
 import { ChipSelector } from './components/ChipSelector';
+import { SetupWizard } from './components/SetupWizard/SetupWizard';
 import { CIRCUIT_TEMPLATES } from './canvas/WebGLCanvas';
 import { ThemeSwitcher } from './theme/switcher';
 import './App.css';
@@ -15,11 +16,24 @@ import './App.css';
 type AppTab = 'mcu' | 'circuit';
 
 function AppShell() {
+  const [inProject, setInProject] = useState(false);
+  const [projectName, setProjectName] = useState('');
   const [tab, setTab] = useState<AppTab>('mcu');
   const [chip, setChip] = useState({ family: 'C51', model: 'AT89C51' });
   const [loadTemplateId, setLoadTemplateId] = useState<string | null>(null);
   const [tplDropdownOpen, setTplDropdownOpen] = useState(false);
   const tplDropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleWizardComplete = (result: { family: string; model: string; projectName: string }) => {
+    setChip({ family: result.family, model: result.model });
+    setProjectName(result.projectName);
+    setInProject(true);
+  };
+
+  const handleNewProject = () => {
+    setInProject(false);
+    setLoadTemplateId(null);
+  };
 
   const handleLoadTemplate = (id: string) => {
     if (id === 'full-dev-board') {
@@ -41,6 +55,15 @@ function AppShell() {
     return () => document.removeEventListener('mousedown', handler);
   }, [tplDropdownOpen]);
 
+  // 未进入工程 → 显示向导
+  if (!inProject) {
+    return (
+      <ThemeProvider>
+        <SetupWizard onComplete={handleWizardComplete} />
+      </ThemeProvider>
+    );
+  }
+
   const activeTemplate = CIRCUIT_TEMPLATES.find(t => t.id === loadTemplateId);
 
   return (
@@ -51,6 +74,17 @@ function AppShell() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </span>
           <h1 className="sil-title">ChipSim</h1>
+          <span style={{ color: 'var(--sil-text-soft)', fontSize: 11, marginLeft: 4 }}>
+            {projectName}
+          </span>
+          <button
+            className="sil-app-tab"
+            style={{ padding: '2px 8px', fontSize: 10, color: 'var(--sil-text-soft)', marginLeft: 4 }}
+            onClick={handleNewProject}
+            title="新建工程"
+          >
+            + 新建
+          </button>
         </div>
         <div className="sil-topbar-center">
           {tab === 'mcu' && (

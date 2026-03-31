@@ -822,11 +822,13 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const lastLoadedModelRef = useRef<string | null>(null);
   const editorMountedRef = useRef(false);
   const mountedRef = useRef(true);
-  /** 用于 Ctrl+S 等闭包中访问最新 activeFile/files */
+  /** 用于 Ctrl+S 等闭包中访问最新 activeFile/files/chipModel */
   const activeFileRef = useRef(activeFile);
   const filesRef = useRef(files);
+  const chipModelRef = useRef(chipModel);
   activeFileRef.current = activeFile;
   filesRef.current = files;
+  chipModelRef.current = chipModel;
 
   const isCodeFile = activeFile && !activePanel;
   const currentFile = files.find(f => f.path === activeFile);
@@ -979,7 +981,7 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     };
     window.addEventListener('chip-sim:insert-code', onInsertCode);
 
-    // 1c: Ctrl+S 快捷键 — 保存到 localStorage
+    // 1c: Ctrl+S 快捷键 — 保存到 localStorage（按芯片型号隔离）
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       const currentModel = editor.getModel();
       if (currentModel) {
@@ -987,7 +989,8 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
         const filePath = filesRef.current.find(f => f.path === activeFileRef.current)?.path;
         if (filePath) {
           try {
-            localStorage.setItem(`chip-sim-file-${filePath}`, content);
+            const modelKey = (chipModelRef.current || 'default').toLowerCase();
+            localStorage.setItem(`chip-sim-file-${modelKey}-${filePath}`, content);
           } catch (e) {
             console.warn('保存到 localStorage 失败:', e);
           }
@@ -1068,17 +1071,18 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     }
   }, []);
 
-  // 1c: 加载 localStorage 中已保存的文件内容（覆盖默认示例）
+  // 1c: 加载 localStorage 中已保存的文件内容（按芯片型号隔离，覆盖默认示例）
   useEffect(() => {
-    if (files.length === 0) return;
+    if (files.length === 0 || !chipModel) return;
+    const modelKey = chipModel.toLowerCase();
     setFiles(prev => prev.map(f => {
-      const saved = localStorage.getItem(`chip-sim-file-${f.path}`);
+      const saved = localStorage.getItem(`chip-sim-file-${modelKey}-${f.path}`);
       if (saved !== null) {
         return { ...f, content: saved };
       }
       return f;
     }));
-  }, [files.length]); // 仅在文件列表长度变化时触发
+  }, [chipModel]); // 芯片型号变化时重新加载
 
   // ========== 操作 ==========
   const openPanel = useCallback((panel: VirtualPanel) => {
@@ -1120,13 +1124,18 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const createFile = useCallback(() => {
     const name = newFileName.trim();
     if (!name) return;
-    const lang = name.endsWith('.c') ? 'c' : name.endsWith('.h') ? 'c' : name.endsWith('.py') ? 'python' : 'text';
+    // 检查重复
+    if (files.some(f => f.path === name)) {
+      alert(`文件 "${name}" 已存在`);
+      return;
+    }
+    const lang = name.endsWith('.c') || name.endsWith('.h' ) ? 'c' : name.endsWith('.ino') ? 'c' : name.endsWith('.cpp') ? 'c' : name.endsWith('.py') ? 'python' : 'text';
     const newFile: VFile = { path: name, content: '', lang };
     setFiles(prev => [...prev, newFile]);
     openFile(name);
     setShowNewFileDialog(false);
     setNewFileName('');
-  }, [newFileName, openFile]);
+  }, [newFileName, files, openFile]);
 
   const importFiles = (fileList: FileList | null) => {
     if (!fileList) return;

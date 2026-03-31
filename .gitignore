@@ -36,3 +36,6 @@ coverage/
 
 # Logs
 *.log
+
+# QEMU binaries (downloaded by CI)
+frontend/src-tauri/resources/qemu/

@@ -59,6 +59,21 @@ jobs:
         working-directory: frontend
         run: npm run test
 
+      - name: Download QEMU binaries
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            brew install qemu
+            mkdir -p frontend/src-tauri/resources/qemu
+            cp $(brew --prefix qemu)/bin/qemu-system-arm frontend/src-tauri/resources/qemu/
+            cp $(brew --prefix qemu)/bin/qemu-system-xtensa frontend/src-tauri/resources/qemu/ 2>/dev/null || true
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install -y qemu-system-arm
+            mkdir -p frontend/src-tauri/resources/qemu
+            cp $(which qemu-system-arm) frontend/src-tauri/resources/qemu/
+            cp $(which qemu-system-xtensa) frontend/src-tauri/resources/qemu/ 2>/dev/null || true
+          fi
+          chmod +x frontend/src-tauri/resources/qemu/*
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:

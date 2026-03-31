@@ -21,7 +21,7 @@ const (
 // ESP32QEMUConfig ESP32 QEMU 配置
 func ESP32QEMUConfig(kernelPath string) QEMUConfig {
 	return QEMUConfig{
-		Binary:     "qemu-system-xtensa",
+		Binary:     FindQEMUBinary("qemu-system-xtensa"),
 		Machine:    "esp32",
 		CPU:        "esp32",
 		Kernel:     kernelPath,

@@ -5,11 +5,45 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 )
+
+// ==================== QEMU 路径查找 ====================
+
+// FindQEMUBinary 查找 QEMU 可执行文件
+// 优先级: 1. 打包内的 qemu/ 目录  2. 系统 PATH
+func FindQEMUBinary(name string) string {
+	// 1. 尝试打包路径（Tauri resources 相对于可执行文件）
+	exePath, err := os.Executable()
+	if err == nil {
+		exeDir := filepath.Dir(exePath)
+		// macOS .app: Contents/Resources/qemu/
+		candidates := []string{
+			filepath.Join(exeDir, "qemu", name),                    // 同级
+			filepath.Join(exeDir, "..", "Resources", "qemu", name), // macOS .app
+			filepath.Join(exeDir, "resources", "qemu", name),       // Windows/Linux
+		}
+		for _, p := range candidates {
+			if abs, err := filepath.Abs(p); err == nil {
+				if info, err := os.Stat(abs); err == nil && !info.IsDir() {
+					return abs
+				}
+			}
+		}
+	}
+
+	// 2. 系统 PATH
+	if path, err := exec.LookPath(name); err == nil {
+		return path
+	}
+
+	return name // fallback, will fail at runtime with clear error
+}
 
 // QEMUConfig QEMU 启动配置
 type QEMUConfig struct {
@@ -35,7 +69,7 @@ type QEMUConfig struct {
 func DefaultSTM32Config(kernelPath string) QEMUConfig {
 	return QEMUConfig{
 		ChipFamily: "stm32",
-		Binary:     "qemu-system-arm",
+		Binary:     FindQEMUBinary("qemu-system-arm"),
 		Machine:    "stm32vldiscovery",
 		CPU:        "cortex-m3",
 		Kernel:     kernelPath,
@@ -49,7 +83,7 @@ func DefaultSTM32Config(kernelPath string) QEMUConfig {
 func DefaultSTM32F4Config(kernelPath string) QEMUConfig {
 	return QEMUConfig{
 		ChipFamily: "stm32f4",
-		Binary:     "qemu-system-arm",
+		Binary:     FindQEMUBinary("qemu-system-arm"),
 		Machine:    "netduinoplus2",
 		CPU:        "cortex-m4",
 		Kernel:     kernelPath,
@@ -63,7 +97,7 @@ func DefaultSTM32F4Config(kernelPath string) QEMUConfig {
 func DefaultStellarisConfig(kernelPath string) QEMUConfig {
 	return QEMUConfig{
 		ChipFamily: "stellaris",
-		Binary:     "qemu-system-arm",
+		Binary:     FindQEMUBinary("qemu-system-arm"),
 		Machine:    "lm3s6965evb",
 		CPU:        "cortex-m3",
 		Kernel:     kernelPath,
@@ -77,7 +111,7 @@ func DefaultStellarisConfig(kernelPath string) QEMUConfig {
 func DefaultMicrobitConfig(kernelPath string) QEMUConfig {
 	return QEMUConfig{
 		ChipFamily: "microbit",
-		Binary:     "qemu-system-arm",
+		Binary:     FindQEMUBinary("qemu-system-arm"),
 		Machine:    "microbit",
 		CPU:        "cortex-m0",
 		Kernel:     kernelPath,
@@ -91,7 +125,7 @@ func DefaultMicrobitConfig(kernelPath string) QEMUConfig {
 func DefaultOlimexConfig(kernelPath string) QEMUConfig {
 	return QEMUConfig{
 		ChipFamily: "stm32f1",
-		Binary:     "qemu-system-arm",
+		Binary:     FindQEMUBinary("qemu-system-arm"),
 		Machine:    "olimex-stm32-h405",
 		CPU:        "cortex-m4",
 		Kernel:     kernelPath,

@@ -281,3 +281,78 @@
 .wizard-confirm-btn:active {
   transform: scale(0.98);
 }
+
+/* 分隔线 */
+.wizard-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 16px;
+  color: var(--sil-text-soft);
+  font-size: 12px;
+}
+
+.wizard-divider::before,
+.wizard-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sil-border, #d0d7de);
+}
+
+/* 打开文件夹按钮 */
+.wizard-open-folder-btn {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--sil-border, #d0d7de);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--sil-text-soft);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.wizard-open-folder-btn:hover {
+  border-color: var(--sil-accent, #0969da);
+  color: var(--sil-accent, #0969da);
+  background: var(--sil-accent-soft, #dbeafe);
+}
+
+.wizard-open-folder-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* 路径选择行 */
+.wizard-path-row {
+  display: flex;
+  gap: 8px;
+}
+
+.wizard-browse-btn {
+  padding: 0 14px;
+  border: 2px solid var(--sil-border, #d0d7de);
+  border-radius: 10px;
+  background: var(--sil-surface-muted, #e6edf2);
+  color: var(--sil-text-main);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.wizard-browse-btn:hover {
+  border-color: var(--sil-accent, #0969da);
+  background: var(--sil-accent-soft, #dbeafe);
+}
+
+/* 提示文字 */
+.wizard-hint {
+  font-size: 11px;
+  color: #f59e0b;
+  margin-top: 6px;
+}

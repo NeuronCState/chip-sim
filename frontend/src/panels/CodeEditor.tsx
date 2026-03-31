@@ -26,6 +26,7 @@ interface CodeEditorProps {
   chipModel?: string;
   wires?: Array<{ from: { componentId: string; pinId: string }; to: { componentId: string; pinId: string } }>;
   chipPins?: Array<{ id: string; name: string; side: string; connected: boolean }>;
+  importedFiles?: Array<{ path: string; content: string; lang: string }> | null;
 }
 
 type VirtualPanel = 'properties' | 'pins' | 'reference' | 'simlog' | null;
@@ -800,7 +801,7 @@ function ElementParams({ type, properties }: ElementParamsProps) {
 }
 
 // ========== 组件 ==========
-export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chipFamily, chipModel, wires, chipPins }: CodeEditorProps) {
+export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chipFamily, chipModel, wires, chipPins, importedFiles }: CodeEditorProps) {
   const [files, setFiles] = useState<VFile[]>([]);
   const [openTabs, setOpenTabs] = useState<string[]>([]);
   const [activeFile, setActiveFile] = useState<string | null>(null);
@@ -1059,6 +1060,18 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
       modelsRef.current.clear();
     }
   }, [chipModel]);
+
+  // 导入的外部文件（从文件夹导入）
+  useEffect(() => {
+    if (!importedFiles || importedFiles.length === 0) return;
+    setFiles(importedFiles);
+    setOpenTabs([importedFiles[0].path]);
+    setActiveFile(importedFiles[0].path);
+    setActivePanel(null);
+    modelsRef.current.forEach(model => model.dispose());
+    modelsRef.current.clear();
+    lastLoadedModelRef.current = chipModel || 'imported';
+  }, [importedFiles]);
 
   // 兜底：如果挂载后没有文件，自动加载 C51 示例
   useEffect(() => {

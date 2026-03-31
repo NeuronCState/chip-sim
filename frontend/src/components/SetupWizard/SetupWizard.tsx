@@ -1,14 +1,16 @@
 /**
  * SetupWizard — 多阶段项目创建引导
- * 阶段1：选择芯片系列和型号
- * 阶段2：输入工程名称
- * 阶段3：进入仿真（可选加载模板）
+ * 阶段1：选择芯片系列
+ * 阶段2：选择芯片型号
+ * 阶段3：输入工程名称 + 选择保存路径
+ * 底部：打开已有文件夹
  */
 
 import { useState, useMemo } from 'react';
+import { pickProjectDirectory, pickExistingProjectFolder, readCodeFilesFromDirectory, isFileSystemSupported } from '../../utils/fileSystem';
 import './SetupWizard.css';
 
-// ─── 芯片数据 ──────────────────────────────
+// ─── 芯片数据（与 ChipSelector 保持一致）───
 
 const CHIP_FAMILIES = [
   {
@@ -72,28 +74,32 @@ const CHIP_FAMILIES = [
   },
 ];
 
-interface WizardResult {
+export interface WizardResult {
   family: string;
   model: string;
   projectName: string;
+  projectDir: string;
+  importedFiles?: Array<{ path: string; content: string; lang: string }>;
 }
 
 interface Props {
   onComplete: (result: WizardResult) => void;
 }
 
-type Step = 'chip-family' | 'chip-model' | 'project-name';
+type Step = 'chip-family' | 'chip-model' | 'project-info';
 
 export function SetupWizard({ onComplete }: Props) {
   const [step, setStep] = useState<Step>('chip-family');
-  const [selectedFamily, setSelectedFamily] = useState<string>('');
-  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [selectedFamily, setSelectedFamily] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
   const [projectName, setProjectName] = useState('');
+  const [projectDir, setProjectDir] = useState('');
+  const [dirHandle, setDirHandle] = useState<FileSystemDirectoryHandle | null>(null);
+  const [importedFiles, setImportedFiles] = useState<Array<{ path: string; content: string; lang: string }>>([]);
+  const [importing, setImporting] = useState(false);
 
-  const familyData = useMemo(
-    () => CHIP_FAMILIES.find(f => f.id === selectedFamily),
-    [selectedFamily]
-  );
+  const familyData = useMemo(() => CHIP_FAMILIES.find(f => f.id === selectedFamily), [selectedFamily]);
+  const fsSupported = isFileSystemSupported();
 
   const handleSelectFamily = (familyId: string) => {
     setSelectedFamily(familyId);
@@ -103,19 +109,88 @@ export function SetupWizard({ onComplete }: Props) {
 
   const handleSelectModel = (model: string) => {
     setSelectedModel(model);
-    setStep('project-name');
+    setStep('project-info');
   };
 
-  const handleConfirm = () => {
+  const handlePickDir = async () => {
+    const handle = await pickProjectDirectory();
+    if (handle) {
+      setDirHandle(handle);
+      setProjectDir(handle.name);
+    }
+  };
+
+  const handleConfirm = async () => {
     const name = projectName.trim() || `${selectedFamily} 项目`;
-    onComplete({ family: selectedFamily, model: selectedModel, projectName: name });
+    const dir = projectDir.trim() || '未选择路径';
+
+    // 如果选择了目录，尝试写入项目标记文件
+    if (dirHandle) {
+      try {
+        const { writeFileToDirectory } = await import('../../utils/fileSystem');
+        await writeFileToDirectory(dirHandle, '.chipsim.json', JSON.stringify({
+          name,
+          chipFamily: selectedFamily,
+          chipModel: selectedModel,
+          version: '2.0.0',
+          createdAt: new Date().toISOString(),
+        }, null, 2));
+      } catch { /* 写入失败不阻塞 */ }
+    }
+
+    onComplete({
+      family: selectedFamily,
+      model: selectedModel,
+      projectName: name,
+      projectDir: dir,
+    });
+  };
+
+  /** 打开已有文件夹并导入代码 */
+  const handleOpenFolder = async () => {
+    setImporting(true);
+    try {
+      const handle = await pickExistingProjectFolder();
+      if (!handle) { setImporting(false); return; }
+
+      const files = await readCodeFilesFromDirectory(handle);
+      if (files.length === 0) {
+        alert('该文件夹中没有找到代码文件（.c/.h/.cpp/.ino）');
+        setImporting(false);
+        return;
+      }
+
+      // 尝试读取 .chipsim.json 获取项目配置
+      let family = 'STM32';
+      let model = 'stm32f103c8t6';
+      let name = handle.name;
+      try {
+        const configEntry = await (handle as any).getFileHandle('.chipsim.json');
+        const configFile = await configEntry.getFile();
+        const config = JSON.parse(await configFile.text());
+        if (config.chipFamily) family = config.chipFamily;
+        if (config.chipModel) model = config.chipModel;
+        if (config.name) name = config.name;
+      } catch { /* 没有配置文件，用默认值 */ }
+
+      onComplete({
+        family,
+        model,
+        projectName: name,
+        projectDir: handle.name,
+        importedFiles: files,
+      });
+    } catch {
+      /* 用户取消 */
+    }
+    setImporting(false);
   };
 
   const handleBack = () => {
     if (step === 'chip-model') {
       setStep('chip-family');
       setSelectedFamily('');
-    } else if (step === 'project-name') {
+    } else if (step === 'project-info') {
       setStep('chip-model');
       setSelectedModel('');
     }
@@ -126,11 +201,11 @@ export function SetupWizard({ onComplete }: Props) {
       <div className="wizard-card">
         {/* 进度指示 */}
         <div className="wizard-steps">
-          <div className={`wizard-step-dot ${step === 'chip-family' ? 'active' : step !== 'chip-family' ? 'done' : ''}`}>1</div>
+          <div className={`wizard-step-dot ${step === 'chip-family' ? 'active' : 'done'}`}>1</div>
           <div className={`wizard-step-line ${step !== 'chip-family' ? 'done' : ''}`} />
-          <div className={`wizard-step-dot ${step === 'chip-model' ? 'active' : step === 'project-name' ? 'done' : ''}`}>2</div>
-          <div className={`wizard-step-line ${step === 'project-name' ? 'done' : ''}`} />
-          <div className={`wizard-step-dot ${step === 'project-name' ? 'active' : ''}`}>3</div>
+          <div className={`wizard-step-dot ${step === 'chip-model' ? 'active' : step === 'project-info' ? 'done' : ''}`}>2</div>
+          <div className={`wizard-step-line ${step === 'project-info' ? 'done' : ''}`} />
+          <div className={`wizard-step-dot ${step === 'project-info' ? 'active' : ''}`}>3</div>
         </div>
 
         {/* 阶段 1：选择芯片系列 */}
@@ -152,6 +227,21 @@ export function SetupWizard({ onComplete }: Props) {
                 </button>
               ))}
             </div>
+
+            {/* 底部：打开已有文件夹 */}
+            <div className="wizard-divider">
+              <span>或</span>
+            </div>
+            <button
+              className="wizard-open-folder-btn"
+              onClick={handleOpenFolder}
+              disabled={importing}
+            >
+              📂 {importing ? '正在导入...' : '打开已有工程文件夹'}
+            </button>
+            {!fsSupported && (
+              <p className="wizard-hint">⚠ 当前浏览器不支持文件夹访问，请使用桌面版</p>
+            )}
           </div>
         )}
 
@@ -179,8 +269,8 @@ export function SetupWizard({ onComplete }: Props) {
           </div>
         )}
 
-        {/* 阶段 3：输入工程名称 */}
-        {step === 'project-name' && (
+        {/* 阶段 3：工程名称 + 路径 */}
+        {step === 'project-info' && (
           <div className="wizard-section">
             <h2 className="wizard-title">
               <button className="wizard-back-btn" onClick={handleBack}>←</button>
@@ -189,6 +279,7 @@ export function SetupWizard({ onComplete }: Props) {
             <p className="wizard-desc">
               芯片：<strong>{familyData?.models.find(m => m.value === selectedModel)?.label}</strong>
             </p>
+
             <div className="wizard-name-input-wrap">
               <label className="wizard-name-label">工程名称</label>
               <input
@@ -201,6 +292,28 @@ export function SetupWizard({ onComplete }: Props) {
                 autoFocus
               />
             </div>
+
+            <div className="wizard-name-input-wrap">
+              <label className="wizard-name-label">保存位置</label>
+              <div className="wizard-path-row">
+                <input
+                  className="wizard-name-input"
+                  type="text"
+                  placeholder="点击右侧按钮选择文件夹..."
+                  value={projectDir}
+                  onChange={e => setProjectDir(e.target.value)}
+                  readOnly={!!dirHandle}
+                  style={{ flex: 1 }}
+                />
+                <button className="wizard-browse-btn" onClick={handlePickDir}>
+                  📁 浏览
+                </button>
+              </div>
+              {!fsSupported && (
+                <p className="wizard-hint">⚠ 当前浏览器不支持选择文件夹，可手动输入路径</p>
+              )}
+            </div>
+
             <button className="wizard-confirm-btn" onClick={handleConfirm}>
               🚀 进入仿真
             </button>

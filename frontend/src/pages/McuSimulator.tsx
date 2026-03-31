@@ -139,9 +139,10 @@ interface Props {
   chipFamily: string;
   chipModel: string;
   loadTemplateId?: string | null;
+  importedFiles?: Array<{ path: string; content: string; lang: string }> | null;
 }
 
-export function McuSimulator({ chipFamily, chipModel, loadTemplateId }: Props) {
+export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFiles }: Props) {
   const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
   const [leftWidth, setLeftWidth] = useState(200);
   const [rightWidth, setRightWidth] = useState(420);
@@ -300,6 +301,7 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId }: Props) {
                     onPinConfigChange={setPinConfigs}
                     chipFamily={chipFamily}
                     chipModel={chipModel}
+                    importedFiles={importedFiles}
                   />
                 </div>
               </aside>

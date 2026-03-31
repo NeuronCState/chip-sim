@@ -18,21 +18,26 @@ type AppTab = 'mcu' | 'circuit';
 function AppShell() {
   const [inProject, setInProject] = useState(false);
   const [projectName, setProjectName] = useState('');
+  const [projectDir, setProjectDir] = useState('');
   const [tab, setTab] = useState<AppTab>('mcu');
   const [chip, setChip] = useState({ family: 'C51', model: 'AT89C51' });
   const [loadTemplateId, setLoadTemplateId] = useState<string | null>(null);
   const [tplDropdownOpen, setTplDropdownOpen] = useState(false);
+  const [importedFiles, setImportedFiles] = useState<Array<{ path: string; content: string; lang: string }> | null>(null);
   const tplDropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleWizardComplete = (result: { family: string; model: string; projectName: string }) => {
+  const handleWizardComplete = (result: { family: string; model: string; projectName: string; projectDir: string; importedFiles?: Array<{ path: string; content: string; lang: string }> }) => {
     setChip({ family: result.family, model: result.model });
     setProjectName(result.projectName);
+    setProjectDir(result.projectDir);
+    setImportedFiles(result.importedFiles || null);
     setInProject(true);
   };
 
   const handleNewProject = () => {
     setInProject(false);
     setLoadTemplateId(null);
+    setImportedFiles(null);
   };
 
   const handleLoadTemplate = (id: string) => {
@@ -170,7 +175,7 @@ function AppShell() {
       </header>
 
       <div className="sil-tab-content">
-        {tab === 'mcu' ? <McuSimulator chipFamily={chip.family} chipModel={chip.model} loadTemplateId={loadTemplateId} /> : <EditorPage />}
+        {tab === 'mcu' ? <McuSimulator chipFamily={chip.family} chipModel={chip.model} loadTemplateId={loadTemplateId} importedFiles={importedFiles} /> : <EditorPage />}
       </div>
     </div>
   );

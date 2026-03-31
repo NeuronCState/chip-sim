@@ -94,7 +94,7 @@ function AppShell() {
         <div className="sil-topbar-center">
           {tab === 'mcu' && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <ChipSelector onChipSelected={(f, m) => setChip({ family: f, model: m })} />
+              <ChipSelector initialFamily={chip.family as any} initialModel={chip.model} onChipSelected={(f, m) => setChip({ family: f, model: m })} />
               <span style={{ color: 'var(--sil-text-soft)', fontSize: 12 }}>|</span>
               {/* 电路模板下拉选择 */}
               <div ref={tplDropdownRef} style={{ position: 'relative' }}>

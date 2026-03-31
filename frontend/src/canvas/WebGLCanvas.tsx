@@ -2131,6 +2131,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
       p.x >= c.x-c.w/2 && p.x <= c.x+c.w/2 && p.y >= c.y-c.h/2 && p.y <= c.y+c.h/2
     );
     if (hitComp) {
+      e.preventDefault();
       // 按钮/开关：延迟单击切换，避免与双击冲突
       if ((hitComp.type === 'button' || hitComp.type === 'switch') && engineRef.current) {
         if (clickTimerRef.current) clearTimeout(clickTimerRef.current);

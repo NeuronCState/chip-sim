@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Segmented } from '../ui/Segmented';
 import { Dropdown } from '../ui/Dropdown';
 
@@ -61,11 +61,23 @@ const seriesOptions = [
 export interface ChipSelectorProps {
   onChipSelected?: (family: ChipFamily, model: string) => void;
   className?: string;
+  initialFamily?: ChipFamily;
+  initialModel?: string;
 }
 
-export function ChipSelector({ onChipSelected, className }: ChipSelectorProps) {
-  const [family, setFamily] = useState<ChipFamily>('C51');
-  const [model, setModel] = useState(chipSeries['C51'][0].value);
+export function ChipSelector({ onChipSelected, className, initialFamily, initialModel }: ChipSelectorProps) {
+  const [family, setFamily] = useState<ChipFamily>(initialFamily ?? 'C51');
+  const [model, setModel] = useState(initialModel ?? chipSeries[initialFamily ?? 'C51'][0].value);
+
+  // Sync props when they change (e.g., after wizard completes)
+  useEffect(() => {
+    if (initialFamily && initialFamily !== family) {
+      setFamily(initialFamily);
+    }
+    if (initialModel && initialModel !== model) {
+      setModel(initialModel);
+    }
+  }, [initialFamily, initialModel]);
 
   const handleFamilyChange = (value: string) => {
     const f = value as ChipFamily;

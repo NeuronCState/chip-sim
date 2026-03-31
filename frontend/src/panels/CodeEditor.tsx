@@ -1073,13 +1073,27 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     lastLoadedModelRef.current = chipModel || 'imported';
   }, [importedFiles]);
 
-  // 兜底：如果挂载后没有文件，自动加载 C51 示例
+  // 兜底：如果挂载后没有文件且芯片系列未加载过，自动加载对应示例
   useEffect(() => {
     if (files.length === 0 && !lastLoadedModelRef.current) {
-      lastLoadedModelRef.current = 'AT89C51';
-      setFiles(C51_EXAMPLES);
-      setOpenTabs(['main.c']);
-      setActiveFile('main.c');
+      const fallbackModel = chipModel || 'AT89C51';
+      lastLoadedModelRef.current = fallbackModel;
+
+      let examples: VFile[] | null = null;
+      const m = fallbackModel.toLowerCase();
+      if (m.includes('stm32')) {
+        examples = STM32F103_EXAMPLES;
+      } else if (m.startsWith('esp32') || m.startsWith('esp8266')) {
+        examples = ESP32_EXAMPLES;
+      } else if (m === 'uno' || m === 'mega' || m === 'nano' || m === 'leonardo' || m === 'due') {
+        examples = ARDUINO_EXAMPLES;
+      } else {
+        examples = C51_EXAMPLES;
+      }
+
+      setFiles(examples);
+      setOpenTabs([examples[0].path]);
+      setActiveFile(examples[0].path);
       setActivePanel(null);
     }
   }, []);

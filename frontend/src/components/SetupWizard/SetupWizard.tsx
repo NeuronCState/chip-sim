@@ -7,7 +7,7 @@
  */
 
 import { useState, useMemo } from 'react';
-import { pickProjectDirectory, pickExistingProjectFolder, readCodeFilesFromDirectory, isFileSystemSupported } from '../../utils/fileSystem';
+import { pickProjectDirectory, pickExistingProjectFolder, writeFileToDirectory, isFileSystemSupported } from '../../utils/fileSystem';
 import './SetupWizard.css';
 
 // ─── 芯片数据（与 ChipSelector 保持一致）───
@@ -78,7 +78,7 @@ export function SetupWizard({ onComplete }: Props) {
   const [selectedModel, setSelectedModel] = useState('');
   const [projectName, setProjectName] = useState('');
   const [projectDir, setProjectDir] = useState('');
-  const [dirHandle, setDirHandle] = useState<FileSystemDirectoryHandle | null>(null);
+  const [dirRef, setDirRef] = useState<{ name: string; pathOrHandle: string | FileSystemDirectoryHandle } | null>(null);
   const [importedFiles, setImportedFiles] = useState<Array<{ path: string; content: string; lang: string }>>([]);
   const [importing, setImporting] = useState(false);
 
@@ -97,10 +97,10 @@ export function SetupWizard({ onComplete }: Props) {
   };
 
   const handlePickDir = async () => {
-    const handle = await pickProjectDirectory();
-    if (handle) {
-      setDirHandle(handle);
-      setProjectDir(handle.name);
+    const picked = await pickProjectDirectory();
+    if (picked) {
+      setDirRef(picked);
+      setProjectDir(picked.name);
     }
   };
 
@@ -109,15 +109,11 @@ export function SetupWizard({ onComplete }: Props) {
     const dir = projectDir.trim() || '未选择路径';
 
     // 如果选择了目录，尝试写入项目标记文件
-    if (dirHandle) {
+    if (dirRef) {
       try {
-        const { writeFileToDirectory } = await import('../../utils/fileSystem');
-        await writeFileToDirectory(dirHandle, '.chipsim.json', JSON.stringify({
-          name,
-          chipFamily: selectedFamily,
-          chipModel: selectedModel,
-          version: '2.0.0',
-          createdAt: new Date().toISOString(),
+        await writeFileToDirectory(dirRef, '.chipsim.json', JSON.stringify({
+          name, chipFamily: selectedFamily, chipModel: selectedModel,
+          version: '2.0.0', createdAt: new Date().toISOString(),
         }, null, 2));
       } catch { /* 写入失败不阻塞 */ }
     }
@@ -130,43 +126,24 @@ export function SetupWizard({ onComplete }: Props) {
     });
   };
 
-  /** 打开已有文件夹并导入代码 */
   const handleOpenFolder = async () => {
     setImporting(true);
     try {
-      const handle = await pickExistingProjectFolder();
-      if (!handle) { setImporting(false); return; }
+      const result = await pickExistingProjectFolder();
+      if (!result) { setImporting(false); return; }
 
-      const files = await readCodeFilesFromDirectory(handle);
-      if (files.length === 0) {
+      if (result.files.length === 0) {
         alert('该文件夹中没有找到代码文件（.c/.h/.cpp/.ino）');
         setImporting(false);
         return;
       }
 
-      // 尝试读取 .chipsim.json 获取项目配置
-      let family = 'STM32';
-      let model = 'stm32f103c8t6';
-      let name = handle.name;
-      try {
-        const configEntry = await (handle as any).getFileHandle('.chipsim.json');
-        const configFile = await configEntry.getFile();
-        const config = JSON.parse(await configFile.text());
-        if (config.chipFamily) family = config.chipFamily;
-        if (config.chipModel) model = config.chipModel;
-        if (config.name) name = config.name;
-      } catch { /* 没有配置文件，用默认值 */ }
-
       onComplete({
-        family,
-        model,
-        projectName: name,
-        projectDir: handle.name,
-        importedFiles: files,
+        family: 'STM32', model: 'stm32f103c8t6',
+        projectName: result.name, projectDir: result.name,
+        importedFiles: result.files,
       });
-    } catch {
-      /* 用户取消 */
-    }
+    } catch { /* 用户取消 */ }
     setImporting(false);
   };
 
@@ -286,7 +263,7 @@ export function SetupWizard({ onComplete }: Props) {
                   placeholder="点击右侧按钮选择文件夹..."
                   value={projectDir}
                   onChange={e => setProjectDir(e.target.value)}
-                  readOnly={!!dirHandle}
+                  readOnly={!!dirRef}
                   style={{ flex: 1 }}
                 />
                 <button className="wizard-browse-btn" onClick={handlePickDir}>

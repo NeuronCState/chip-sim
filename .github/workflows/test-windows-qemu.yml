@@ -9,67 +9,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Test Source 1 - qemu.weilnetz.de
+      - name: Test winget
         shell: bash
         run: |
-          echo "=== 源1: qemu.weilnetz.de (官方) ==="
-          curl -L -f -o /tmp/qemu1.exe --max-time 60 "https://qemu.weilnetz.de/w64/2024/qemu-w64-setup-20241212.exe" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu1.exe)" || echo "下载失败"
+          echo "=== winget ==="
+          winget install --id SoftwareFreedomConservancy.QEMU -e --accept-package-agreements --accept-source-agreements 2>&1 || echo "winget 失败"
+          ls "/c/Program Files/qemu/qemu-system-arm.exe" 2>/dev/null && echo "winget 成功" || echo "winget 未找到文件"
           echo ""
 
-      - name: Test Source 2 - cloudbase.it mirror
+      - name: Test direct curl (no -f)
         shell: bash
         run: |
-          echo "=== 源2: cloudbase.it ==="
-          curl -L -f -o /tmp/qemu2.msi --max-time 60 "https://cloudbase.it/downloads/qemu-w64-setup-20241212.exe" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu2.msi)" || echo "下载失败"
+          echo "=== 直接下载测试 (不加 -f 看状态码) ==="
+          curl -L -o /tmp/qemu1.exe --max-time 120 "https://qemu.weilnetz.de/w64/2024/qemu-w64-setup-20241212.exe" 2>&1
+          echo "状态码: $?"
+          ls -lh /tmp/qemu1.exe 2>/dev/null || echo "文件不存在"
           echo ""
 
-      - name: Test Source 3 - Fedora COPR
+      - name: Test GitHub releases API
         shell: bash
         run: |
-          echo "=== 源3: GitHub qemu-virgil releases ==="
-          curl -L -f -o /tmp/qemu3.zip --max-time 60 "https://github.com/niclas-2209/qemu-win64-portable/releases/download/v8.2.0-1/qemu-8.2.0-win64.7z" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu3.zip)" || echo "下载失败"
+          echo "=== 查找 qemu-win64-portable releases ==="
+          curl -s "https://api.github.com/repos/niclas-2209/qemu-win64-portable/releases/latest" | head -50
           echo ""
 
-      - name: Test Source 4 - GitHub QEMU official mirror
+      - name: Test scoop
         shell: bash
         run: |
-          echo "=== 源4: GitHub actions cache ==="
-          curl -L -f -o /tmp/qemu4.zip --max-time 60 "https://github.com/niclas-2209/qemu-win64-portable/releases/download/v9.0.0-1/qemu-9.0.0-win64.7z" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu4.zip)" || echo "下载失败"
+          echo "=== scoop ==="
+          iex "& {$(irm get.scoop.sh)} -RunAsAdmin" 2>/dev/null || true
+          scoop install qemu 2>&1 || echo "scoop 失败"
           echo ""
 
-      - name: Test Source 5 - scoop-like portable
+      - name: Locate qemu after all attempts
         shell: bash
         run: |
-          echo "=== 源5: GitHub qemu-v9 ==="
-          curl -L -f -o /tmp/qemu5.7z --max-time 60 "https://github.com/niclas-2209/qemu-win64-portable/releases/download/v9.1.0-1/qemu-9.1.0-win64.7z" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu5.7z)" || echo "下载失败"
-          echo ""
-
-      - name: Test Source 6 - direct exe from weilnetz
-        shell: bash
-        run: |
-          echo "=== 源6: 直接 exe (旧版) ==="
-          curl -L -f -o /tmp/qemu6.exe --max-time 60 "https://qemu.weilnetz.de/w64/2023/qemu-w64-setup-20231219.exe" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu6.exe)" || echo "下载失败"
-          echo ""
-
-      - name: Test Source 7 - msys2
-        shell: bash
-        run: |
-          echo "=== 源7: msys2 仓库 ==="
-          curl -L -f -o /tmp/qemu7.pkg.tar.zst --max-time 60 "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-qemu-8.2.0-2-any.pkg.tar.zst" 2>&1 && echo "下载成功: $(ls -lh /tmp/qemu7.pkg.tar.zst)" || echo "下载失败"
-          echo ""
-
-      - name: Summary
-        shell: bash
-        run: |
-          echo "=== 测试结果汇总 ==="
-          echo "可用的下载源:"
-          for f in /tmp/qemu1.exe /tmp/qemu2.msi /tmp/qemu3.zip /tmp/qemu4.zip /tmp/qemu5.7z /tmp/qemu6.exe /tmp/qemu7.pkg.tar.zst; do
-            if [ -f "$f" ]; then
-              SIZE=$(stat --format=%s "$f" 2>/dev/null || stat -f%z "$f" 2>/dev/null || echo 0)
-              if [ "$SIZE" -gt 1000000 ]; then
-                echo "  可用: $f ($(ls -lh "$f" | awk '{print $5}'))"
-              else
-                echo "  文件太小: $f (${SIZE} bytes)"
-              fi
-            fi
-          done
+          echo "=== 搜索系统中的 qemu ==="
+          find /c/Program\ Files -name "qemu-system-arm*" 2>/dev/null | head -5
+          find /c/Users -name "qemu-system-arm*" 2>/dev/null | head -5
+          which qemu-system-arm 2>/dev/null || echo "PATH 中未找到"

@@ -1,22 +1,38 @@
 package ws
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
 
-	"chip-sim/internal/handler"
+	"chip-sim/internal/qemu"
 )
 
-// QEMUUpgrader 升级 HTTP 为 QEMU WebSocket 连接
 var qemuUpgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+}
+
+// QEMUCommand 前端发来的 QEMU 命令
+type QEMUCommand struct {
+	Command string          `json:"command"`
+	Payload json.RawMessage `json:"payload,omitempty"`
+}
+
+// StartPayload start 命令参数
+type StartPayload struct {
+	Firmware string `json:"firmware"`
+}
+
+// UARTSendPayload uart_send 命令参数
+type UARTSendPayload struct {
+	Data string `json:"data"`
 }
 
 // HandleQEMU 处理 QEMU 仿真 WebSocket 连接
@@ -28,23 +44,95 @@ func HandleQEMU(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("[QEMU-WS] Client connected: %s", conn.RemoteAddr())
 
-	// 创建带写锁的发送函数，确保并发安全
+	var manager *qemu.Manager
+
+	// 写锁，确保并发安全
 	writeMu := make(chan struct{}, 1)
 	writeMu <- struct{}{}
 
-	sendFunc := func(data []byte) error {
+	sendJSON := func(data interface{}) {
+		bytes, err := json.Marshal(data)
+		if err != nil {
+			log.Printf("[QEMU-WS] Marshal error: %v", err)
+			return
+		}
 		<-writeMu
-		defer func() { writeMu <- struct{}{} }()
 		conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
-		return conn.WriteMessage(websocket.TextMessage, data)
+		err = conn.WriteMessage(websocket.TextMessage, bytes)
+		writeMu <- struct{}{}
+		if err != nil {
+			log.Printf("[QEMU-WS] Write error: %v", err)
+		}
 	}
 
-	// 创建 QEMU 消息处理器
-	qemuHandler := handler.NewQEMUHandler(sendFunc)
+	forwardEvents := func(m *qemu.Manager) {
+		for event := range m.Events() {
+			sendJSON(event)
+		}
+	}
+
+	handleMessage := func(msg []byte) {
+		var cmd QEMUCommand
+		if err := json.Unmarshal(msg, &cmd); err != nil {
+			log.Printf("[QEMU-WS] Invalid message: %v", err)
+			return
+		}
+
+		switch cmd.Command {
+		case "start":
+			if manager != nil && manager.IsRunning() {
+				manager.Stop()
+			}
+			var p StartPayload
+			if err := json.Unmarshal(cmd.Payload, &p); err != nil {
+				log.Printf("[QEMU-WS] start payload error: %v", err)
+				return
+			}
+			config := qemu.DefaultSTM32Config(p.Firmware)
+			manager = qemu.NewManager(config)
+			go forwardEvents(manager)
+			if err := manager.Start(); err != nil {
+				log.Printf("[QEMU-WS] start failed: %v", err)
+				sendJSON(map[string]interface{}{
+					"type":    "state",
+					"running": false,
+					"error":   err.Error(),
+				})
+			}
+		case "stop":
+			if manager != nil {
+				manager.Stop()
+			}
+		case "pause":
+			if manager != nil {
+				manager.Pause()
+			}
+		case "resume":
+			if manager != nil {
+				manager.Resume()
+			}
+		case "step":
+			if manager != nil {
+				manager.Step()
+			}
+		case "uart_send":
+			if manager != nil {
+				var p UARTSendPayload
+				if err := json.Unmarshal(cmd.Payload, &p); err == nil {
+					manager.SendToUART([]byte(p.Data))
+				}
+			}
+		default:
+			log.Printf("[QEMU-WS] Unknown command: %s", cmd.Command)
+		}
+	}
 
 	// 读取消息循环
 	go func() {
 		defer func() {
+			if manager != nil {
+				manager.Stop()
+			}
 			conn.Close()
 			log.Printf("[QEMU-WS] Client disconnected: %s", conn.RemoteAddr())
 		}()
@@ -64,7 +152,7 @@ func HandleQEMU(w http.ResponseWriter, r *http.Request) {
 				}
 				break
 			}
-			qemuHandler.HandleMessage(message)
+			handleMessage(message)
 		}
 	}()
 

@@ -2366,6 +2366,39 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
     return () => { unsub(); unsubUART(); };
   }, []);
 
+  // QEMU 仿真引脚状态监听
+  useEffect(() => {
+    const onSetPinLevel = (e: Event) => {
+      const { pinId, level } = (e as CustomEvent).detail;
+      // 更新芯片引脚电平
+      chipPinsRef.current = chipPinsRef.current.map(p =>
+        p.id === pinId ? { ...p, level } : p
+      );
+      // 同步更新连线另一端的元件引脚
+      for (const w of wiresRef.current) {
+        if (w.from.componentId === '__chip__' && w.from.pinId === pinId) {
+          const toComp = compsRef.current.find(c => c.id === w.to.componentId);
+          if (toComp) {
+            toComp.pins = toComp.pins.map(p =>
+              p.id === w.to.pinId ? { ...p, level } : p
+            );
+          }
+        }
+        if (w.to.componentId === '__chip__' && w.to.pinId === pinId) {
+          const fromComp = compsRef.current.find(c => c.id === w.from.componentId);
+          if (fromComp) {
+            fromComp.pins = fromComp.pins.map(p =>
+              p.id === w.from.pinId ? { ...p, level } : p
+            );
+          }
+        }
+      }
+      forceUpdate(n => n + 1);
+    };
+    window.addEventListener('chip-sim:set-pin-level', onSetPinLevel);
+    return () => window.removeEventListener('chip-sim:set-pin-level', onSetPinLevel);
+  }, []);
+
   // 监听编译成功事件：解析代码 → 配置引脚行为 → 启动仿真
   useEffect(() => {
     const onCodeCompiled = (e: Event) => {

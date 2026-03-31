@@ -7,13 +7,15 @@
  * Resizer 分隔线：左-中、中-右、主-底
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { WebGLCanvas, CIRCUIT_TEMPLATES } from '../canvas/WebGLCanvas';
 import { SerialMonitor } from '../panels/SerialMonitor';
 import { CodeEditor } from '../panels/CodeEditor';
 import { ToastContainer } from '../ui/Toast';
 import { Resizer } from '../components/Resizer';
 import { PinListPanel } from '../components/PinListPanel';
+import { QEMUClient } from '../lib/qemu/client';
+import { QEMUAdapter } from '../lib/qemu/adapter';
 import type { ToastItem } from '../ui/Toast';
 import type { SelectedElement } from '../canvas/interaction';
 
@@ -152,6 +154,9 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set());
   const [libPinSplit, setLibPinSplit] = useState(0.5);
   const [pinConfigs, setPinConfigs] = useState<Record<string, string>>({});
+  const [qemuConnected, setQemuConnected] = useState(false);
+  const [qemuRunning, setQemuRunning] = useState(false);
+  const qemuClientRef = useRef<QEMUClient | null>(null);
 
   const dismissToast = useCallback((id: string) => setToasts(prev => prev.filter(t => t.id !== id)), []);
   const addToast = useCallback((msg: string, type: ToastItem['type'] = 'info') => {
@@ -159,6 +164,47 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
     setToasts(prev => [...prev, { id, message: msg, type }]);
     setTimeout(() => dismissToast(id), 4000);
   }, [dismissToast]);
+
+  const handleQEMUStart = useCallback(async () => {
+    if (qemuRunning && qemuClientRef.current) {
+      qemuClientRef.current.stop();
+      qemuClientRef.current.disconnect();
+      qemuClientRef.current = null;
+      setQemuRunning(false);
+      setQemuConnected(false);
+      return;
+    }
+
+    const updater = {
+      setChipPinLevel: (pinId: string, level: 'high' | 'low' | 'floating') => {
+        window.dispatchEvent(new CustomEvent('chip-sim:set-pin-level', {
+          detail: { pinId, level }
+        }));
+      },
+      appendUARTData: (data: string) => {
+        window.dispatchEvent(new CustomEvent('chip-sim:uart-output', {
+          detail: { data, timestamp: Date.now(), baudRate: 115200 }
+        }));
+      },
+      setSimRunning: (running: boolean) => {
+        setQemuRunning(running);
+      },
+    };
+
+    const adapter = new QEMUAdapter(updater);
+    const client = new QEMUClient({
+      onEvent: (event) => adapter.handleEvent(event),
+      onConnect: () => setQemuConnected(true),
+      onDisconnect: () => { setQemuConnected(false); setQemuRunning(false); },
+    });
+
+    qemuClientRef.current = client;
+    client.connect();
+
+    setTimeout(() => {
+      client.startFirmware('/tmp/chipsim/firmware.elf');
+    }, 500);
+  }, [qemuRunning]);
 
   /** 左-中分隔线拖拽 */
   const handleLeftResize = useCallback((delta: number) => {
@@ -287,6 +333,11 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                 <div className="mcu-section-header" style={{ gap: 4 }}>
                   <span style={{ fontSize: 12, fontWeight: 600 }}>编辑器</span>
                   <button className="mcu-btn-sm" style={{ background: '#2ecc71', color: '#fff', fontWeight: 700 }} onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:compile'))}>▶ 运行</button>
+                  <button className="mcu-btn-sm"
+                    style={{ background: qemuRunning ? '#e74c3c' : '#3498db', color: '#fff', fontWeight: 700 }}
+                    onClick={handleQEMUStart}>
+                    {qemuRunning ? 'QEMU 停止' : 'QEMU 仿真'}
+                  </button>
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:new-file'))}>新建</button>
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:import-file'))}>导入</button>
                   <span style={{ flex: 1 }} />

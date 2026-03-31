@@ -218,6 +218,8 @@ func (m *Manager) startQEMU() error {
 		switch m.config.ChipFamily {
 		case "esp32":
 			regions = m.getESP32MonitorRegions()
+		case "stellaris":
+			regions = StellarisMonitorRegions()
 		default:
 			regions = m.getSTM32MonitorRegions()
 		}
@@ -387,6 +389,35 @@ func (m *Manager) mergeC51Events() {
 	}
 }
 
+// startAVR 启动 AVR 后端（simavr）
+func (m *Manager) startAVR() error {
+	m.avrManager = NewAVRManager()
+	mcu := AVRMCUName(m.config.Machine) // Machine 字段存储芯片型号
+	if err := m.avrManager.Start(m.config.Kernel, mcu); err != nil {
+		return err
+	}
+	m.running = true
+	go m.mergeAVREvents()
+	return nil
+}
+
+// mergeAVREvents 将 AVR 模拟器事件转发到统一 channel
+func (m *Manager) mergeAVREvents() {
+	if m.avrManager == nil {
+		return
+	}
+	for {
+		select {
+		case <-m.done:
+			return
+		case ev, ok := <-m.avrManager.Events():
+			if ok {
+				m.events <- ev
+			}
+		}
+	}
+}
+
 // Stop 停止 QEMU
 func (m *Manager) Stop() {
 	m.mu.Lock()
@@ -405,6 +436,9 @@ func (m *Manager) Stop() {
 	}
 	if m.uart != nil {
 		m.uart.Close()
+	}
+	if m.avrManager != nil {
+		m.avrManager.Stop()
 	}
 	m.running = false
 }

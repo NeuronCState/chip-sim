@@ -72,11 +72,12 @@ jobs:
             cp $(which qemu-system-arm) frontend/src-tauri/resources/qemu/
             cp $(which qemu-system-xtensa) frontend/src-tauri/resources/qemu/ 2>/dev/null || true
           elif [ "$RUNNER_OS" == "Windows" ]; then
-            curl -L -o /tmp/qemu-w64.zip "https://qemu.weilnetz.de/w64/2024/qemu-w64-setup-20241212.exe" || true
-            echo "Windows QEMU: 需要手动添加，跳过"
+            choco install qemu -y --version=2024.12.12
+            cp "/c/Program Files/qemu/qemu-system-arm.exe" frontend/src-tauri/resources/qemu/ 2>/dev/null || \
+            cp "C:/Program Files/qemu/qemu-system-arm.exe" frontend/src-tauri/resources/qemu/ 2>/dev/null || true
           fi
           chmod +x frontend/src-tauri/resources/qemu/* 2>/dev/null || true
-          ls -lh frontend/src-tauri/resources/qemu/ 2>/dev/null || echo "无 QEMU 文件"
+          ls -lh frontend/src-tauri/resources/qemu/ 2>/dev/null || echo "无 QEMU"
 
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0

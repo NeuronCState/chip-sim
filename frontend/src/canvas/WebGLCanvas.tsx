@@ -1890,7 +1890,7 @@ export function WebGLCanvas({ chipFamily, chipModel, onSelect, loadTemplateId }:
           setHoverComp(null);
           hoverCompRef.current = null;
         }}
-        onDragOver={e => e.preventDefault()}
+        onDragOver={e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; }}
         onDrop={onDrop}
         onContextMenu={e => e.preventDefault()}
         onDoubleClick={(e) => {

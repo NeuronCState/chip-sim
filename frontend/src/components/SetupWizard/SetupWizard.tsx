@@ -8,6 +8,140 @@
 
 import { useState, useMemo } from 'react';
 import { pickProjectDirectory, pickExistingProjectFolder, writeFileToDirectory, isFileSystemSupported } from '../../utils/fileSystem';
+
+// ─── 工程初始化模板 ───────────────────────
+
+function getMainTemplate(family: string, model: string): string {
+  const f = family.toLowerCase();
+  if (f === 'stm32') {
+    return `#include "stm32f1xx_hal.h"
+
+void SystemClock_Config(void);
+
+int main(void) {
+  HAL_Init();
+  SystemClock_Config();
+
+  // PA5 LED 输出
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  GPIO_InitTypeDef gpio = {GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FREQ_LOW};
+  HAL_GPIO_Init(GPIOA, &gpio);
+
+  while (1) {
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    HAL_Delay(500);
+  }
+}
+`;
+  }
+  if (f === 'esp32') {
+    return `#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/gpio.h"
+
+#define LED_PIN GPIO_NUM_2
+
+void app_main(void) {
+  gpio_reset_pin(LED_PIN);
+  gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
+
+  int level = 0;
+  while (1) {
+    gpio_set_level(LED_PIN, level);
+    level = !level;
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+  }
+}
+`;
+  }
+  if (f === 'arduino') {
+    return `// Arduino 项目
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(500);
+}
+`;
+  }
+  // C51 / 默认
+  return `#include <reg52.h>
+
+sbit LED = P1^0;
+
+void delay(unsigned int ms) {
+  unsigned int i, j;
+  for (i = 0; i < ms; i++)
+    for (j = 0; j < 120; j++);
+}
+
+void main(void) {
+  while (1) {
+    LED = 0;
+    delay(500);
+    LED = 1;
+    delay(500);
+  }
+}
+`;
+}
+
+function getMakefileContent(family: string, model: string): string {
+  const f = family.toLowerCase();
+  if (f === 'stm32') {
+    return `# ${model} 项目 Makefile
+TARGET = firmware
+CC = arm-none-eabi-gcc
+CFLAGS = -mcpu=cortex-m3 -mthumb -Os -Wall -I./include
+LDFLAGS = -T linker.ld -nostartfiles
+
+SRC = $(wildcard src/*.c)
+OBJ = $(SRC:.c=.o)
+
+all: \$(TARGET).elf
+
+\$(TARGET).elf: \$(OBJ)
+	\$(CC) \$(CFLAGS) \$(LDFLAGS) -o \$@ \$^
+
+%.o: %.c
+	\$(CC) \$(CFLAGS) -c \$< -o \$@
+
+clean:
+	rm -f \$(OBJ) \$(TARGET).elf
+
+.PHONY: all clean
+`;
+  }
+  if (f === 'esp32') {
+    return `# ${model} 项目
+# 使用 ESP-IDF 编译
+# idf.py build
+# idf.py flash monitor
+`;
+  }
+  return `# ${model} 项目 Makefile
+# 请根据你的工具链配置
+CC = gcc
+CFLAGS = -Wall -Os -I./include
+SRC = \$(wildcard src/*.c)
+TARGET = firmware
+
+all: \$(TARGET)
+
+\$(TARGET): \$(SRC)
+	\$(CC) \$(CFLAGS) -o \$@ \$^
+
+clean:
+	rm -f \$(TARGET)
+
+.PHONY: all clean
+`;
+}
 import './SetupWizard.css';
 
 // ─── 芯片数据（与 ChipSelector 保持一致）───
@@ -64,6 +198,7 @@ export interface WizardResult {
   projectName: string;
   projectDir: string;
   importedFiles?: Array<{ path: string; content: string; lang: string }>;
+  initialFiles?: Array<{ path: string; content: string; lang: string }>;
 }
 
 interface Props {
@@ -108,21 +243,61 @@ export function SetupWizard({ onComplete }: Props) {
     const name = projectName.trim() || `${selectedFamily} 项目`;
     const dir = projectDir.trim() || '未选择路径';
 
-    // 如果选择了目录，尝试写入项目标记文件
+    // 如果选择了目录，写入项目初始化文件
     if (dirRef) {
       try {
+        const isTauri = typeof window !== 'undefined' && ('__TAURI_INTERNALS__' in window || '__TAURI__' in window);
+        const isBrowser = !isTauri && typeof window !== 'undefined' && 'showDirectoryPicker' in window;
+
+        // .chipsim.json 项目标记
         await writeFileToDirectory(dirRef, '.chipsim.json', JSON.stringify({
           name, chipFamily: selectedFamily, chipModel: selectedModel,
           version: '2.0.0', createdAt: new Date().toISOString(),
         }, null, 2));
+
+        // main.c 模板
+        const mainContent = getMainTemplate(selectedFamily, selectedModel);
+        await writeFileToDirectory(dirRef, 'main.c', mainContent);
+
+        // Makefile
+        await writeFileToDirectory(dirRef, 'Makefile', getMakefileContent(selectedFamily, selectedModel));
+
+        // README.md
+        await writeFileToDirectory(dirRef, 'README.md', `# ${name}\n\n芯片: ${selectedFamily} ${selectedModel}\n\n## 编译\n\n\`\`\`bash\nmake\n\`\`\`\n`);
+
+        // 浏览器环境：创建 src/ 和 include/ 子目录（写入 .gitkeep 占位）
+        if (isBrowser && dirRef.pathOrHandle instanceof FileSystemDirectoryHandle) {
+          try {
+            const srcDir = await dirRef.pathOrHandle.getDirectoryHandle('src', { create: true });
+            const srcFile = await srcDir.getFileHandle('.gitkeep', { create: true });
+            const w = await srcFile.createWritable();
+            await w.write('');
+            await w.close();
+          } catch { /* 忽略 */ }
+          try {
+            const incDir = await dirRef.pathOrHandle.getDirectoryHandle('include', { create: true });
+            const incFile = await incDir.getFileHandle('.gitkeep', { create: true });
+            const w = await incFile.createWritable();
+            await w.write('');
+            await w.close();
+          } catch { /* 忽略 */ }
+        }
       } catch { /* 写入失败不阻塞 */ }
     }
+
+    // 生成编辑器中的初始文件
+    const initialFiles = [
+      { path: 'main.c', content: getMainTemplate(selectedFamily, selectedModel), lang: 'c' as const },
+      { path: 'Makefile', content: getMakefileContent(selectedFamily, selectedModel), lang: 'text' as const },
+      { path: 'README.md', content: `# ${name}\n\n芯片: ${selectedFamily} ${selectedModel}\n`, lang: 'text' as const },
+    ];
 
     onComplete({
       family: selectedFamily,
       model: selectedModel,
       projectName: name,
       projectDir: dir,
+      initialFiles,
     });
   };
 

@@ -10,10 +10,10 @@
 
 | 平台 | 下载 |
 |------|------|
-| macOS (Apple Silicon) | [ChipSim_0.4.0_aarch64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_aarch64.dmg) |
-| macOS (Intel) | [ChipSim_0.4.0_x64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_x64.dmg) |
-| Windows x64 | [ChipSim_0.4.0_x64-setup.exe](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_x64-setup.exe) |
-| Linux x64 | [.deb](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_amd64.deb) \| [.AppImage](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_amd64.AppImage) |
+| macOS (Apple Silicon) | [ChipSim_0.5.0_aarch64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.5.0_aarch64.dmg) |
+| macOS (Intel) | [ChipSim_0.5.0_x64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.5.0_x64.dmg) |
+| Windows x64 | [ChipSim_0.5.0_x64-setup.exe](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.5.0_x64-setup.exe) |
+| Linux x64 | [.deb](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.5.0_amd64.deb) \| [.AppImage](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.5.0_amd64.AppImage) |
 
 安装后即可使用，无需额外安装编译器或 QEMU。
 

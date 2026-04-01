@@ -1,10 +1,9 @@
 /**
  * MCU 仿真平台
- * 左上：元件库 | 左下：芯片引脚 (PinListPanel)
+ * 左：元件库 + 串口
  * 中：画布（点击元件→属性显示在编辑器虚拟标签页）
  * 右：代码编辑器+文件管理+虚拟文件标签页（可收起）
- * 底：串口/波形（收起）
- * Resizer 分隔线：左-中、中-右、主-底
+ * Resizer 分隔线：左-中、中-右
  */
 
 import { useState, useCallback, useRef, useMemo } from 'react';
@@ -13,10 +12,8 @@ import { SerialMonitor } from '../panels/SerialMonitor';
 import { CodeEditor } from '../panels/CodeEditor';
 import { ToastContainer } from '../ui/Toast';
 import { Resizer } from '../components/Resizer';
-import { PinListPanel } from '../components/PinListPanel';
 import { ExportMenu } from '../components/ExportMenu/ExportMenu';
 import { TeachingMode } from '../components/TeachingMode/TeachingMode';
-import { Settings } from '../components/Settings/Settings';
 import { QEMUClient } from '../lib/qemu/client';
 import { QEMUAdapter } from '../lib/qemu/adapter';
 import type { ToastItem } from '../ui/Toast';
@@ -238,12 +235,10 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set());
   const [libSearch, setLibSearch] = useState('');
   const [recentIds, setRecentIds] = useState<string[]>(getRecentComponents());
-  const [libPinSplit, setLibPinSplit] = useState(0.5);
   const [pinConfigs, setPinConfigs] = useState<Record<string, string>>({});
   const [qemuConnected, setQemuConnected] = useState(false);
   const [qemuRunning, setQemuRunning] = useState(false);
   const [teachingOpen, setTeachingOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const qemuClientRef = useRef<QEMUClient | null>(null);
 
   const dismissToast = useCallback((id: string) => setToasts(prev => prev.filter(t => t.id !== id)), []);
@@ -316,12 +311,12 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
         {/* 上方主行：左栏 + Resizer + 画布 + Resizer + 右栏 */}
         <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
 
-          {/* ===== 左栏：元件库 + PinListPanel ===== */}
+          {/* ===== 左栏：元件库 ===== */}
           {leftOpen && (
             <>
               <aside className="mcu-panel mcu-left" style={{ width: leftWidth, flexShrink: 0 }}>
                 {/* 元件库 */}
-                <div className="mcu-section" style={{ flex: `0 0 ${libPinSplit * 100}%`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                <div className="mcu-section" style={{ flex: '1 1 auto', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                   <div className="mcu-section-header" style={{ padding: '4px 8px' }}>
                     <span style={{ fontSize: 12, fontWeight: 600 }}>元件库</span>
                     <button className="mcu-btn-sm" onClick={() => setLeftOpen(false)}>◀</button>
@@ -363,7 +358,7 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                               key={item.id}
                               className="mcu-comp-btn"
                               draggable
-                              onDragStart={(e) => e.dataTransfer.setData('component-type', item.id)}
+                              onDragStart={(e) => { e.dataTransfer.effectAllowed = 'copy'; e.dataTransfer.setData('component-type', item.id); }}
                               onClick={() => { addRecentComponent(item.id); setRecentIds(getRecentComponents()); }}
                               title={item.label}
                               style={{ fontSize: 10, padding: '4px 2px' }}
@@ -391,7 +386,7 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                                     key={id}
                                     className="mcu-comp-btn"
                                     draggable
-                                    onDragStart={(e) => e.dataTransfer.setData('component-type', id)}
+                                    onDragStart={(e) => { e.dataTransfer.effectAllowed = 'copy'; e.dataTransfer.setData('component-type', id); }}
                                     onClick={() => { addRecentComponent(id); setRecentIds(getRecentComponents()); }}
                                     title={label}
                                     style={{ fontSize: 10, padding: '4px 2px' }}
@@ -426,7 +421,7 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                                     key={item.id}
                                     className="mcu-comp-btn"
                                     draggable
-                                    onDragStart={(e) => e.dataTransfer.setData('component-type', item.id)}
+                                    onDragStart={(e) => { e.dataTransfer.effectAllowed = 'copy'; e.dataTransfer.setData('component-type', item.id); }}
                                     onClick={() => { addRecentComponent(item.id); setRecentIds(getRecentComponents()); }}
                                     title={item.label}
                                     style={{ fontSize: 10, padding: '4px 2px' }}
@@ -443,41 +438,8 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                   </div>
                 </div>
 
-                {/* 元件库与引脚配置之间的分隔线 */}
-                <div
-                  style={{ height: 4, cursor: 'row-resize', background: 'var(--sil-border, #d0d7de)', flexShrink: 0, borderRadius: 2 }}
-                />
-
-                {/* PinListPanel 引脚配置 */}
-                <div className="mcu-section" style={{ flex: '1 1 30%', minHeight: 80, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                  <div className="mcu-section-header" style={{ padding: '4px 8px' }}>
-                    <span style={{ fontSize: 12, fontWeight: 600 }}>引脚配置</span>
-                  </div>
-                  <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <PinListPanel chipFamily={chipFamily} chipModel={chipModel} />
-                  </div>
-                </div>
-
-                {/* 引脚列表与串口之间的可拖拽分隔线 */}
-                <div
-                  style={{ height: 4, cursor: 'row-resize', background: 'var(--sil-border, #d0d7de)', flexShrink: 0, borderRadius: 2 }}
-                  onPointerDown={(e) => {
-                    e.preventDefault();
-                    const startY = e.clientY;
-                    const startRatio = libPinSplit;
-                    const panelHeight = (e.currentTarget.parentElement?.clientHeight ?? 400);
-                    const onMove = (ev: PointerEvent) => {
-                      const delta = ev.clientY - startY;
-                      setLibPinSplit(Math.max(0.2, Math.min(0.8, startRatio + delta / panelHeight)));
-                    };
-                    const onUp = () => { window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); };
-                    window.addEventListener('pointermove', onMove);
-                    window.addEventListener('pointerup', onUp);
-                  }}
-                />
-
                 {/* 串口监视器（左下） */}
-                <div className="mcu-section" style={{ flex: `1 1 ${100 - libPinSplit * 100}%`, minHeight: 0, overflow: 'hidden' }}>
+                <div className="mcu-section" style={{ flex: '1 1 50%', minHeight: 0, overflow: 'hidden' }}>
                   <SerialMonitor />
                 </div>
               </aside>
@@ -510,11 +472,10 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:new-file'))}>新建</button>
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:import-file'))}>导入</button>
                   <span style={{ flex: 1 }} />
-                  <button className="mcu-btn-sm" onClick={() => setTeachingOpen(true)}>🎓 教学</button>
-                  <button className="mcu-btn-sm" onClick={() => setSettingsOpen(true)}>⚙️ 设置</button>
+                  <button className="mcu-btn-sm" onClick={() => setTeachingOpen(true)}>教学</button>
                   <ExportMenu />
-                  <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:open-reference'))}>📖 速查</button>
-                  <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:open-pins'))}>📌 引脚</button>
+                  <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:open-reference'))}>速查</button>
+                  <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:open-pins'))}>引脚</button>
                   <button className="mcu-btn-sm" onClick={() => setRightOpen(false)}>▶</button>
                 </div>
                 <div className="mcu-section-grow">
@@ -539,7 +500,6 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
       <TeachingMode isOpen={teachingOpen} onClose={() => setTeachingOpen(false)} />
-      <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
 }

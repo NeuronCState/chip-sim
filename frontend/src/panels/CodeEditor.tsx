@@ -842,6 +842,9 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const isCodeFile = activeFile && !activePanel;
   const currentFile = files.find(f => f.path === activeFile);
 
+  // 标记用户是否已主动初始化（选择模板/导入文件/新建文件）
+  const projectInitializedRef = useRef(false);
+
   // 监听事件
   useEffect(() => {
     const onNew = () => setShowNewFileDialog(true);
@@ -1037,9 +1040,9 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     return () => sub.dispose();
   }, [activeFile, activePanel]);
 
-  // 各芯片系列自动加载示例文件
+  // 各芯片系列自动加载示例文件（仅在用户主动初始化后加载）
   useEffect(() => {
-    if (!chipModel) return;
+    if (!chipModel || !projectInitializedRef.current) return;
     // 仅在芯片真正变化时加载（忽略大小写差异）
     if (lastLoadedModelRef.current?.toLowerCase() === chipModel.toLowerCase() && files.length > 0) return;
     lastLoadedModelRef.current = chipModel;
@@ -1072,6 +1075,7 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   // 导入的外部文件（从文件夹导入）
   useEffect(() => {
     if (!importedFiles || importedFiles.length === 0) return;
+    projectInitializedRef.current = true;
     setFiles(importedFiles);
     setOpenTabs([importedFiles[0].path]);
     setActiveFile(importedFiles[0].path);
@@ -1080,31 +1084,6 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     modelsRef.current.clear();
     lastLoadedModelRef.current = chipModel || 'imported';
   }, [importedFiles]);
-
-  // 兜底：如果挂载后没有文件且芯片系列未加载过，自动加载对应示例
-  useEffect(() => {
-    if (files.length === 0 && !lastLoadedModelRef.current) {
-      const fallbackModel = chipModel || 'AT89C51';
-      lastLoadedModelRef.current = fallbackModel;
-
-      let examples: VFile[] | null = null;
-      const m = fallbackModel.toLowerCase();
-      if (m.includes('stm32')) {
-        examples = STM32F103_EXAMPLES;
-      } else if (m.startsWith('esp32') || m.startsWith('esp8266')) {
-        examples = ESP32_EXAMPLES;
-      } else if (m === 'uno' || m === 'mega' || m === 'nano' || m === 'leonardo' || m === 'due') {
-        examples = ARDUINO_EXAMPLES;
-      } else {
-        examples = C51_EXAMPLES;
-      }
-
-      setFiles(examples);
-      setOpenTabs([examples[0].path]);
-      setActiveFile(examples[0].path);
-      setActivePanel(null);
-    }
-  }, []);
 
   // 1c: 加载 localStorage 中已保存的文件内容（按芯片型号隔离，覆盖默认示例）
   useEffect(() => {
@@ -1164,6 +1143,7 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
       alert(`文件 "${name}" 已存在`);
       return;
     }
+    projectInitializedRef.current = true;
     const lang = name.endsWith('.c') || name.endsWith('.h' ) ? 'c' : name.endsWith('.ino') ? 'c' : name.endsWith('.cpp') ? 'c' : name.endsWith('.py') ? 'python' : 'text';
     const newFile: VFile = { path: name, content: '', lang };
     setFiles(prev => [...prev, newFile]);
@@ -1174,6 +1154,7 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
 
   const importFiles = (fileList: FileList | null) => {
     if (!fileList) return;
+    projectInitializedRef.current = true;
     Array.from(fileList).forEach(file => {
       const reader = new FileReader();
       reader.onload = () => {
@@ -1515,7 +1496,8 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
           )}
 
           {/* Monaco 编辑器 */}
-          {isCodeFile && <div ref={editorContainerRef} className="ide-monaco-container" />}
+          {/* Monaco 编辑器 — 始终挂载，通过 display 控制可见性 */}
+          <div ref={editorContainerRef} className="ide-monaco-container" style={{ display: isCodeFile ? '' : 'none' }} />
 
           {/* 编译输出 */}
           {(compileResult || compiling) && (

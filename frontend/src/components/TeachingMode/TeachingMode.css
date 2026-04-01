@@ -23,7 +23,7 @@
   background: var(--bg-panel, #1e1e2e);
   border: 1px solid var(--border, #333);
   border-radius: 14px;
-  width: 560px;
+  width: 600px;
   max-width: 92vw;
   max-height: 80vh;
   display: flex;
@@ -70,7 +70,7 @@
   color: var(--text, #e0e0e0);
 }
 
-/* 课程列表 */
+/* ===== 课程列表 ===== */
 .tm-course-list {
   flex: 1;
   overflow-y: auto;
@@ -80,17 +80,12 @@
   gap: 8px;
 }
 
-/* 课程卡片 */
 .tm-course {
   background: var(--bg-input, #2a2a3e);
   border: 1px solid var(--border, #333);
   border-radius: 10px;
   overflow: hidden;
   transition: border-color 0.15s;
-}
-
-.tm-course-expanded {
-  border-color: var(--accent, #4a9eff);
 }
 
 .tm-course-header {
@@ -102,19 +97,20 @@
   border: none;
   background: transparent;
   color: var(--text, #e0e0e0);
-  cursor: pointer;
   text-align: left;
-  transition: background 0.12s;
-}
-
-.tm-course-header:hover {
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .tm-course-icon {
-  font-size: 24px;
-  width: 32px;
-  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft, rgba(74, 158, 255, 0.15));
+  color: var(--accent, #4a9eff);
+  border-radius: 8px;
   flex-shrink: 0;
 }
 
@@ -134,85 +130,274 @@
   color: var(--text-dim, #888);
 }
 
-/* 进度条 */
-.tm-course-progress {
+.tm-course-meta {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
   flex-shrink: 0;
 }
 
+.tm-course-steps-count {
+  font-size: 11px;
+  color: var(--text-dim, #888);
+}
+
+/* 进度条 */
 .tm-progress-bar {
   width: 60px;
-  height: 6px;
+  height: 4px;
   background: var(--border, #333);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .tm-progress-fill {
   height: 100%;
   background: var(--accent, #4a9eff);
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.3s ease;
 }
 
-.tm-progress-text {
-  font-size: 11px;
-  color: var(--text-dim, #888);
-  min-width: 24px;
-  text-align: right;
+/* 课程操作按钮 */
+.tm-course-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 12px;
 }
 
-.tm-course-arrow {
-  font-size: 10px;
-  color: var(--text-dim, #888);
-  flex-shrink: 0;
-  width: 16px;
-  text-align: center;
+.tm-course-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border, #333);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-/* 步骤列表 */
-.tm-steps {
-  padding: 4px 14px 12px;
+.tm-course-btn-start {
+  background: var(--accent, #4a9eff);
+  color: #fff;
+  border-color: var(--accent, #4a9eff);
+}
+
+.tm-course-btn-start:hover {
+  opacity: 0.9;
+}
+
+.tm-course-btn-resume {
+  background: var(--accent-soft, rgba(74, 158, 255, 0.15));
+  color: var(--accent, #4a9eff);
+  border-color: var(--accent, #4a9eff);
+}
+
+.tm-course-btn-resume:hover {
+  background: var(--accent, #4a9eff);
+  color: #fff;
+}
+
+.tm-course-btn-reset {
+  background: transparent;
+  color: var(--text-dim, #888);
+}
+
+.tm-course-btn-reset:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text, #e0e0e0);
+}
+
+/* ===== 引导步骤视图 ===== */
+.tm-guide {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  border-top: 1px solid var(--border, #333);
 }
 
-.tm-step {
+.tm-guide-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
-  padding: 8px 10px;
-  border: none;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border, #333);
+}
+
+.tm-guide-back {
   background: transparent;
-  color: var(--text, #e0e0e0);
-  font-size: 13px;
+  border: none;
+  color: var(--accent, #4a9eff);
+  font-size: 12px;
   cursor: pointer;
-  border-radius: 6px;
-  text-align: left;
-  transition: background 0.12s;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
-.tm-step:hover {
-  background: rgba(255, 255, 255, 0.04);
+.tm-guide-back:hover {
+  background: var(--accent-soft, rgba(74, 158, 255, 0.15));
 }
 
-.tm-step-done .tm-step-label {
-  color: var(--text-dim, #888);
-  text-decoration: line-through;
-}
-
-.tm-step-check {
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.tm-step-label {
+.tm-guide-course-name {
   flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #e0e0e0);
+  text-align: center;
+}
+
+.tm-guide-reset {
+  background: transparent;
+  border: none;
+  color: var(--text-dim, #888);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.tm-guide-reset:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text, #e0e0e0);
+}
+
+/* 步骤列表 */
+.tm-guide-steps {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tm-guide-step {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  position: relative;
+}
+
+.tm-guide-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 40px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--border, #333);
+}
+
+.tm-guide-step-done::after {
+  background: var(--accent, #4a9eff);
+}
+
+.tm-guide-step-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 2px solid var(--border, #333);
+  color: var(--text-dim, #888);
+  background: var(--bg-input, #2a2a3e);
+  z-index: 1;
+}
+
+.tm-guide-step-current .tm-guide-step-marker {
+  border-color: var(--accent, #4a9eff);
+  color: var(--accent, #4a9eff);
+  background: var(--accent-soft, rgba(74, 158, 255, 0.15));
+}
+
+.tm-guide-step-done .tm-guide-step-marker {
+  border-color: var(--accent, #4a9eff);
+  color: #fff;
+  background: var(--accent, #4a9eff);
+}
+
+.tm-guide-step-future .tm-guide-step-title {
+  color: var(--text-dim, #888);
+}
+
+.tm-guide-step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tm-guide-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #e0e0e0);
+  margin-bottom: 4px;
+}
+
+.tm-guide-step-instruction {
+  font-size: 13px;
+  color: var(--text-soft, #bbb);
+  line-height: 1.6;
+  margin: 8px 0;
+  white-space: pre-wrap;
+  padding: 10px 12px;
+  background: var(--bg-input, #2a2a3e);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent, #4a9eff);
+}
+
+.tm-guide-step-hint {
+  font-size: 12px;
+  color: var(--accent, #4a9eff);
+  margin: 6px 0;
+  padding: 6px 10px;
+  background: var(--accent-soft, rgba(74, 158, 255, 0.1));
+  border-radius: 6px;
+}
+
+.tm-guide-step-actions {
+  margin-top: 10px;
+}
+
+.tm-guide-complete-btn {
+  padding: 8px 20px;
+  background: var(--accent, #4a9eff);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.tm-guide-complete-btn:hover {
+  opacity: 0.9;
+}
+
+.tm-guide-step-done-label {
+  font-size: 12px;
+  color: var(--accent, #4a9eff);
+  margin-top: 4px;
+}
+
+/* 完成提示 */
+.tm-guide-complete {
+  padding: 24px;
+  text-align: center;
+  border-top: 1px solid var(--border, #333);
+}
+
+.tm-guide-complete-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent, #4a9eff);
+  margin-bottom: 8px;
+}
+
+.tm-guide-complete-desc {
+  font-size: 13px;
+  color: var(--text-dim, #888);
+  margin-bottom: 16px;
 }
 
 /* 响应式 */
@@ -220,9 +405,5 @@
   .tm-panel {
     max-height: 92vh;
     border-radius: 10px;
-  }
-
-  .tm-course-progress {
-    display: none;
   }
 }

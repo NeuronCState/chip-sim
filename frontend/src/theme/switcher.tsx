@@ -1,6 +1,6 @@
 /**
  * ThemeSwitcher — 主题切换控件
- * ☀️ 亮色 / 🌙 暗色 / 💻 跟随系统
+ * L 亮色 / D 暗色 / S 跟随系统
  */
 
 import React from 'react';
@@ -9,9 +9,9 @@ import type { ThemePreference } from './useTheme';
 import './switcher.css';
 
 const options: { value: ThemePreference; label: string; icon: string }[] = [
-  { value: 'light', label: '亮色', icon: '☀️' },
-  { value: 'dark', label: '暗色', icon: '🌙' },
-  { value: 'system', label: '系统', icon: '💻' },
+  { value: 'light', label: '亮色', icon: 'L' },
+  { value: 'dark', label: '暗色', icon: 'D' },
+  { value: 'system', label: '系统', icon: 'S' },
 ];
 
 export function ThemeSwitcher() {
@@ -51,7 +51,7 @@ export function ThemeToggle() {
     setPreference(order[(idx + 1) % order.length]);
   };
 
-  const icon = preference === 'light' ? '☀️' : preference === 'dark' ? '🌙' : '💻';
+  const icon = preference === 'light' ? 'L' : preference === 'dark' ? 'D' : 'S';
 
   return (
     <button

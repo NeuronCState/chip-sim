@@ -4,7 +4,7 @@
  * 封装 Zustand store，支持链式调用
  */
 
-import { useToastStore, toast as toastApi, type ToastType } from '../stores/toast-store';
+import { useToastStore, toast as toastApi, type ToastType } from '../stores/ui-store';
 
 /**
  * @example
@@ -17,7 +17,7 @@ import { useToastStore, toast as toastApi, type ToastType } from '../stores/toas
  */
 export function useToast() {
   const addToast = useToastStore((s) => s.addToast);
-  const clearAll = useToastStore((s) => s.clearAll);
+  const clearAllToasts = useToastStore((s) => s.clearAllToasts);
   const toasts = useToastStore((s) => s.toasts);
 
   return {
@@ -32,7 +32,7 @@ export function useToast() {
     /** 自定义类型 */
     show: (type: ToastType, message: string, duration?: number) => addToast(type, message, duration),
     /** 清除所有通知 */
-    clearAll,
+    clearAll: clearAllToasts,
     /** 当前通知列表 */
     toasts,
   };

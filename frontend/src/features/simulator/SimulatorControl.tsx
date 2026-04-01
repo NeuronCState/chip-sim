@@ -24,8 +24,11 @@ const DEFAULTS = {
   transient: { stepTime: 1e-6, stopTime: 1e-3, adaptiveStep: true, truncErrorTol: 1e-4 },
 };
 
+const SPEED_OPTIONS = [0.25, 0.5, 1, 2, 4];
+
 export function SimulatorControl() {
-  const { isSimulating, simulationResult, setIsSimulating, setSimulationResult, wsError, setWsError, simLoading: _simLoading } = useCircuitStore();
+  const { isSimulating, simulationResult, setIsSimulating, setSimulationResult, wsError, setWsError, simLoading: _simLoading,
+    simSpeed, setSimSpeed, isSimPaused, setIsSimPaused, requestStep } = useCircuitStore();
   const { send, isConnected, state: wsState, connect, reconnectAttempt, maxReconnectAttempts } = useWebSocket();
   const { handleSimulationError: _handleSimulationError } = useErrorHandler();
   const { confirm, dialogProps } = useConfirm();
@@ -448,6 +451,41 @@ export function SimulatorControl() {
           </button>
         )}
       </div>
+
+      {/* 仿真速度控制 */}
+      {isSimulating && (
+        <div className="speed-control">
+          <div className="speed-label">速度</div>
+          <div className="speed-buttons">
+            {SPEED_OPTIONS.map(s => (
+              <button
+                key={s}
+                className={`speed-btn ${simSpeed === s ? 'active' : ''}`}
+                onClick={() => setSimSpeed(s)}
+              >
+                {s}x
+              </button>
+            ))}
+          </div>
+          <div className="sim-actions">
+            <button
+              className={`btn-pause ${isSimPaused ? 'paused' : ''}`}
+              onClick={() => setIsSimPaused(!isSimPaused)}
+              title={isSimPaused ? '继续' : '暂停'}
+            >
+              {isSimPaused ? '▶ 继续' : '⏸ 暂停'}
+            </button>
+            <button
+              className="btn-step"
+              onClick={requestStep}
+              disabled={!isSimPaused}
+              title="单步执行（需先暂停）"
+            >
+              ⏭ 单步
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 确认对话框 */}
       <ConfirmDialog {...dialogProps} />

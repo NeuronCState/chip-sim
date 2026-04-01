@@ -28,6 +28,7 @@
 .ide-tree-header {
   padding: 4px 8px; font-weight: 600; font-size: 10px;
   color: var(--sil-text-soft, #5a707a); text-transform: uppercase; letter-spacing: 0.5px;
+  display: flex; justify-content: space-between; align-items: center;
 }
 .ide-tree-dir {
   padding: 2px 8px; cursor: pointer; font-size: 11px;
@@ -77,6 +78,11 @@
   display: flex; align-items: center; justify-content: center;
 }
 .ide-tab-close:hover { background: var(--sil-border, #d0d7de); }
+
+/* Tab 拖拽状态 */
+.ide-tab { cursor: grab; }
+.ide-tab:active { cursor: grabbing; }
+.ide-tab-dragging { opacity: 0.4; }
 
 /* 信息面板内容 */
 .ide-panel-content { flex: 1; overflow-y: auto; }

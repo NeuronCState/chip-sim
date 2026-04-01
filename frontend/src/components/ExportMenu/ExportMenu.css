@@ -1,0 +1,59 @@
+/**
+ * ExportMenu 导出下拉菜单样式
+ */
+
+.export-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.export-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 180px;
+  background: var(--bg-panel, #1e1e2e);
+  border: 1px solid var(--border, #333);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 1000;
+  padding: 4px 0;
+  animation: exportMenu-fadeIn 0.12s ease;
+}
+
+@keyframes exportMenu-fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.export-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text, #e0e0e0);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.12s;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.export-menu-item:hover {
+  background: var(--bg-input, #2a2a3e);
+}
+
+.export-menu-icon {
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+}
+
+.export-menu-divider {
+  height: 1px;
+  background: var(--border, #333);
+  margin: 4px 8px;
+}

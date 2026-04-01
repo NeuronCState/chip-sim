@@ -79,10 +79,24 @@
 }
 
 .tour-tooltip-title {
-  margin: 0 0 8px 0;
+  margin: 0;
   font-size: 16px;
   font-weight: 700;
   color: var(--color-text);
+}
+
+/* 步骤标题行（图标 + 标题） */
+.tour-step-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tour-step-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .tour-tooltip-desc {

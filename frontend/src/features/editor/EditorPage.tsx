@@ -24,7 +24,7 @@ import { ProjectSettings } from '../../components/ProjectSettings';
 import { useCircuitStore } from '../../stores/circuit-store';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { useKeybindings } from '../../hooks/useKeybindings';
-import { toast } from '../../stores/toast-store';
+import { toast } from '../../stores/ui-store';
 import { resetComponentCounters } from './ComponentLibrary';
 import { projectManager, type TabInfo } from '../../core/ProjectManager';
 import { WireRouting } from '../../types/circuit';
@@ -616,6 +616,7 @@ export function EditorPage() {
         onPrev={tour.prevStep}
         onSkip={tour.skipTour}
         onFinish={tour.finishTour}
+        onResumeLater={tour.resumeLater}
       />
 
       {/* ====== 交互式教程系统 ====== */}

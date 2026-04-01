@@ -6,7 +6,7 @@
 
 import { useRef, useEffect, useCallback } from 'react';
 import { useCircuitStore } from '../stores/circuit-store';
-import { toast } from '../stores/toast-store';
+import { toast } from '../stores/ui-store';
 import { WebGLRenderer } from '../lib/rendering/webgl-renderer';
 import { getRenderOptimizer } from '../lib/rendering/RenderOptimizer';
 import { ToolMode } from '../types/circuit';

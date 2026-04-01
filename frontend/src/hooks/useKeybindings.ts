@@ -14,7 +14,7 @@ import {
   type ShortcutContext,
 } from '../core/KeybindingManager';
 import { useCircuitStore } from '../stores/circuit-store';
-import { toast } from '../stores/toast-store';
+import { toast } from '../stores/ui-store';
 import { ToolMode } from '../types/circuit';
 import { resetComponentCounters } from '../features/editor/ComponentLibrary';
 

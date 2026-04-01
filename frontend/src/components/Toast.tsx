@@ -4,7 +4,7 @@
  * 自动消失 + 手动关闭 + 多条堆叠
  */
 
-import { useToastStore, type ToastItem } from '../stores/toast-store';
+import { useToastStore, type ToastItem } from '../stores/ui-store';
 import './Toast.css';
 
 /** 单条通知 */

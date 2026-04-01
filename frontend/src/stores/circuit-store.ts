@@ -38,7 +38,7 @@ import {
   saveToLocalStorage,
   loadFromLocalStorage,
 } from '../lib/circuit/serialization';
-import { toast } from './toast-store';
+import { toast } from './ui-store';
 import { CleanupManager } from '../core/memory';
 import { getAllTemplates, createTemplateFromProject, saveUserTemplate } from '../core/ProjectTemplates';
 
@@ -123,6 +123,15 @@ interface CircuitStore {
   // === 仿真 ===
   simulationResult: SimulationResult | null;
   isSimulating: boolean;
+  /** 仿真速度倍率 (0.25, 0.5, 1, 2, 4) */
+  simSpeed: number;
+  /** 仿真是否暂停 */
+  isSimPaused: boolean;
+  /** 单步执行请求 */
+  stepRequested: boolean;
+  setSimSpeed: (speed: number) => void;
+  setIsSimPaused: (paused: boolean) => void;
+  requestStep: () => void;
 
   // === 主题 ===
   theme: Theme;
@@ -304,6 +313,9 @@ const initialState = {
   validationMessages: [] as ValidationMessage[],
   simulationResult: null as SimulationResult | null,
   isSimulating: false,
+  simSpeed: 1,
+  isSimPaused: false,
+  stepRequested: false,
   theme: 'dark' as Theme,
   undoStack: [] as Snapshot[],
   redoStack: [] as Snapshot[],
@@ -1343,10 +1355,13 @@ export const useCircuitStore = create<CircuitStore>((set, get) => ({
   // ==================== 仿真操作 ====================
 
   setSimulationResult: (result) => set({ simulationResult: result }),
-  setIsSimulating: (running) => set({ isSimulating: running }),
+  setIsSimulating: (running) => set({ isSimulating: running, isSimPaused: false, stepRequested: false }),
   setWsError: (error) => set({ wsError: error }),
   setSimLoading: (loading) => set({ simLoading: loading }),
   setBulkOperationLoading: (loading, message) => set({ bulkOperationLoading: loading, bulkOperationMessage: message ?? null }),
+  setSimSpeed: (speed) => set({ simSpeed: speed }),
+  setIsSimPaused: (paused) => set({ isSimPaused: paused }),
+  requestStep: () => set({ stepRequested: true, isSimPaused: true }),
 
   // ==================== 验证 ====================
 

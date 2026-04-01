@@ -7,13 +7,16 @@
  * Resizer 分隔线：左-中、中-右、主-底
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { WebGLCanvas, CIRCUIT_TEMPLATES } from '../canvas/WebGLCanvas';
 import { SerialMonitor } from '../panels/SerialMonitor';
 import { CodeEditor } from '../panels/CodeEditor';
 import { ToastContainer } from '../ui/Toast';
 import { Resizer } from '../components/Resizer';
 import { PinListPanel } from '../components/PinListPanel';
+import { ExportMenu } from '../components/ExportMenu/ExportMenu';
+import { TeachingMode } from '../components/TeachingMode/TeachingMode';
+import { Settings } from '../components/Settings/Settings';
 import { QEMUClient } from '../lib/qemu/client';
 import { QEMUAdapter } from '../lib/qemu/adapter';
 import type { ToastItem } from '../ui/Toast';
@@ -134,6 +137,87 @@ const LIBRARY_CATEGORIES = [
 
 /** 面板最小宽度 */
 const MIN_LEFT = 160;
+
+/** 元件拼音/英文映射（覆盖常见元件） */
+const COMPONENT_PINYIN_MAP: Record<string, string[]> = {
+  resistor: ['dianzu', 'resistor', 'r'],
+  capacitor: ['dianrong', 'capacitor', 'c'],
+  inductor: ['diangan', 'inductor', 'l'],
+  ferrite_bead: ['cizhu', 'ferrite', 'bead'],
+  crystal: ['jingzhen', 'crystal', 'oscillator'],
+  potentiometer: ['dianweiqi', 'potentiometer', 'pot'],
+  button: ['anjian', 'button', 'key', 'push'],
+  switch: ['kaiguan', 'switch', 'sw'],
+  ir_receiver: ['hongwai', 'infrared', 'ir'],
+  led: ['led', 'erjiguan', '发光二极管'],
+  diode: ['erjiguan', 'diode'],
+  zener_diode: ['wenya', 'zener', '稳压二极管'],
+  bjt_npn: ['sanjiguan', 'npn', 'transistor'],
+  bjt_pnp: ['pnp', 'transistor'],
+  mosfet_nmos: ['nmos', 'mosfet'],
+  mosfet_pmos: ['pmos', 'mosfet'],
+  op_amp: ['yunfang', 'opamp', 'amplifier'],
+  optocoupler: ['guangou', 'optocoupler'],
+  timer_555: ['555', 'ne555', 'dingishi'],
+  voltage_regulator_7805: ['7805', 'lm7805', 'wenya'],
+  voltage_regulator_7812: ['7812', 'lm7812', 'wenya'],
+  eeprom_i2c: ['eeprom', 'i2c', 'cunchu'],
+  eeprom_spi: ['eeprom', 'spi', 'cunchu'],
+  ntc_thermistor: ['ntc', 'remin', 'thermistor'],
+  ptc_thermistor: ['ptc', 'remin', 'thermistor'],
+  ds18b20: ['ds18b20', 'wensensor', 'temperature'],
+  ldr: ['guangmin', 'ldr', 'light'],
+  photodiode: ['guangdian', 'photodiode'],
+  piezo_sensor: ['yadian', 'piezo'],
+  accelerometer: ['jiasudu', 'accelerometer', 'imu'],
+  gyroscope: ['tuoluoyi', 'gyroscope', 'imu'],
+  uart_tx: ['uart', 'chuanxou', 'serial', 'tx'],
+  uart_rx: ['uart', 'chuanxou', 'serial', 'rx'],
+  spi_master: ['spi', 'master', 'zhuji'],
+  spi_slave: ['spi', 'slave', 'congji'],
+  i2c_master: ['i2c', 'master', 'zhuji'],
+  i2c_slave: ['i2c', 'slave', 'congji'],
+  bluetooth_module: ['bluetooth', 'lanya', 'ble'],
+  wifi_module: ['wifi', 'wulianwang'],
+  can_transceiver: ['can', 'transceiver'],
+  rs485_transceiver: ['rs485', 'transceiver'],
+  usb_serial: ['usb', 'serial', 'chuankou'],
+  buzzer_active: ['fengming', 'buzzer', 'active', 'youyuan'],
+  buzzer_passive: ['fengming', 'buzzer', 'passive', 'wuyuan'],
+  relay: ['jidianqi', 'relay'],
+  dc_motor: ['dianji', 'motor', 'dc'],
+  stepper_motor: ['buji', 'stepper', 'motor'],
+  servo_motor: ['duoji', 'servo', 'motor'],
+  led_indicator: ['zhishideng', 'led', 'indicator'],
+  seven_segment: ['shumaguan', 'segment', 'display'],
+  lcd_display: ['lcd', '1602', 'display'],
+  oled_display: ['oled', 'display'],
+  ground: ['jiedi', 'ground', 'gnd'],
+  battery: ['dianchi', 'battery', 'power'],
+  ldo: ['ldo', 'wenya'],
+  buck_converter: ['jiangya', 'buck', 'dc-dc'],
+  boost_converter: ['shengya', 'boost', 'dc-dc'],
+  pin_header: ['paizhen', 'header', 'pin'],
+  dupont_wire: ['dupont', 'wire', 'duxian'],
+};
+
+const RECENT_STORAGE_KEY = 'chip-sim-recent-components';
+const MAX_RECENT = 8;
+
+function getRecentComponents(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function addRecentComponent(id: string): void {
+  try {
+    let recent = getRecentComponents();
+    recent = [id, ...recent.filter(r => r !== id)].slice(0, MAX_RECENT);
+    localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(recent));
+  } catch { /* ignore */ }
+}
 const MIN_RIGHT = 200;
 const MIN_BOTTOM = 80;
 
@@ -152,10 +236,14 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
   const [rightOpen, setRightOpen] = useState(true);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set());
+  const [libSearch, setLibSearch] = useState('');
+  const [recentIds, setRecentIds] = useState<string[]>(getRecentComponents());
   const [libPinSplit, setLibPinSplit] = useState(0.5);
   const [pinConfigs, setPinConfigs] = useState<Record<string, string>>({});
   const [qemuConnected, setQemuConnected] = useState(false);
   const [qemuRunning, setQemuRunning] = useState(false);
+  const [teachingOpen, setTeachingOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const qemuClientRef = useRef<QEMUClient | null>(null);
 
   const dismissToast = useCallback((id: string) => setToasts(prev => prev.filter(t => t.id !== id)), []);
@@ -239,38 +327,119 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                     <button className="mcu-btn-sm" onClick={() => setLeftOpen(false)}>◀</button>
                   </div>
                   <div style={{ flex: 1, overflowY: 'auto', padding: '2px 4px' }}>
-                    {LIBRARY_CATEGORIES.map(cat => (
-                      <div key={cat.id} style={{ marginBottom: 1 }}>
-                        <button
-                          className="mcu-comp-btn"
-                          style={{ width: '100%', justifyContent: 'space-between', borderRadius: 3, fontSize: 11, fontWeight: 600, padding: '3px 6px', flexWrap: 'nowrap' }}
-                          onClick={() => setExpandedCats(prev => {
-                            const next = new Set(prev);
-                            next.has(cat.id) ? next.delete(cat.id) : next.add(cat.id);
-                            return next;
-                          })}
-                        >
-                          <span>{expandedCats.has(cat.id) ? '▼' : '▶'} {cat.label}</span>
-                          <span style={{ fontSize: 9, opacity: 0.4 }}>{cat.items.length}</span>
-                        </button>
-                        {expandedCats.has(cat.id) && (
-                          <div className="mcu-component-grid" style={{ padding: '2px 4px 4px', gap: 2 }}>
-                            {cat.items.map(item => (
-                              <button
-                                key={item.id}
-                                className="mcu-comp-btn"
-                                draggable
-                                onDragStart={(e) => e.dataTransfer.setData('component-type', item.id)}
-                                title={item.label}
-                                style={{ fontSize: 10, padding: '4px 2px' }}
-                              >
-                                {item.label}
-                              </button>
-                            ))}
+                    {/* 搜索框 */}
+                    <input
+                      type="text"
+                      placeholder="搜索元件（支持中文/拼音/英文）..."
+                      value={libSearch}
+                      onChange={e => setLibSearch(e.target.value)}
+                      style={{
+                        width: '100%', boxSizing: 'border-box', padding: '4px 6px', marginBottom: 4,
+                        borderRadius: 3, border: '1px solid var(--sil-border, #d0d7de)',
+                        fontSize: 11, background: 'transparent', color: 'inherit', outline: 'none',
+                      }}
+                    />
+
+                    {/* 搜索模式：跨分类过滤 */}
+                    {libSearch.trim() ? (() => {
+                      const q = libSearch.trim().toLowerCase();
+                      const matched: { id: string; label: string }[] = [];
+                      LIBRARY_CATEGORIES.forEach(cat => {
+                        cat.items.forEach(item => {
+                          const pinyinKeys = COMPONENT_PINYIN_MAP[item.id] || [];
+                          const haystack = [item.label.toLowerCase(), item.id.toLowerCase(), ...pinyinKeys.map(k => k.toLowerCase())];
+                          if (haystack.some(h => h.includes(q))) {
+                            matched.push(item);
+                          }
+                        });
+                      });
+                      if (matched.length === 0) {
+                        return <div style={{ fontSize: 11, opacity: 0.5, textAlign: 'center', padding: '12px 0' }}>未找到匹配元件</div>;
+                      }
+                      return (
+                        <div className="mcu-component-grid" style={{ padding: '2px 4px', gap: 2 }}>
+                          {matched.map(item => (
+                            <button
+                              key={item.id}
+                              className="mcu-comp-btn"
+                              draggable
+                              onDragStart={(e) => e.dataTransfer.setData('component-type', item.id)}
+                              onClick={() => { addRecentComponent(item.id); setRecentIds(getRecentComponents()); }}
+                              title={item.label}
+                              style={{ fontSize: 10, padding: '4px 2px' }}
+                            >
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      );
+                    })() : (
+                      <>
+                        {/* 最近使用 */}
+                        {recentIds.length > 0 && (
+                          <div style={{ marginBottom: 4 }}>
+                            <div style={{ fontSize: 10, fontWeight: 600, opacity: 0.6, padding: '2px 4px' }}>最近使用</div>
+                            <div className="mcu-component-grid" style={{ padding: '2px 4px', gap: 2 }}>
+                              {recentIds.map(id => {
+                                let label = id;
+                                for (const cat of LIBRARY_CATEGORIES) {
+                                  const found = cat.items.find(i => i.id === id);
+                                  if (found) { label = found.label; break; }
+                                }
+                                return (
+                                  <button
+                                    key={id}
+                                    className="mcu-comp-btn"
+                                    draggable
+                                    onDragStart={(e) => e.dataTransfer.setData('component-type', id)}
+                                    onClick={() => { addRecentComponent(id); setRecentIds(getRecentComponents()); }}
+                                    title={label}
+                                    style={{ fontSize: 10, padding: '4px 2px' }}
+                                  >
+                                    {label}
+                                  </button>
+                                );
+                              })}
+                            </div>
                           </div>
                         )}
-                      </div>
-                    ))}
+
+                        {/* 分类展开列表 */}
+                        {LIBRARY_CATEGORIES.map(cat => (
+                          <div key={cat.id} style={{ marginBottom: 1 }}>
+                            <button
+                              className="mcu-comp-btn"
+                              style={{ width: '100%', justifyContent: 'space-between', borderRadius: 3, fontSize: 11, fontWeight: 600, padding: '3px 6px', flexWrap: 'nowrap' }}
+                              onClick={() => setExpandedCats(prev => {
+                                const next = new Set(prev);
+                                next.has(cat.id) ? next.delete(cat.id) : next.add(cat.id);
+                                return next;
+                              })}
+                            >
+                              <span>{expandedCats.has(cat.id) ? '▼' : '▶'} {cat.label}</span>
+                              <span style={{ fontSize: 9, opacity: 0.4 }}>{cat.items.length}</span>
+                            </button>
+                            {expandedCats.has(cat.id) && (
+                              <div className="mcu-component-grid" style={{ padding: '2px 4px 4px', gap: 2 }}>
+                                {cat.items.map(item => (
+                                  <button
+                                    key={item.id}
+                                    className="mcu-comp-btn"
+                                    draggable
+                                    onDragStart={(e) => e.dataTransfer.setData('component-type', item.id)}
+                                    onClick={() => { addRecentComponent(item.id); setRecentIds(getRecentComponents()); }}
+                                    title={item.label}
+                                    style={{ fontSize: 10, padding: '4px 2px' }}
+                                  >
+                                    {item.label}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -341,6 +510,9 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:new-file'))}>新建</button>
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:import-file'))}>导入</button>
                   <span style={{ flex: 1 }} />
+                  <button className="mcu-btn-sm" onClick={() => setTeachingOpen(true)}>🎓 教学</button>
+                  <button className="mcu-btn-sm" onClick={() => setSettingsOpen(true)}>⚙️ 设置</button>
+                  <ExportMenu />
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:open-reference'))}>📖 速查</button>
                   <button className="mcu-btn-sm" onClick={() => window.dispatchEvent(new CustomEvent('chip-sim:open-pins'))}>📌 引脚</button>
                   <button className="mcu-btn-sm" onClick={() => setRightOpen(false)}>▶</button>
@@ -366,6 +538,8 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
       </div>
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+      <TeachingMode isOpen={teachingOpen} onClose={() => setTeachingOpen(false)} />
+      <Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
 }

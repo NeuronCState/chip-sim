@@ -9,7 +9,7 @@ import { useCircuitStore } from '../../stores/circuit-store';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { WSState } from '../../lib/simulation/ws-client';
 import { ServerMessageType } from '../../types/message';
-import { toast } from '../../stores/toast-store';
+import { toast } from '../../stores/ui-store';
 import type {
   SimulationDataMessage,
   SimulationCompleteMessage,

@@ -247,6 +247,97 @@
   white-space: nowrap;
 }
 
+/* 仿真速度控制 */
+.speed-control {
+  margin-top: 10px;
+  padding: 8px;
+  background: var(--bg-input, #1e1e3a);
+  border-radius: 6px;
+  border: 1px solid var(--border, var(--color-border));
+}
+
+.speed-label {
+  font-size: 11px;
+  color: var(--text-dim, #888);
+  margin-bottom: 6px;
+}
+
+.speed-buttons {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.speed-btn {
+  flex: 1;
+  padding: 4px 6px;
+  background: var(--bg-app, #0d0d1a);
+  color: var(--text-dim, #aaa);
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: monospace;
+  transition: all 0.15s;
+}
+
+.speed-btn:hover {
+  background: var(--border, var(--color-border));
+  color: var(--text, #fff);
+}
+
+.speed-btn.active {
+  background: var(--accent, var(--color-accent));
+  color: var(--color-text-inverse);
+  border-color: var(--accent-hover, #0088ff);
+}
+
+.sim-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-pause,
+.btn-step {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1px solid var(--border, var(--color-border));
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+
+.btn-pause {
+  background: var(--bg-app, #0d0d1a);
+  color: var(--text, #ddd);
+}
+
+.btn-pause:hover {
+  background: var(--border, var(--color-border));
+}
+
+.btn-pause.paused {
+  background: rgba(78, 205, 196, 0.15);
+  color: var(--success, var(--color-success));
+  border-color: var(--success, var(--color-success));
+}
+
+.btn-step {
+  background: var(--bg-app, #0d0d1a);
+  color: var(--text-dim, #aaa);
+}
+
+.btn-step:hover:not(:disabled) {
+  background: var(--border, var(--color-border));
+  color: var(--text, #fff);
+}
+
+.btn-step:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .spinner {
   width: 12px;
   height: 12px;

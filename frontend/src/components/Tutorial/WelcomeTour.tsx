@@ -6,7 +6,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { TOUR_STEPS } from './tour-steps';
 import type { TourStep } from './tour-steps';
-import { t } from '../../i18n';
+import { t, getLocale } from '../../i18n';
 import './WelcomeTour.css';
 
 interface WelcomeTourProps {
@@ -16,6 +16,7 @@ interface WelcomeTourProps {
   onPrev: () => void;
   onSkip: () => void;
   onFinish: () => void;
+  onResumeLater?: () => void;
 }
 
 interface TargetRect {
@@ -32,6 +33,7 @@ export function WelcomeTour({
   onPrev,
   onSkip,
   onFinish,
+  onResumeLater,
 }: WelcomeTourProps) {
   const [targetRect, setTargetRect] = useState<TargetRect | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -47,7 +49,13 @@ export function WelcomeTour({
       setTargetRect(null);
       return;
     }
-    const el = document.querySelector(step.target);
+    // 尝试多个选择器
+    const targets = step.target.split(',').map(s => s.trim());
+    let el: Element | null = null;
+    for (const sel of targets) {
+      el = document.querySelector(sel);
+      if (el) break;
+    }
     if (el) {
       const rect = el.getBoundingClientRect();
       setTargetRect({
@@ -57,7 +65,6 @@ export function WelcomeTour({
         height: rect.height,
       });
     } else {
-      // 目标不存在时居中显示
       setTargetRect(null);
     }
   }, [step]);
@@ -89,7 +96,6 @@ export function WelcomeTour({
 
   const getTooltipStyle = (): React.CSSProperties => {
     if (!targetRect) {
-      // 居中显示 (welcome / complete)
       return {
         position: 'fixed',
         top: '50%',
@@ -138,6 +144,11 @@ export function WelcomeTour({
     };
   };
 
+  // 步骤标题如"第1步：欢迎"
+  const locale = getLocale();
+  const stepLabel = locale === 'zh' ? `第${currentStep + 1}步` : `Step ${currentStep + 1}`;
+  const stepTitle = `${stepLabel}：${t(step.titleKey)}`;
+
   return (
     <div className="tour-overlay">
       {/* 背景遮罩 */}
@@ -163,7 +174,11 @@ export function WelcomeTour({
           </button>
         </div>
 
-        <h3 className="tour-tooltip-title">{t(step.titleKey)}</h3>
+        {/* 步骤标题 + 图标 */}
+        <div className="tour-step-title-row">
+          <span className="tour-step-icon">{step.icon}</span>
+          <h3 className="tour-tooltip-title">{stepTitle}</h3>
+        </div>
         <p className="tour-tooltip-desc">{t(step.descKey)}</p>
 
         {/* 进度条 */}
@@ -183,6 +198,11 @@ export function WelcomeTour({
           <button className="tour-btn tour-btn-skip" onClick={onSkip}>
             {t('common.skip')}
           </button>
+          {!isLast && onResumeLater && (
+            <button className="tour-btn tour-btn-skip" onClick={onResumeLater} title={t('tour.resumeLaterHint')}>
+              {t('tour.resumeLater')}
+            </button>
+          )}
           <div style={{ flex: 1 }} />
           {isLast ? (
             <button className="tour-btn tour-btn-primary" onClick={onFinish}>

@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useVersionStore } from '../../stores/version-store';
 import { useCircuitStore } from '../../stores/circuit-store';
 import type { VersionSnapshot } from '../../types/version';
-import { toast } from '../../stores/toast-store';
+import { toast } from '../../stores/ui-store';
 import './VersionHistory.css';
 
 interface VersionHistoryProps {

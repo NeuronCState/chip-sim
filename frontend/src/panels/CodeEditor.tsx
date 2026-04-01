@@ -811,9 +811,17 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
   const [newFileName, setNewFileName] = useState('');
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
   const [treeWidth, setTreeWidth] = useState(140);
+  const [treeCollapsed, setTreeCollapsed] = useState(false);
   const [compiling, setCompiling] = useState(false);
   const [compileResult, setCompileResult] = useState<CompileResult | null>(null);
   const [compilers, setCompilers] = useState<CompilerInfo[]>([]);
+  // 右键菜单
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; filePath: string } | null>(null);
+  // 重命名
+  const [renamingFile, setRenamingFile] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState('');
+  // Tab 拖拽
+  const [dragTab, setDragTab] = useState<string | null>(null);
   // 1b: 仿真状态定时刷新
   const [simTick, setSimTick] = useState(0);
   const editorContainerRef = useRef<HTMLDivElement>(null);
@@ -1177,6 +1185,96 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
     });
   };
 
+  // 右键菜单：重命名
+  const handleRename = useCallback(() => {
+    if (!contextMenu) return;
+    setRenamingFile(contextMenu.filePath);
+    const name = contextMenu.filePath.split('/').pop() || contextMenu.filePath;
+    setRenameValue(name);
+    setContextMenu(null);
+  }, [contextMenu]);
+
+  const confirmRename = useCallback(() => {
+    if (!renamingFile || !renameValue.trim()) { setRenamingFile(null); return; }
+    const newName = renameValue.trim();
+    const parts = renamingFile.split('/');
+    parts[parts.length - 1] = newName;
+    const newPath = parts.join('/');
+    if (newPath !== renamingFile && files.some(f => f.path === newPath)) {
+      alert(`文件 "${newName}" 已存在`);
+      setRenamingFile(null);
+      return;
+    }
+    setFiles(prev => prev.map(f => f.path === renamingFile ? { ...f, path: newPath } : f));
+    setOpenTabs(prev => prev.map(t => t === renamingFile ? newPath : t));
+    if (activeFile === renamingFile) setActiveFile(newPath);
+    // 更新 Monaco model
+    const model = modelsRef.current.get(renamingFile);
+    if (model) {
+      modelsRef.current.delete(renamingFile);
+      modelsRef.current.set(newPath, model);
+    }
+    setRenamingFile(null);
+  }, [renamingFile, renameValue, files, activeFile]);
+
+  // 右键菜单：删除
+  const handleDelete = useCallback(() => {
+    if (!contextMenu) return;
+    const filePath = contextMenu.filePath;
+    setContextMenu(null);
+    if (!confirm(`确定删除文件 "${filePath}" 吗？`)) return;
+    setFiles(prev => prev.filter(f => f.path !== filePath));
+    setOpenTabs(prev => prev.filter(t => t !== filePath));
+    if (activeFile === filePath) {
+      const remaining = openTabs.filter(t => t !== filePath);
+      setActiveFile(remaining.length > 0 ? remaining[remaining.length - 1] : null);
+    }
+    // 清理 Monaco model
+    const model = modelsRef.current.get(filePath);
+    if (model) { model.dispose(); modelsRef.current.delete(filePath); }
+  }, [contextMenu, activeFile, openTabs]);
+
+  // Tab 拖拽排序
+  const handleTabDragStart = useCallback((path: string, e: React.DragEvent) => {
+    setDragTab(path);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', path);
+  }, []);
+
+  const handleTabDragOver = useCallback((targetPath: string, e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const handleTabDrop = useCallback((targetPath: string, e: React.DragEvent) => {
+    e.preventDefault();
+    const sourcePath = dragTab;
+    if (!sourcePath || sourcePath === targetPath) return;
+    setOpenTabs(prev => {
+      const next = prev.filter(t => t !== sourcePath);
+      const targetIdx = next.indexOf(targetPath);
+      if (targetIdx === -1) return prev;
+      next.splice(targetIdx, 0, sourcePath);
+      return next;
+    });
+    setDragTab(null);
+  }, [dragTab]);
+
+  // Tab 中键关闭
+  const handleTabMouseDown = useCallback((path: string, e: React.MouseEvent) => {
+    if (e.button === 1) { // 中键
+      e.preventDefault();
+      setOpenTabs(prev => {
+        const next = prev.filter(t => t !== path);
+        if (activeFile === path) {
+          setActiveFile(next.length > 0 ? next[next.length - 1] : null);
+          setActivePanel(null);
+        }
+        return next;
+      });
+    }
+  }, [activeFile]);
+
   const dirs = new Set<string>();
   files.forEach(f => { const p = f.path.split('/'); for (let i = 1; i < p.length; i++) dirs.add(p.slice(0, i).join('/')); });
 
@@ -1196,8 +1294,16 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
 
       <div className="ide-body">
         {/* 文件树 */}
-        <div className="ide-file-tree" style={{ width: treeWidth, flexShrink: 0 }}>
-          <div className="ide-tree-header">信息</div>
+        {!treeCollapsed && (
+          <div className="ide-file-tree" style={{ width: treeWidth, flexShrink: 0 }}>
+            <div className="ide-tree-header">
+              <span>信息</span>
+              <button
+                onClick={() => setTreeCollapsed(true)}
+                title="收起文件树"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontSize: 11, padding: '0 2px' }}
+              >◀</button>
+            </div>
           {panelTabs.map(p => (
             <div key={p.id}
               className={`ide-tree-file ${activePanel === p.id ? 'active' : ''}`}
@@ -1221,19 +1327,72 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
             const parts = f.path.split('/');
             const parentDir = parts.slice(0, -1).join('/');
             if (parts.length > 1 && !expandedDirs.has(parentDir)) return null;
+            const isRenaming = renamingFile === f.path;
             return (
               <div key={f.path}
                 className={`ide-tree-file ${activeFile === f.path && !activePanel ? 'active' : ''}`}
                 style={{ paddingLeft: 6 + (parts.length - 1) * 10 }}
-                onClick={() => openFile(f.path)}>
-                <span>{parts[parts.length - 1]}</span>
+                onClick={() => !isRenaming && openFile(f.path)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  setContextMenu({ x: e.clientX, y: e.clientY, filePath: f.path });
+                }}>
+                {isRenaming ? (
+                  <input
+                    autoFocus
+                    value={renameValue}
+                    onChange={e => setRenameValue(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') confirmRename(); if (e.key === 'Escape') setRenamingFile(null); }}
+                    onBlur={confirmRename}
+                    onClick={e => e.stopPropagation()}
+                    style={{ width: '100%', fontSize: 11, padding: '0 2px', boxSizing: 'border-box' }}
+                  />
+                ) : (
+                  <span>{parts[parts.length - 1]}</span>
+                )}
               </div>
             );
           })}
         </div>
+        )}
+
+        {/* 右键菜单 */}
+        {contextMenu && (
+          <>
+            <div style={{ position: 'fixed', inset: 0, zIndex: 9998 }} onClick={() => setContextMenu(null)} />
+            <div style={{
+              position: 'fixed', left: contextMenu.x, top: contextMenu.y, zIndex: 9999,
+              background: 'var(--color-bg-input, #252536)', border: '1px solid var(--color-border, #444)',
+              borderRadius: 6, padding: '4px 0', minWidth: 120, boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+            }}>
+              <div
+                style={{ padding: '6px 14px', cursor: 'pointer', fontSize: 12 }}
+                onClick={handleRename}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
+              >重命名</div>
+              <div
+                style={{ padding: '6px 14px', cursor: 'pointer', fontSize: 12, color: '#f87171' }}
+                onClick={handleDelete}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
+              >删除</div>
+            </div>
+          </>
+        )}
 
         {/* 分隔线 */}
-        <div
+        {treeCollapsed ? (
+          <button
+            onClick={() => setTreeCollapsed(false)}
+            title="展开文件树"
+            style={{
+              width: 24, flexShrink: 0, background: 'var(--sil-border, #d0d7de)', border: 'none',
+              cursor: 'pointer', color: 'inherit', fontSize: 11, borderRadius: 0,
+            }}
+          >▶</button>
+        ) : (
+          <div
           style={{ width: 3, cursor: 'col-resize', background: 'var(--sil-border, #d0d7de)', flexShrink: 0 }}
           onPointerDown={(e) => {
             e.preventDefault();
@@ -1244,6 +1403,7 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
             window.addEventListener('pointerup', onUp);
           }}
         />
+        )}
 
         {/* 编辑器区域 */}
         <div className="ide-editor-area">
@@ -1251,8 +1411,14 @@ export function CodeEditor({ selectedElement, pinConfigs, onPinConfigChange, chi
           <div className="ide-tab-bar">
             {openTabs.map(tab => (
               <div key={tab}
-                className={`ide-tab ${activeFile === tab && !activePanel ? 'active' : ''}`}
-                onClick={() => openFile(tab)}>
+                className={`ide-tab ${activeFile === tab && !activePanel ? 'active' : ''} ${dragTab === tab ? 'ide-tab-dragging' : ''}`}
+                onClick={() => openFile(tab)}
+                onMouseDown={(e) => handleTabMouseDown(tab, e)}
+                draggable
+                onDragStart={(e) => handleTabDragStart(tab, e)}
+                onDragOver={(e) => handleTabDragOver(tab, e)}
+                onDrop={(e) => handleTabDrop(tab, e)}
+              >
                 <span>{tab.split('/').pop()}</span>
                 <button className="ide-tab-close" onClick={(e) => closeTab(tab, e)}>×</button>
               </div>

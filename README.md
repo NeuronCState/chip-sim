@@ -1,7 +1,7 @@
 # ChipSim · MCU 仿真平台
 
 > 桌面端嵌入式芯片在线仿真平台 — 电路设计、代码编辑、编译、仿真一体化
-注意！当前版本有无法正常使用的问题，正在积极修复，建议不要尝试下载使用
+注意！全新升级版本，功能完善，欢迎下载体验
 [![Build ChipSim](https://github.com/NeuronCState/chip-sim/actions/workflows/build.yml/badge.svg)](https://github.com/NeuronCState/chip-sim/actions/workflows/build.yml)
 [![Latest Release](https://img.shields.io/github/v/release/NeuronCState/chip-sim?color=green&label=Latest%20Release)](https://github.com/NeuronCState/chip-sim/releases/latest)
 [![License](https://img.shields.io/badge/License-Proprietary-blue)](#)
@@ -10,10 +10,10 @@
 
 | 平台 | 下载 |
 |------|------|
-| macOS (Apple Silicon) | [ChipSim_0.2.0_aarch64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.2.0_aarch64.dmg) |
-| macOS (Intel) | [ChipSim_0.2.0_x64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.2.0_x64.dmg) |
-| Windows x64 | [ChipSim_0.2.0_x64-setup.exe](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.2.0_x64-setup.exe) |
-| Linux x64 | [.deb](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.2.0_amd64.deb) \| [.AppImage](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.2.0_amd64.AppImage) |
+| macOS (Apple Silicon) | [ChipSim_0.4.0_aarch64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_aarch64.dmg) |
+| macOS (Intel) | [ChipSim_0.4.0_x64.dmg](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_x64.dmg) |
+| Windows x64 | [ChipSim_0.4.0_x64-setup.exe](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_x64-setup.exe) |
+| Linux x64 | [.deb](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_amd64.deb) \| [.AppImage](https://github.com/NeuronCState/chip-sim/releases/latest/download/ChipSim_0.4.0_amd64.AppImage) |
 
 安装后即可使用，无需额外安装编译器或 QEMU。
 

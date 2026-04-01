@@ -6,7 +6,7 @@
 import { useState, useCallback } from 'react';
 import { useCircuitStore } from '../../stores/circuit-store';
 import { NetLabelKind } from '../../types/circuit';
-import { toast } from '../../stores/toast-store';
+import { toast } from '../../stores/ui-store';
 
 /** 网络标签预设 */
 const PRESET_NETS = [

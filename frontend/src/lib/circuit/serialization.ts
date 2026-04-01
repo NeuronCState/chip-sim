@@ -10,7 +10,7 @@ import type {
   CircuitProject,
   SimulationConfig,
 } from '../../types/circuit';
-import { toast } from '../../stores/toast-store';
+import { toast } from '../../stores/ui-store';
 
 const PROJECT_VERSION = '1.0.0';
 

@@ -7,9 +7,9 @@ import { useState, useRef, useEffect } from 'react';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { McuSimulator } from './pages/McuSimulator';
 import { EditorPage } from './features/editor/EditorPage';
-import { ChipSelector } from './components/ChipSelector';
 import { SetupWizard } from './components/SetupWizard/SetupWizard';
 import { CIRCUIT_TEMPLATES } from './canvas/WebGLCanvas';
+import { useCircuitStore } from './stores/circuit-store';
 import { ThemeSwitcher } from './theme/switcher';
 import './App.css';
 
@@ -38,6 +38,7 @@ function AppShell() {
     setInProject(false);
     setLoadTemplateId(null);
     setImportedFiles(null);
+    useCircuitStore.getState().setTemplateLoaded(false);
   };
 
   const handleLoadTemplate = (id: string) => {
@@ -46,6 +47,7 @@ function AppShell() {
     }
     setLoadTemplateId(id);
     setTplDropdownOpen(false);
+    useCircuitStore.getState().setTemplateLoaded(true);
   };
 
   // 点击外部关闭下拉
@@ -94,8 +96,6 @@ function AppShell() {
         <div className="sil-topbar-center">
           {tab === 'mcu' && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <ChipSelector initialFamily={chip.family as any} initialModel={chip.model} onChipSelected={(f, m) => setChip({ family: f, model: m })} />
-              <span style={{ color: 'var(--sil-text-soft)', fontSize: 12 }}>|</span>
               {/* 电路模板下拉选择 */}
               <div ref={tplDropdownRef} style={{ position: 'relative' }}>
                 <button

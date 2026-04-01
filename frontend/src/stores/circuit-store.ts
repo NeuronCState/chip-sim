@@ -275,6 +275,10 @@ interface CircuitStore {
   selectAll: () => void;
   toggleShortcutsHelp: () => void;
 
+  // === 模板加载状态（示例加载前置条件） ===
+  templateLoaded: boolean;
+  setTemplateLoaded: (loaded: boolean) => void;
+
   // === 重置 ===
   reset: () => void;
 }
@@ -317,6 +321,8 @@ const initialState = {
   // 多工程管理
   projects: [] as ProjectMeta[],
   currentProjectId: null as string | null,
+  // 模板加载状态
+  templateLoaded: false,
 };
 
 export const useCircuitStore = create<CircuitStore>((set, get) => ({
@@ -2027,6 +2033,10 @@ export const useCircuitStore = create<CircuitStore>((set, get) => ({
     setTimeout(() => get().fitToScreen(), 50);
     get().autoSave();
   },
+
+  // ==================== 模板加载状态 ====================
+
+  setTemplateLoaded: (loaded) => set({ templateLoaded: loaded }),
 
   // ==================== 重置 ====================
 

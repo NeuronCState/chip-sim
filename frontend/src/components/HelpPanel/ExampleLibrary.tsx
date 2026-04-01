@@ -284,6 +284,7 @@ const EXAMPLES: ExampleInfo[] = [
 export function ExampleLibrary() {
   const reset = useCircuitStore((s) => s.reset);
   const fitToScreen = useCircuitStore((s) => s.fitToScreen);
+  const templateLoaded = useCircuitStore((s) => s.templateLoaded);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -311,6 +312,7 @@ export function ExampleLibrary() {
   }, [searchQuery, activeCategory]);
 
   const handleLoadExample = (templateId: string) => {
+    if (!templateLoaded) return; // 未加载模板时不允许加载示例
     const template = TEMPLATES.find((t) => t.id === templateId);
     if (!template) return;
 
@@ -338,6 +340,13 @@ export function ExampleLibrary() {
   return (
     <div className="example-library">
       <h4 className="example-title">📚 {t('examples.title')}</h4>
+
+      {/* 未加载模板提示 */}
+      {!templateLoaded && (
+        <div className="example-template-hint">
+          请先从顶部「电路模板」下拉菜单加载一个模板，再加载示例电路。
+        </div>
+      )}
 
       {/* 搜索框 */}
       <div className="example-search">
@@ -409,8 +418,10 @@ export function ExampleLibrary() {
                     {'⭐'.repeat(template.difficulty)}
                   </span>
                   <button
-                    className="example-load-btn"
+                    className={`example-load-btn ${!templateLoaded ? 'example-load-btn-disabled' : ''}`}
                     onClick={() => handleLoadExample(example.templateId)}
+                    disabled={!templateLoaded}
+                    title={!templateLoaded ? '请先加载电路模板' : '加载此示例'}
                   >
                     加载
                   </button>

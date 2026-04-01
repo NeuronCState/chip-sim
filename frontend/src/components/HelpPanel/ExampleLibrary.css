@@ -240,6 +240,25 @@
   color: var(--color-success);
 }
 
+/* 未加载模板提示 */
+.example-template-hint {
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background: rgba(255, 193, 7, 0.08);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--color-warning, #f0ad4e);
+  line-height: 1.5;
+}
+
+/* 加载按钮禁用态 */
+.example-load-btn-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* 空状态 */
 .example-empty {
   text-align: center;

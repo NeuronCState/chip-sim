@@ -1,11 +1,11 @@
 # ChipSim · MCU 仿真平台
 
 > 桌面端嵌入式芯片在线仿真平台 — 电路设计、代码编辑、编译、仿真一体化
-注意！全新升级版本，功能完善，欢迎下载体验
+
 [![Build ChipSim](https://github.com/NeuronCState/chip-sim/actions/workflows/build.yml/badge.svg)](https://github.com/NeuronCState/chip-sim/actions/workflows/build.yml)
 [![Latest Release](https://img.shields.io/github/v/release/NeuronCState/chip-sim?color=green&label=Latest%20Release)](https://github.com/NeuronCState/chip-sim/releases/latest)
 [![License](https://img.shields.io/badge/License-Proprietary-blue)](#)
-
+# 仅是测试版，有许多已验证但未修复或未验证的问题，请谨慎下载
 ## 下载
 
 | 平台 | 下载 |

@@ -33,6 +33,43 @@ export {
   getButtonStates,
 } from './ComponentBehaviors';
 
+// 事件录制器
+export { SignalEventRecorder, getGlobalRecorder, resetGlobalRecorder } from './SignalEventRecorder';
+export type {
+  WireType,
+  SignalEvent,
+  WireStateSnapshot,
+  PinStateSnapshot,
+  SimulationStateSnapshot,
+  RecorderConfig,
+} from './SignalEventRecorder';
+
+// 协议解码器
+export {
+  decodeGPIO,
+  decodeUART,
+  extractUARTMessages,
+  decodeI2C,
+  parseI2CByte,
+  decodeSPI,
+  decodeSPITransaction,
+  detectProtocol,
+  hexToBytes,
+  bytesToHex,
+  bytesToAscii,
+  asciiToBytes,
+} from './ProtocolDecoder';
+export type {
+  ProtocolType,
+  GPIODecodeResult,
+  UARTDecodeResult,
+  I2CDecodeResult,
+  SPIDecodeResult,
+  DecodeResult,
+  I2CSignal,
+  SPISignal,
+} from './ProtocolDecoder';
+
 // 类型
 export type {
   MCUPinState,

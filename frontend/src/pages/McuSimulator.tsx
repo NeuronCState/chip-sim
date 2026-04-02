@@ -6,7 +6,7 @@
  * Resizer 分隔线：左-中、中-右
  */
 
-import { useState, useCallback, useRef, useMemo } from 'react';
+import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { WebGLCanvas, CIRCUIT_TEMPLATES } from '../canvas/WebGLCanvas';
 import { SerialMonitor } from '../panels/SerialMonitor';
 import { CodeEditor } from '../panels/CodeEditor';
@@ -16,8 +16,11 @@ import { ExportMenu } from '../components/ExportMenu/ExportMenu';
 import { TeachingMode } from '../components/TeachingMode/TeachingMode';
 import { QEMUClient } from '../lib/qemu/client';
 import { QEMUAdapter } from '../lib/qemu/adapter';
+import { TimelineControl, EventHistory } from '../components/Timeline';
+import { getGlobalRecorder } from '../core/simulation/SignalEventRecorder';
 import type { ToastItem } from '../ui/Toast';
 import type { SelectedElement } from '../canvas/interaction';
+import type { SignalEvent } from '../core/simulation/SignalEventRecorder';
 
 /** 分类定义 */
 const LIBRARY_CATEGORIES = [
@@ -241,6 +244,30 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
   const [teachingOpen, setTeachingOpen] = useState(false);
   const qemuClientRef = useRef<QEMUClient | null>(null);
 
+  // Timeline 状态
+  const [timelineOpen, setTimelineOpen] = useState(true);
+  const [timelineHeight, setTimelineHeight] = useState(200);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isRecording, setIsRecording] = useState(true);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [events, setEvents] = useState<SignalEvent[]>([]);
+  const recorder = useRef(getGlobalRecorder());
+  const playbackTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // 监听录制器事件
+  useEffect(() => {
+    const unsub = recorder.current.onEvent((event) => {
+      setEvents(recorder.current.getAllEvents());
+      const range = recorder.current.getTimeRange();
+      if (range) {
+        setTotalTime(range.end);
+      }
+    });
+    return () => unsub();
+  }, []);
+
   const dismissToast = useCallback((id: string) => setToasts(prev => prev.filter(t => t.id !== id)), []);
   const addToast = useCallback((msg: string, type: ToastItem['type'] = 'info') => {
     const id = Date.now().toString();
@@ -304,6 +331,117 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
       return Math.max(MIN_RIGHT, Math.min(600, next));
     });
   }, []);
+
+  /** 时间轴分隔线拖拽 */
+  const handleTimelineResize = useCallback((delta: number) => {
+    setTimelineHeight(prev => {
+      const next = prev - delta;
+      return Math.max(100, Math.min(400, next));
+    });
+  }, []);
+
+  // Timeline 控制回调
+  const handlePlayPause = useCallback(() => {
+    if (isPlaying) {
+      // 暂停
+      if (playbackTimerRef.current) {
+        clearInterval(playbackTimerRef.current);
+        playbackTimerRef.current = null;
+      }
+      setIsPlaying(false);
+    } else {
+      // 播放
+      setIsPlaying(true);
+      const interval = Math.round(1000 / (60 * playbackSpeed));
+      playbackTimerRef.current = setInterval(() => {
+        setCurrentTime(prev => {
+          const next = prev + (1000 / 60) * playbackSpeed;
+          if (next >= totalTime) {
+            if (playbackTimerRef.current) {
+              clearInterval(playbackTimerRef.current);
+              playbackTimerRef.current = null;
+            }
+            setIsPlaying(false);
+            return totalTime;
+          }
+          return next;
+        });
+      }, interval);
+    }
+  }, [isPlaying, playbackSpeed, totalTime]);
+
+  const handleStop = useCallback(() => {
+    if (playbackTimerRef.current) {
+      clearInterval(playbackTimerRef.current);
+      playbackTimerRef.current = null;
+    }
+    setIsPlaying(false);
+    setCurrentTime(0);
+  }, []);
+
+  const handleSeek = useCallback((time: number) => {
+    setCurrentTime(Math.max(0, Math.min(totalTime, time)));
+    // 回溯到指定时间点
+    recorder.current.seekTo(time);
+  }, [totalTime]);
+
+  const handleSpeedChange = useCallback((speed: number) => {
+    setPlaybackSpeed(speed);
+    // 如果正在播放，重新启动定时器
+    if (isPlaying && playbackTimerRef.current) {
+      clearInterval(playbackTimerRef.current);
+      const interval = Math.round(1000 / (60 * speed));
+      playbackTimerRef.current = setInterval(() => {
+        setCurrentTime(prev => {
+          const next = prev + (1000 / 60) * speed;
+          if (next >= totalTime) {
+            if (playbackTimerRef.current) {
+              clearInterval(playbackTimerRef.current);
+              playbackTimerRef.current = null;
+            }
+            setIsPlaying(false);
+            return totalTime;
+          }
+          return next;
+        });
+      }, interval);
+    }
+  }, [isPlaying, totalTime]);
+
+  const handleToggleRecord = useCallback(() => {
+    if (isRecording) {
+      recorder.current.pause();
+    } else {
+      recorder.current.resume();
+    }
+    setIsRecording(!isRecording);
+  }, [isRecording]);
+
+  const handleExportCSV = useCallback(() => {
+    const csv = recorder.current.exportCSV();
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chip-sim-events-${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const handleExportJSON = useCallback(() => {
+    const json = recorder.current.exportJSON();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chip-sim-events-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const handleEventClick = useCallback((event: SignalEvent) => {
+    handleSeek(event.timestamp);
+  }, [handleSeek]);
 
   return (
     <div className="mcu-simulator">
@@ -496,6 +634,42 @@ export function McuSimulator({ chipFamily, chipModel, loadTemplateId, importedFi
             <button className="mcu-expand-btn" style={{ width: 28, flexShrink: 0 }} onClick={() => setRightOpen(true)}>◀</button>
           )}
         </div>
+
+        {/* 底部：时间轴 */}
+        {timelineOpen && (
+          <>
+            <Resizer direction="vertical" onResize={handleTimelineResize} />
+            <div style={{ height: timelineHeight, flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+                {/* 时间轴控制 */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                  <TimelineControl
+                    currentTime={currentTime}
+                    totalTime={totalTime}
+                    isPlaying={isPlaying}
+                    isRecording={isRecording}
+                    playbackSpeed={playbackSpeed}
+                    events={events}
+                    onPlayPause={handlePlayPause}
+                    onStop={handleStop}
+                    onSeek={handleSeek}
+                    onSpeedChange={handleSpeedChange}
+                    onToggleRecord={handleToggleRecord}
+                    onExportCSV={handleExportCSV}
+                    onExportJSON={handleExportJSON}
+                  />
+                  <div style={{ flex: 1, minHeight: 0 }}>
+                    <EventHistory
+                      events={events}
+                      currentTime={currentTime}
+                      onEventClick={handleEventClick}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />

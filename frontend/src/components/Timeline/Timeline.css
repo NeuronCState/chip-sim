@@ -1,0 +1,458 @@
+/* Timeline.css — 时间轴控件样式（Silicone Float UI 风格） */
+
+.timeline-container {
+  --timeline-bg: rgba(20, 22, 30, 0.95);
+  --timeline-border: rgba(255, 255, 255, 0.08);
+  --timeline-accent: #4fc3f7;
+  --timeline-accent-dim: rgba(79, 195, 247, 0.3);
+  --timeline-text: rgba(255, 255, 255, 0.9);
+  --timeline-text-dim: rgba(255, 255, 255, 0.5);
+  --timeline-surface: rgba(255, 255, 255, 0.05);
+  --timeline-hover: rgba(255, 255, 255, 0.1);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--timeline-bg);
+  border-top: 1px solid var(--timeline-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  user-select: none;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--timeline-text);
+}
+
+/* ── 主控制栏 ── */
+.timeline-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--timeline-border);
+  flex-shrink: 0;
+}
+
+.timeline-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--timeline-border);
+  border-radius: 6px;
+  background: var(--timeline-surface);
+  color: var(--timeline-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.timeline-btn:hover {
+  background: var(--timeline-hover);
+  border-color: var(--timeline-accent-dim);
+  color: var(--timeline-accent);
+}
+
+.timeline-btn:active {
+  transform: scale(0.95);
+}
+
+.timeline-btn.active {
+  background: var(--timeline-accent-dim);
+  border-color: var(--timeline-accent);
+  color: var(--timeline-accent);
+}
+
+.timeline-btn.recording {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+  color: #ef4444;
+  animation: pulse-recording 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-recording {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── 时间显示 ── */
+.timeline-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  font-variant-numeric: tabular-nums;
+  color: var(--timeline-accent);
+  font-weight: 600;
+  min-width: 90px;
+}
+
+.timeline-time-current {
+  font-size: 13px;
+}
+
+.timeline-time-total {
+  font-size: 10px;
+  color: var(--timeline-text-dim);
+}
+
+/* ── 倍速选择 ── */
+.timeline-speed {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.timeline-speed-btn {
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--timeline-text-dim);
+  cursor: pointer;
+  font-size: 10px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.timeline-speed-btn:hover {
+  color: var(--timeline-text);
+  background: var(--timeline-surface);
+}
+
+.timeline-speed-btn.active {
+  color: var(--timeline-accent);
+  border-color: var(--timeline-accent-dim);
+  background: var(--timeline-accent-dim);
+}
+
+/* ── 导出按钮 ── */
+.timeline-export {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+/* ── 时间刻度条 ── */
+.timeline-ruler {
+  position: relative;
+  height: 40px;
+  background: var(--timeline-surface);
+  border-bottom: 1px solid var(--timeline-border);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.timeline-ruler-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.timeline-ruler-markers {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.timeline-ruler-marker {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  background: var(--timeline-text-dim);
+  transition: background 0.2s ease;
+}
+
+.timeline-ruler-marker.major {
+  height: 12px;
+  background: var(--timeline-text);
+}
+
+.timeline-ruler-marker.minor {
+  height: 6px;
+}
+
+.timeline-ruler-label {
+  position: absolute;
+  bottom: 14px;
+  font-size: 9px;
+  color: var(--timeline-text-dim);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* ── 滑块 ── */
+.timeline-scrubber {
+  position: relative;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--timeline-border);
+}
+
+.timeline-scrubber-track {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.timeline-scrubber-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--timeline-accent), rgba(79, 195, 247, 0.6));
+  border-radius: 2px;
+  transition: width 0.05s linear;
+}
+
+.timeline-scrubber-thumb {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background: var(--timeline-accent);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  z-index: 2;
+}
+
+.timeline-scrubber-thumb:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 2px 12px rgba(79, 195, 247, 0.5);
+}
+
+.timeline-scrubber-thumb:active {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.timeline-scrubber-thumb.dragging {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* ── 事件标记点 ── */
+.timeline-event-markers {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.timeline-event-marker {
+  position: absolute;
+  top: 2px;
+  width: 2px;
+  height: 8px;
+  border-radius: 1px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.timeline-event-marker.gpio { background: #4ade80; }
+.timeline-event-marker.uart { background: #facc15; }
+.timeline-event-marker.i2c { background: #c084fc; }
+.timeline-event-marker.spi { background: #f97316; }
+
+/* ── 事件历史面板 ── */
+.timeline-event-history {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--timeline-border);
+  flex-shrink: 0;
+}
+
+.timeline-event-header-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--timeline-text);
+}
+
+.timeline-event-header-count {
+  font-size: 10px;
+  color: var(--timeline-text-dim);
+}
+
+.timeline-event-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 0;
+}
+
+.timeline-event-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.timeline-event-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.timeline-event-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.timeline-event-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ── 事件项 ── */
+.timeline-event-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-left: 2px solid transparent;
+}
+
+.timeline-event-item:hover {
+  background: var(--timeline-hover);
+}
+
+.timeline-event-item.current {
+  background: var(--timeline-accent-dim);
+  border-left-color: var(--timeline-accent);
+}
+
+.timeline-event-item.gpio { border-left-color: #4ade80; }
+.timeline-event-item.uart { border-left-color: #facc15; }
+.timeline-event-item.i2c { border-left-color: #c084fc; }
+.timeline-event-item.spi { border-left-color: #f97316; }
+
+.timeline-event-time {
+  font-size: 10px;
+  color: var(--timeline-text-dim);
+  min-width: 70px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-event-type {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timeline-event-type.gpio {
+  background: rgba(74, 222, 128, 0.2);
+  color: #4ade80;
+}
+
+.timeline-event-type.uart {
+  background: rgba(250, 204, 21, 0.2);
+  color: #facc15;
+}
+
+.timeline-event-type.i2c {
+  background: rgba(192, 132, 252, 0.2);
+  color: #c084fc;
+}
+
+.timeline-event-type.spi {
+  background: rgba(249, 115, 22, 0.2);
+  color: #f97316;
+}
+
+.timeline-event-command {
+  flex: 1;
+  font-size: 11px;
+  color: var(--timeline-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeline-event-pin {
+  font-size: 10px;
+  color: var(--timeline-text-dim);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ── 浮动气泡标签（在画布上） ── */
+.wire-tooltip {
+  position: absolute;
+  padding: 4px 8px;
+  background: rgba(20, 22, 30, 0.9);
+  border: 1px solid var(--timeline-border);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 10px;
+  color: var(--timeline-text);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.wire-tooltip.hidden {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.wire-tooltip-type {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.wire-tooltip-type.gpio { color: #4ade80; }
+.wire-tooltip-type.uart { color: #facc15; }
+.wire-tooltip-type.i2c { color: #c084fc; }
+.wire-tooltip-type.spi { color: #f97316; }
+
+/* ── 连线高亮 ── */
+.wire-highlight {
+  position: absolute;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ── 响应式调整 ── */
+@media (max-width: 800px) {
+  .timeline-controls {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .timeline-speed {
+    margin-left: 0;
+  }
+
+  .timeline-event-history {
+    max-height: 150px;
+  }
+}

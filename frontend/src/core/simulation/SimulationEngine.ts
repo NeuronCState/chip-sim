@@ -13,6 +13,8 @@
 
 import { MCUSim, type PinBehaviorConfig } from './MCUSim';
 import { SignalBus, type SimWire, type SignalSource, type PinSignal } from './SignalBus';
+import { getGlobalRecorder, type SignalEvent } from './SignalEventRecorder';
+import { detectProtocol, decodeGPIO, decodeUART } from './ProtocolDecoder';
 import {
   create8051Simulator,
   createATmegaSimulator,
